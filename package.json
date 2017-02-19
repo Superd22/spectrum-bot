@@ -1,0 +1,26 @@
+{
+  "name": "spectrum-bot",
+  "version": "0.0.1",
+  "description": "A crude bot for StarCitizen's SPECTRUM@^0.0.3",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+  },
+  "author": "Super d",
+  "license": "ISC",
+  "dependencies": {
+    "draft-js": "^0.10.0",
+    "popsicle": "^9.1.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "typescript": "^2.1.6",
+    "websocket": "^1.0.24"
+  },
+  "devDependencies": {
+    "@types/core-js": "^0.9.35",
+    "@types/node": "^7.0.5",
+    "ts-node": "^2.1.0"
+  }
+}
