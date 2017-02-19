@@ -1,3 +1,5 @@
+import { State } from './state.service';
+import { Identify } from './identify.interface';
 import { RSI } from './../RSI/rsi.service';
 import { Websocket, WebSocketClient } from 'websocket';
 
@@ -19,18 +21,20 @@ export class Spectrum {
     /** main wss endpoint */
     private spectrumUrl = "wss://spectrum-gw.robertsspaceindustries.com/";
 
+    private state:State;
+
     /**
      * 
      */
     constructor(callback?, errorCallback?) {
         this.wss.on('connectFailed', (error) => {
-            if(errorCallback) errorCallback(error);
+            if (errorCallback) errorCallback(error);
             else this.wssConnecFailed(error);
         });
 
         this.wss.on('connect', (connection) => {
             this.wssCo = connection;
-            if(callback) callback(connection);
+            if (callback) callback(connection);
             else this.wssConnected(connection);
         });
     }
@@ -42,11 +46,11 @@ export class Spectrum {
      * @param password the password to launch spectrum with
      */
     public initSpectrum();
-    public initSpectrum(username,password);
-    public initSpectrum(username?,password?) {
+    public initSpectrum(username, password);
+    public initSpectrum(username?, password?) {
         console.log("login rsi");
 
-        if(username && password) {
+        if (username && password) {
             this.rsi.setUsername(username);
             this.rsi.setPassword(password);
         }
@@ -64,7 +68,7 @@ export class Spectrum {
      * @param password the password
      */
     public initAsUser(username, password) {
-        this.initSpectrum()
+        this.initSpectrum(username, password);
     }
 
     /**
@@ -87,10 +91,13 @@ export class Spectrum {
      * First API Call to be made on Spectrum Launch
      * Will populate token and x-tavern-id
      */
-    private identify() {
+    private identify(): Promise<string> {
         return this.rsi.post("api/spectrum/auth/identify").then(res => {
             let data = res.body.data;
+
             this.getTavernId(data.token);
+            this.state = new State(data);
+
             return data.token;
         });
     }
@@ -108,11 +115,6 @@ export class Spectrum {
         });
         connection.on('close', function () {
             console.log('echo-protocol Connection Closed');
-        });
-        connection.on('message', function (message) {
-            if (message.type === 'utf8') {
-                console.log("Received: '" + message.utf8Data + "'");
-            }
         });
     }
 

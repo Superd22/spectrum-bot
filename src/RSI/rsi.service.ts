@@ -17,6 +17,19 @@ export class RSI {
     /** cookieJar for api calls */
     private cookieJar = popsicle.jar();
 
+    private static _instance: RSI = new RSI();
+
+    constructor() {
+        if (RSI._instance) {
+            throw new Error("Error: Instantiation failed: Use RSI.getInstance() instead of new.");
+        }
+        RSI._instance = this;
+    }
+
+    public static getInstance(): RSI {
+        return RSI._instance;
+    }
+
     /**
      * Convenience method to generate requests options
      * @param opts the request option
