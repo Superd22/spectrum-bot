@@ -1,11 +1,18 @@
-const popsicle = require('popsicle');
+/**
+ * @module RSI
+ */ /** */
+
+import { RSIApiResponse } from './RSIApiResponse.interface';
+import { ApiResponse } from './APIResponse.interface';
+
+ const popsicle = require('popsicle');
 
 /**
  * Main API class to handle every call to the RSI-API as well as 
  * user-identification.
- * @class RSI
+ * @class Service
  */
-export class RSI {
+export class Service {
     /** the username to use for login */
     private user: string
     /** the password to use for login */
@@ -17,17 +24,17 @@ export class RSI {
     /** cookieJar for api calls */
     private cookieJar = popsicle.jar();
 
-    private static _instance: RSI = new RSI();
+    private static _instance: Service = new Service();
 
     constructor() {
-        if (RSI._instance) {
+        if (Service._instance) {
             throw new Error("Error: Instantiation failed: Use RSI.getInstance() instead of new.");
         }
-        RSI._instance = this;
+        Service._instance = this;
     }
 
-    public static getInstance(): RSI {
-        return RSI._instance;
+    public static getInstance(): Service {
+        return Service._instance;
     }
 
     /**
@@ -96,7 +103,7 @@ export class RSI {
     }
 
     /**
-     * Performs a Login on the RSI website.
+     * Performs a Login on the Service website.
      * And sets auth token as needed.
      * @return wheter or not we're sucessfully logged-in.
      */
@@ -105,6 +112,7 @@ export class RSI {
             if (this.pwd && this.user)
                 return popsicle.post(this.pop({ url: this.rsi + "api/account/signin", body: { password: this.pwd, username: this.user } }))
                     .use(popsicle.plugins.parse('json')).then((res) => {
+                        console.log("LOGIN OK");
                         return res.body;
                     });
 
@@ -137,24 +145,28 @@ export class RSI {
     }
 
     /**
-     * Sends a POST request to the RSI Website.
-     * Will append the full RSI url (with trailing slash)
+     * Sends a POST request to the Service Website.
+     * Will append the full Service url (with trailing slash)
      * @param url the endpoint 
      * @param data an object of data to send
      * @return a popsicle Promise
      */
-    public post(url, data?) {
-        return popsicle.post(this.pop({ url: this.rsi + url, body: data })).use(popsicle.plugins.parse('json'));
+    public post(url, data?):Promise<RSIApiResponse> {
+        return popsicle.post(this.pop({ url: this.rsi + url, body: data })).use(popsicle.plugins.parse('json')).then( (res:ApiResponse) => {
+            return res.body;
+        });
     }
 
     /**
-     * Sends a GET request to the RSI Website.
-     * Will append the full RSI url (with trailing slash)
+     * Sends a GET request to the Service Website.
+     * Will append the full Service url (with trailing slash)
      * @param url the endpoint 
      * @return a popsicle Promise
      */
-    public get(url) {
-        return popsicle.post(this.pop({ url: this.rsi + url })).use(popsicle.plugins.parse('json'));
+    public get(url):Promise<RSIApiResponse> {
+        return popsicle.post(this.pop({ url: this.rsi + url })).use(popsicle.plugins.parse('json')).then( (res:ApiResponse) => {
+            return res.body;
+        });
     }
 
     /**

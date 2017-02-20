@@ -1,7 +1,12 @@
+/**
+ * @module Spectrum
+ */ /** */
+
 import { State } from './state.service';
 import { Identify } from './identify.interface';
-import { RSI } from './../RSI/rsi.service';
-import { Websocket, WebSocketClient } from 'websocket';
+import { Service as RSI } from './../RSI/rsi.service';
+import { WebSocketConnection, WebSocketClient } from 'websocket';
+import { RSIApiResponse } from '../RSI/RSIApiResponse.interface';
 
 var wssClient = require('websocket').client;
 /**
@@ -9,13 +14,13 @@ var wssClient = require('websocket').client;
  * Performs every spectrum user actions via wss or api calls
  * @class Spectrum
  */
-export class Spectrum {
+export class Service {
     /** Wss Client for spectrum */
     private wss: WebSocketClient = new wssClient();
     /** Wss Connection for spectrum */
-    private wssCo: Websocket;
+    private wssCo: WebSocketConnection;
     /** the RSI API instance */
-    private rsi: RSI = new RSI();
+    private rsi: RSI = RSI.getInstance();
     /** clientId used as x-tavern-id for some calls */
     private clientId;
     /** main wss endpoint */
@@ -32,8 +37,9 @@ export class Spectrum {
             else this.wssConnecFailed(error);
         });
 
-        this.wss.on('connect', (connection) => {
-            this.wssCo = connection;
+        this.wss.on('connect', (connection:WebSocketConnection) => {
+            this.wssCo = connection;                
+            this.state.setWsConnected(this.wssCo);
             if (callback) callback(connection);
             else this.wssConnected(connection);
         });
@@ -44,10 +50,11 @@ export class Spectrum {
      * or with crenditials if username and password are set.
      * @param username the username to launch spectrum as
      * @param password the password to launch spectrum with
+     * @return a promise which is true when the connection is ready
      */
-    public initSpectrum();
-    public initSpectrum(username, password);
-    public initSpectrum(username?, password?) {
+    public initSpectrum():Promise<boolean>;
+    public initSpectrum(username, password):Promise<boolean>;
+    public initSpectrum(username?, password?):Promise<boolean> {
         console.log("login rsi");
 
         if (username && password) {
@@ -55,20 +62,27 @@ export class Spectrum {
             this.rsi.setPassword(password);
         }
 
-        this.loginRsi().then((loggedIn) => {
-            this.identify().then((token) => {
-                this.wss.connect(this.spectrumUrl + "?token=" + token, null);
+        return this.loginRsi().then((loggedIn) => {
+            return this.identify().then((payload:Identify) => {
+                console.log("Connecting to wss");
+                this.state = new State(payload);
+                this.wss.connect(this.spectrumUrl + "?token=" + payload.token, null);
+
+                return true;
             });
         });
     }
 
     /**
+     * Convenience method for initSpectrum()
      * Launch spectrum as a given user with password
+     * @see initSpectrum()
      * @param username the username
      * @param password the password
+     * @return a promise which is true when the connection is ready
      */
-    public initAsUser(username, password) {
-        this.initSpectrum(username, password);
+    public initAsUser(username, password):Promise<boolean> {
+        return this.initSpectrum(username, password);
     }
 
     /**
@@ -90,15 +104,16 @@ export class Spectrum {
     /**
      * First API Call to be made on Spectrum Launch
      * Will populate token and x-tavern-id
+     * @return 
      */
-    private identify(): Promise<string> {
-        return this.rsi.post("api/spectrum/auth/identify").then(res => {
-            let data = res.body.data;
+    private identify(): Promise<Identify> {
+        return this.rsi.post("api/spectrum/auth/identify").then((res:RSIApiResponse) => {
+            let data = res.data;
 
+            console.log("IDENTIFY OK");
             this.getTavernId(data.token);
-            this.state = new State(data);
 
-            return data.token;
+            return data;
         });
     }
 
@@ -153,39 +168,11 @@ export class Spectrum {
     }
 
     /**
-     * Sends a plain unstyled text message to a chat lobby
-     * @param text the content of the message
-     * @param lobbyId the short ID of the lobby
-     * @todo Figure out content_state 
-     * @todo return state
+     * Getter function for the current state of Spectrum
+     * @return the State object
+     * @property state
      */
-    public sendPlainMessageToLobby(text, lobbyId) {
-        let m = {
-            content_state: {
-                blocks: [
-                    {
-                        data: {},
-                        depth: 0,
-                        entityRanges: [],
-                        inlineStyleRanges: [],
-                        // I typed this at random... oops
-                        key: "dgmak",
-                        text: text,
-                        type: "unstyled"
-                    }
-                ],
-                entityMap: {},
-            },
-            highlight_role_id: null,
-            lobby_id: lobbyId,
-            media_id: null,
-            plaintext: text,
-        };
-
-        this.rsi.post("api/spectrum/message/create", m).then(res => console.log(res.body.data));
+    public getState():State {
+        return this.state;
     }
-
-
-
-
 }

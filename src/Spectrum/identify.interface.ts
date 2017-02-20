@@ -1,3 +1,7 @@
+/**
+ * @module Spectrum
+ */ /** */
+ 
 export interface Identify {
     bookmarks,
     communities,

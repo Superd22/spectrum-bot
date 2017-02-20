@@ -1,3 +1,7 @@
+/**
+ * @module Spectrum
+ */ /** */
+ 
 export enum MessageType {
     /** When the wss has finished loading */
     "broadcaster.ready",
