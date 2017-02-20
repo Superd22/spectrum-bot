@@ -3,10 +3,11 @@
  */ /** */
 
 import { State } from './state.service';
-import { Identify } from './identify.interface';
-import { Service as RSI } from './../RSI/rsi.service';
+import { Identify } from './../interfaces/identify.interface';
+import { Service as RSI } from './../../RSI/services/rsi.service';
 import { WebSocketConnection, WebSocketClient } from 'websocket';
-import { RSIApiResponse } from '../RSI/RSIApiResponse.interface';
+import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
+import { SpectrumUser } from '../components/user.component';
 
 var wssClient = require('websocket').client;
 /**
@@ -153,26 +154,34 @@ export class Service {
     }
 
     /**
-     * Subscribe wss to a given channel
-     * @param channelLongName the long id of the channel
-     * @todo handle return
-     */
-    public subscribeToChannel(channelLongName) {
-        if (this.wssCo && this.wssCo.connected) {
-            this.wssCo.send({
-                subscription_keys: [channelLongName],
-                subscription_scope: "update",
-                type: "subscribe"
-            });
-        }
-    }
-
-    /**
      * Getter function for the current state of Spectrum
      * @return the State object
      * @property state
      */
     public getState():State {
         return this.state;
+    }
+
+    /**
+     * Calls the RSI API to search the given name and tries to come up with
+     * the best match possibles.
+     * _will __not__ return the BOT's own identity_
+     * @param monickerOrHandle the text to search by
+     * @return an array of Users sorted by best likelyhood as calculated by RSI
+     */
+    public LookForUserByName(monickerOrHandle:string):Promise<SpectrumUser[]> {
+        return this.rsi.PostAPIAutoComplete(monickerOrHandle).then( (payload:RSIApiResponse) => {
+            let data = payload.data;
+            
+            var results=[];
+            
+            if(data && data.hits && data.hits.hits) {
+                data.hits.hits.forEach( (hit) => {
+                    results.push(new SpectrumUser(hit._source));
+                });
+            }
+
+            return results;
+        });
     }
 }

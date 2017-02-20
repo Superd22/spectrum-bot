@@ -2,8 +2,8 @@
  * @module RSI
  */ /** */
 
-import { RSIApiResponse } from './RSIApiResponse.interface';
-import { ApiResponse } from './APIResponse.interface';
+import { RSIApiResponse } from './../interfaces/RSIApiResponse.interface';
+import { ApiResponse } from './../interfaces/APIResponse.interface';
 
  const popsicle = require('popsicle');
 
@@ -176,6 +176,18 @@ export class Service {
     public getRsiToken(): string {
         if (this.tokens['Rsi-Token']) return this.tokens['Rsi-Token'];
         return null;
+    }
+
+    /**
+     * Convenience method to push data to api/spectrum/search/member/autocomplete
+     * @param subject the Monicker or Handle to search
+     * @param community_id the community_id in which to search
+     * @return the data returned by the RSI API
+     */
+    public PostAPIAutoComplete(subject:string, community_id?:number):Promise<RSIApiResponse> {
+        return this.post("api/spectrum/search/member/autocomplete", {
+            text: subject, community_id: community_id
+        });
     }
 
 }

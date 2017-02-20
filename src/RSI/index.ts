@@ -6,4 +6,4 @@
  * @module RSI
  */ /** */
  
- export * from './rsi.service';
+ export * from './services/rsi.service';
