@@ -3,13 +3,13 @@
  */ /** */
  
 import { Websocket, WebSocketConnection } from 'websocket';
-import { SpectrumLobby } from './lobby.component';
-import { Identify } from './identify.interface';
-import { Service as RSI } from './../RSI/rsi.service';
+import { SpectrumLobby } from './../components/lobby.component';
+import { Identify } from './../interfaces/identify.interface';
+import { Service as RSI } from './../../RSI/services/rsi.service';
 import { Broadcaster } from './broadcaster.service';
-import { Community } from './community.interface';
-import { SpectrumCommunity } from './community.component';
-import { MessageType } from './messageType.enum';
+import { Community } from './../interfaces/community.interface';
+import { SpectrumCommunity } from './../components/community.component';
+import { MessageType } from './../enums/messageType.enum';
 
 /**
  * @class State

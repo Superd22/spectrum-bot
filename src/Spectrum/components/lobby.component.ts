@@ -2,9 +2,9 @@
  * @module Spectrum
  */ /** */
 
-import { Service as RSI } from './../RSI/rsi.service';
-import { Lobby } from './lobby.interface';
-import { Broadcaster } from './broadcaster.service';
+import { Service as RSI } from './../../RSI/services/rsi.service';
+import { Lobby } from './../interfaces/lobby.interface';
+import { Broadcaster } from './../services/broadcaster.service';
 
 /**
  * Used internal to represent a spectrum text lobby

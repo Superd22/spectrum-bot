@@ -17,7 +17,7 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
 
         // Do stuff !
         testLobby.subscribe();
-        testLobby.sendPlainTextMessage("Coucou à tous !");
+        // testLobby.sendPlainTextMessage("Coucou à tous !");
     });
     
 });

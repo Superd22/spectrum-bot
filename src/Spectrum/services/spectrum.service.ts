@@ -3,10 +3,10 @@
  */ /** */
 
 import { State } from './state.service';
-import { Identify } from './identify.interface';
-import { Service as RSI } from './../RSI/rsi.service';
+import { Identify } from './../interfaces/identify.interface';
+import { Service as RSI } from './../../RSI/services/rsi.service';
 import { WebSocketConnection, WebSocketClient } from 'websocket';
-import { RSIApiResponse } from '../RSI/RSIApiResponse.interface';
+import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
 
 var wssClient = require('websocket').client;
 /**

@@ -2,8 +2,8 @@
  * @module RSI
  */ /** */
 
-import { RSIApiResponse } from './RSIApiResponse.interface';
-import { ApiResponse } from './APIResponse.interface';
+import { RSIApiResponse } from './../interfaces/RSIApiResponse.interface';
+import { ApiResponse } from './../interfaces/APIResponse.interface';
 
  const popsicle = require('popsicle');
 
