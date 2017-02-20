@@ -178,4 +178,16 @@ export class Service {
         return null;
     }
 
+    /**
+     * Convenience method to push data to api/spectrum/search/member/autocomplete
+     * @param subject the Monicker or Handle to search
+     * @param community_id the community_id in which to search
+     * @return the data returned by the RSI API
+     */
+    public PostAPIAutoComplete(subject:string, community_id?:number):Promise<RSIApiResponse> {
+        return this.post("api/spectrum/search/member/autocomplete", {
+            text: subject, community_id: community_id
+        });
+    }
+
 }

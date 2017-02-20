@@ -76,26 +76,10 @@ export class State {
         this.Broadcaster = Broadcaster.getInstance();
         this.Broadcaster.setWs(ws);
 
-        this.ws.on('message', (message) => {
-            this.handleMessages(message);
-        });
-    }
-
-    /**
-     * Main callback for every messages received via websocket
-     * @param message the message received
-     */
-    private handleMessages(message) {
-        if (message.type === 'utf8') {
-            console.log("[STATE] Message Received: '" + message.utf8Data + "'");
-        }
-
-        let payload = JSON.parse(message.utf8Data);
-        console.log(payload.type);
-        if(payload["type"] == "broadcaster.ready") {
+        this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
             this._isReady(true);
-        }
+        });
     }
 
     /**

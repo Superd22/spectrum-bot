@@ -5,6 +5,7 @@
 import { Service as RSI } from './../../RSI/services/rsi.service';
 import { Lobby } from './../interfaces/lobby.interface';
 import { Broadcaster } from './../services/broadcaster.service';
+import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
 
 /**
  * Used internal to represent a spectrum text lobby
@@ -20,6 +21,8 @@ export class SpectrumLobby {
     private rsi: RSI = RSI.getInstance();
     /** instance of RSI Spectrum ws */
     private broadcaster:Broadcaster = Broadcaster.getInstance();
+    /** Our message listener */
+    private _messageListener:number;
 
     /**
      * Create a new SpectrumLobby
@@ -77,7 +80,8 @@ export class SpectrumLobby {
     }
 
     /**
-     * Joining a lobby will subscribe to its ws event and broadcast presence
+     * Subscribe a lobby will subscribe to its ws event and broadcast presence
+     * It is needed to subscribe to a channel to get any update from it (new message/reaction...)
      */
     public subscribe() {
         this.broadcaster.broadCastMessage(this.buildSubscribtionMessage());
@@ -95,11 +99,38 @@ export class SpectrumLobby {
         };
     }
 
-    public join() {
-    }
 
     public unSubscribe() {
 
+    }
+
+    /**
+     * Sets a function to be called everytime a new TextMessage is received in this lobby.
+     * /!\ to receive any messages you need to be subscribed to this lobby
+     * @see subscribe()
+     * @todo have more than one callback
+     * @param callback the function to callback on messages
+     */
+    public OnTextMessage(callback=(message:receivedTextMessage)=>{}) {        
+        this.broadcaster.removeListener(this._messageListener);
+        this._messageListener = this.broadcaster.addListener("message.new", m => callback(m.message), {
+            message: {
+                lobby_id: this._lobby.id,
+            }
+        });
+    }
+
+    /**
+     * Tells the broadcaster to stop sending the messages from this lobby
+     * to the callback.
+     * Does not unSubscribe from the channel on its own.
+     */
+    public closeOnTextMessage() {
+        this.broadcaster.removeListener(this._messageListener);
+    }
+
+    public getLobby() {
+        return this._lobby;
     }
 
 
