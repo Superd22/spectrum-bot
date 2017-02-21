@@ -3,7 +3,7 @@
  */ /** */
 
 export interface RSIApiResponse {
-    success:boolean,
+    success:number,
     data:any,
     code:string;
     msg:string;
