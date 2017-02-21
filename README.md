@@ -51,6 +51,7 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
 
 ## What's implemented
 - Send an unformated text message to text lobby
+- Send an embed (video/link/image) text message to lobby
 - Get Lobby
 - Get User
 - Get Community

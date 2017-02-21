@@ -10,6 +10,8 @@ import { Broadcaster } from './broadcaster.service';
 import { Community } from './../interfaces/community.interface';
 import { SpectrumCommunity } from './../components/community.component';
 import { MessageType } from './../enums/messageType.enum';
+import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
+
 
 /**
  * @class State
@@ -34,6 +36,8 @@ export class State {
     protected _SubscribedLobbies: SpectrumLobby[];
     /** used internally to store the original state of things */
     protected _originalIdentify: Identify;
+    /** the global message listener */
+    protected _messageListener;
 
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
@@ -122,6 +126,24 @@ export class State {
 
     public getCommunities():SpectrumCommunity[] {
         return this.communities;
+    }
+
+    /**
+     * Declare a global message listener for every message the bot will get to see.
+     * @param callback the callback function on message.
+     */
+    public onMessage(callback=(message:receivedTextMessage)=>{}) {        
+        this.closeOnMessage();
+        this._messageListener = this.Broadcaster.addListener("message.new", m => callback(m.message), {
+            message: null
+        });
+    }
+
+    /**
+     * Removes the global listener
+     */
+    public closeOnMessage() {
+        this.Broadcaster.removeListener(this._messageListener);
     }
 
 
