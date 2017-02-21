@@ -17,6 +17,7 @@ export class Broadcaster {
     protected static _instance:Broadcaster = new Broadcaster();
     /** our message listeners */
     protected _listerners=[];
+    protected member;
 
     /**
      * Constructs the singleton Broadcaster
@@ -38,6 +39,14 @@ export class Broadcaster {
         this._ws.on('message', (message) => {
             this.handleMessages(message);
         });
+    }
+
+    public setBot(botM) {
+        this.member = botM;
+    }
+
+    public getMember() {
+        return this.member;
     }
 
     /**
