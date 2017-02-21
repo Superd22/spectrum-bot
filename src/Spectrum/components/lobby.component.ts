@@ -6,6 +6,7 @@ import { Service as RSI } from './../../RSI/services/rsi.service';
 import { Lobby } from './../interfaces/lobby.interface';
 import { Broadcaster } from './../services/broadcaster.service';
 import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
+import { SpectrumTextMessage } from './textMessage.component';
 
 /**
  * Used internal to represent a spectrum text lobby
@@ -35,32 +36,50 @@ export class SpectrumLobby {
     /**
      * Sends a plain text message to the lobby
      * @param text the text to send
+     * @param highlight_role_id the role id to take (color of the post)
      * @return A promise on the rsi api call 
      */
-    public sendPlainTextMessage(text:string): Promise<any> {
-        let m = {
-            content_state: {
-                blocks: [
-                    {
-                        data: {},
-                        depth: 0,
-                        entityRanges: [],
-                        inlineStyleRanges: [],
-                        // I typed this at random... oops
-                        key: "dgmak",
-                        text: text,
-                        type: "unstyled"
-                    }
-                ],
-                entityMap: {},
-            },
-            highlight_role_id: null,
-            lobby_id: this._lobby.id,
-            media_id: null,
-            plaintext: text,
-        };
+    public sendPlainTextMessage(text:string, highlight_role_id=null) {
+        let m = this.generateTextPayload(text, null, highlight_role_id);
+        return this.doPostMessage(m);
+    }
 
-        return this.rsi.post("api/spectrum/message/create", m).then(res => console.log(res.data));
+    /**
+     * Sends a text messages with an embeded link
+     * @param text the text to send
+     * @param url the url of the object to embed
+     * @param highlight_role_id the role id to take (color of the post)
+     * @return information on the created post
+     */
+    public sendTextMessageWithEmbed(text:string, embedUrl:string, highlight_role_id=null) {
+        if(!embedUrl) return this.sendPlainTextMessage(text,highlight_role_id);
+
+        return SpectrumTextMessage.fetchEmbedMediaId(embedUrl).then((embedId) => {
+            let m = this.generateTextPayload(text, embedId, highlight_role_id);
+            return this.doPostMessage(m);
+        });   
+    }
+
+    /**
+     * @todo create interface to validate postData
+     */
+    private doPostMessage(postData) {
+        return this.rsi.post("api/spectrum/message/create", postData).then((res) => {
+            return res.data;
+        });
+    }
+
+    private generateTextPayload(text, mediaId=null, highlightId=null) {
+        return {
+                content_state: {
+                    blocks: SpectrumTextMessage.generateTextBlocksFromText(text),
+                    entityMap: {},
+                },
+                highlight_role_id: highlightId,
+                lobby_id: this._lobby.id,
+                media_id: mediaId,
+                plaintext: text,
+            };
     }
 
     public getHistory() {
