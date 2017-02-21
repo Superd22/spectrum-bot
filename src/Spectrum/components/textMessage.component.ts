@@ -4,7 +4,7 @@
  
 import { TextMessage } from '../interfaces/textMessage.interface';
 import { ContentState } from 'draft-js';
-import { Service as RSI } from './../../RSI/';
+import { RSI } from './../../RSI/';
 
 export class SpectrumTextMessage {
     protected _message:TextMessage;
