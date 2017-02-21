@@ -1,2 +1,2 @@
-export { Service as RSI } from './RSI/';
-export { Service as Spectrum } from './Spectrum/';
+export  * from './RSI/';
+export  * from './Spectrum/';

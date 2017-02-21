@@ -1,7 +1,7 @@
 /**
  * @module Spectrum
  */ /** */
- 
+
 import { Websocket, WebSocketConnection } from 'websocket';
 import { SpectrumLobby } from './../components/lobby.component';
 import { Identify } from './../interfaces/identify.interface';
@@ -22,7 +22,7 @@ export class State {
     /** the currently bookmarked channels */
     protected bookmarks;
     /** the communities we have access to */
-    protected communities:SpectrumCommunity[]=[];
+    protected communities: SpectrumCommunity[] = [];
     /** information on the bot member */
     protected member;
     /** notifications of the bot */
@@ -36,18 +36,16 @@ export class State {
     protected _SubscribedLobbies: SpectrumLobby[];
     /** used internally to store the original state of things */
     protected _originalIdentify: Identify;
-    /** the global message listener */
-    protected _messageListener;
 
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
-    private Broadcaster:Broadcaster;
+    private Broadcaster: Broadcaster;
     /** our websocket connection to spectrum*/
-    private ws:WebSocketConnection;
+    private ws: WebSocketConnection;
 
-    private _isReady(a) {};
-    private _hasFailed(a) {};
+    private _isReady(a) { };
+    private _hasFailed(a) { };
 
     /**
      * Creates a State Object
@@ -58,7 +56,7 @@ export class State {
         this._originalIdentify = packet;
 
         this.bookmarks = packet.bookmarks;
-        packet.communities.forEach( (co:Community) => {
+        packet.communities.forEach((co: Community) => {
             this.communities.push(new SpectrumCommunity(co));
         });
         this.member = packet.member;
@@ -67,18 +65,20 @@ export class State {
         this.roles = packet.roles;
     }
 
-    public whenReady():Promise<boolean> {
+    public whenReady(): Promise<boolean> {
         return new Promise((success, fail) => {
             this._isReady = success;
             this._hasFailed = fail;
         });
-   }
+    }
 
-    public setWsConnected(ws:WebSocketConnection) {
+
+    public setWsConnected(ws: WebSocketConnection) {
         this.ws = ws;
 
         this.Broadcaster = Broadcaster.getInstance();
         this.Broadcaster.setWs(ws);
+        this.Broadcaster.setBot(this.member);
 
         this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
@@ -117,14 +117,14 @@ export class State {
      * @param name the name the category
      * @return Community if found, null otherwise.
      */
-    public getCommunityByName(name:string):SpectrumCommunity {
+    public getCommunityByName(name: string): SpectrumCommunity {
         let n = name.toLowerCase();
-        return this.communities.find( (co:SpectrumCommunity) => {
+        return this.communities.find((co: SpectrumCommunity) => {
             return co.getRaw().name.toLowerCase() == n;
         }) || null;
     }
 
-    public getCommunities():SpectrumCommunity[] {
+    public getCommunities(): SpectrumCommunity[] {
         return this.communities;
     }
 
@@ -132,18 +132,10 @@ export class State {
      * Declare a global message listener for every message the bot will get to see.
      * @param callback the callback function on message.
      */
-    public onMessage(callback=(message:receivedTextMessage)=>{}) {        
-        this.closeOnMessage();
-        this._messageListener = this.Broadcaster.addListener("message.new", m => callback(m.message), {
+    public onMessage(callback = (message: receivedTextMessage) => { }): number {
+        return this.Broadcaster.addListener("message.new", m => callback(m.message), {
             message: null
         });
-    }
-
-    /**
-     * Removes the global listener
-     */
-    public closeOnMessage() {
-        this.Broadcaster.removeListener(this._messageListener);
     }
 
 

@@ -15,22 +15,26 @@ import { SpectrumTextMessage } from './textMessage.component';
 export class SpectrumLobby {
 
     /** used internally to store the rsi lobby info */
-    private _lobby: Lobby;
+    private _lobby: Lobby | any;
     /** used internally to store the rsi community info */
     private _community;
     /** instance of RSI api */
     private rsi: RSI = RSI.getInstance();
     /** instance of RSI Spectrum ws */
-    private broadcaster:Broadcaster = Broadcaster.getInstance();
+    private broadcaster: Broadcaster = Broadcaster.getInstance();
     /** Our message listener */
-    private _messageListener:number;
+    private _messageListener: number;
 
     /**
      * Create a new SpectrumLobby
      * @param lobby the rsi lobby info
      */
-    constructor(lobby: Lobby) {
-        this._lobby = lobby;
+    constructor(lobby:number);
+    constructor(lobby:Lobby);
+    constructor(lobby:any) {
+        console.log(typeof lobby );
+        if(typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
+        else this._lobby = lobby;
     }
 
     /**
@@ -67,6 +71,33 @@ export class SpectrumLobby {
         return this.rsi.post("api/spectrum/message/create", postData).then((res) => {
             return res.data;
         });
+    }
+
+    public editPlainTextMessage(messageId: number, text: string): Promise<any> {
+        let m = {
+            content_state: {
+                blocks: [
+                    {
+                        data: {},
+                        depth: 0,
+                        entityRanges: [],
+                        inlineStyleRanges: [],
+                        // I typed this at random... oops
+                        key: "dgmak",
+                        text: text,
+                        type: "unstyled"
+                    }
+                ],
+                entityMap: {},
+            },
+            highlight_role_id: null,
+            lobby_id: this._lobby.id,
+            media_id: null,
+            plaintext: text,
+            message_id: messageId,
+        };
+
+        return this.rsi.post("api/spectrum/message/edit", m).then(res => console.log(res.data));
     }
 
     private generateTextPayload(text, mediaId=null, highlightId=null) {
@@ -130,7 +161,7 @@ export class SpectrumLobby {
      * @todo have more than one callback
      * @param callback the function to callback on messages
      */
-    public OnTextMessage(callback=(message:receivedTextMessage)=>{}) {        
+    public OnTextMessage(callback = (message: receivedTextMessage) => { }) {
         this.broadcaster.removeListener(this._messageListener);
         this._messageListener = this.broadcaster.addListener("message.new", m => callback(m.message), {
             message: {
