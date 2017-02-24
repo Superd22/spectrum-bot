@@ -13,4 +13,7 @@ export interface TextMessage {
     }*/
     media_id?,
     highlight_role_id?,
+    id?,
+    time_created?,
+    time_modified?,
 }

@@ -43,7 +43,7 @@ export class SpectrumLobby {
      * @param highlight_role_id the role id to take (color of the post)
      * @return A promise on the rsi api call 
      */
-    public sendPlainTextMessage(text:string, highlight_role_id=null) {
+    public sendPlainTextMessage(text:string, highlight_role_id=null):Promise<SpectrumTextMessage> {
         let m = this.generateTextPayload(text, null, highlight_role_id);
         return this.doPostMessage(m);
     }
@@ -55,7 +55,7 @@ export class SpectrumLobby {
      * @param highlight_role_id the role id to take (color of the post)
      * @return information on the created post
      */
-    public sendTextMessageWithEmbed(text:string, embedUrl:string, highlight_role_id=null) {
+    public sendTextMessageWithEmbed(text:string, embedUrl:string, highlight_role_id=null):Promise<SpectrumTextMessage> {
         if(!embedUrl) return this.sendPlainTextMessage(text,highlight_role_id);
 
         return SpectrumTextMessage.fetchEmbedMediaId(embedUrl).then((embedId) => {
@@ -67,9 +67,9 @@ export class SpectrumLobby {
     /**
      * @todo create interface to validate postData
      */
-    private doPostMessage(postData) {
+    private doPostMessage(postData):Promise<SpectrumTextMessage> {
         return this.rsi.post("api/spectrum/message/create", postData).then((res) => {
-            return res.data;
+            return new SpectrumTextMessage(res.data);
         });
     }
 

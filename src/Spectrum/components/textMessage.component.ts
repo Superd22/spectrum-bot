@@ -1,3 +1,4 @@
+import { Broadcaster } from './../services/broadcaster.service';
 /**
  * @module Spectrum
  */ /** */
@@ -10,6 +11,9 @@ import { emojioneList } from './emoji.component';
 export class SpectrumTextMessage {
     protected _message: TextMessage;
     protected static _emojis = "";
+    /** instance of RSI Spectrum ws */
+    private broadcaster: Broadcaster = Broadcaster.getInstance();
+    protected _reactionListener;
 
     constructor(message: TextMessage)
     constructor(plainText: string, lobby_id?);
@@ -31,6 +35,27 @@ export class SpectrumTextMessage {
         return this._message.plaintext;
     }
 
+    public onReaction(callback) {
+        this.broadcaster.removeListener(this._reactionListener);
+        this._reactionListener = this.broadcaster.addListener("reaction", m => callback(m), {
+            reaction: {
+                entity_id: this._message.id,
+            }
+        });
+    }
+
+    public removeOnReaction() {
+        this.broadcaster.removeListener(this._reactionListener);
+    }
+
+    public onEdit() {
+
+    }
+
+    public onDelete() {
+
+    }
+
     public static generateContentStateFromText(text: string, delimiter?: string, disableEmojis = false) {
         let base = ContentState.createFromText(text, delimiter);
 
@@ -38,7 +63,7 @@ export class SpectrumTextMessage {
         var finalBlocks = [];
         var finalEntities = [];
         var entityMap = {};
-        var curEntity : { EntityMap:any, entityRanges:any } = { EntityMap:{}, entityRanges:[] };
+        var curEntity: { EntityMap: any, entityRanges: any } = { EntityMap: {}, entityRanges: [] };
 
         /**
          *  blocks: SpectrumTextMessage.generateTextBlocksFromText(text),
@@ -67,7 +92,7 @@ export class SpectrumTextMessage {
         return { blocks: finalBlocks, entityMap: curEntity["EntityMap"] };
     }
 
-    public static findEmojiInText(text, entityMap): { entityRanges:any, EntityMap:any } {
+    public static findEmojiInText(text, entityMap): { entityRanges: any, EntityMap: any } {
         var entityRanges = [];
 
         if (!this._emojis) {

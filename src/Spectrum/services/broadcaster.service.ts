@@ -85,7 +85,7 @@ export class Broadcaster {
         let payload = JSON.parse(message.utf8Data);
         for(var i=0; i < this._listerners.length; i++) {
             let listener = this._listerners[i];
-            if(payload.type != listener.type) continue;
+            if(!payload.type || payload.type.indexOf(listener.type) !== 0) continue;
 
             if(this.testObjects(payload, listener.content)) {
                 console.log("calling LISTENER "+i);
