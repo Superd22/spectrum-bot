@@ -102,10 +102,7 @@ export class SpectrumLobby {
 
     private generateTextPayload(text, mediaId=null, highlightId=null) {
         return {
-                content_state: {
-                    blocks: SpectrumTextMessage.generateTextBlocksFromText(text),
-                    entityMap: {},
-                },
+                content_state: SpectrumTextMessage.generateContentStateFromText(text),
                 highlight_role_id: highlightId,
                 lobby_id: this._lobby.id,
                 media_id: mediaId,
