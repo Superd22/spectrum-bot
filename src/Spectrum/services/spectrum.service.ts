@@ -64,6 +64,7 @@ export class Service {
         }
 
         return this.loginRsi().then((loggedIn) => {
+            console.log("ok in spectrum");
             return this.identify().then((payload:Identify) => {
                 console.log("Connecting to wss");
                 this.state = new State(payload);
