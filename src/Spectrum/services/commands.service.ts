@@ -1,5 +1,3 @@
-import { SpectrumLobby } from './../components/lobby.component';
-import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
 /**
  * @module Spectrum
  */ /** */
@@ -8,6 +6,8 @@ import { aSpectrumCommand } from './../interfaces/command.interface';
 import { Broadcaster } from './broadcaster.service';
 import { RSI } from './../../';
 import { aBotCommand } from '../components/command.component';
+import { SpectrumLobby } from './../components/lobby.component';
+import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
 
 /** @class SpectrumCommand */
 export class SpectrumCommands {
@@ -57,16 +57,21 @@ export class SpectrumCommands {
      * @param shortCode the shortcode to listen for
      * @param callback the function to call when this command is used
      * @param manual an explanation of what this command does.
-     * @return the aBotCommand object that we are now listening for.
+     * @return the aSpectrumCommand object that we are now listening for.
      */
-    public registerCommand(command:aBotCommand):aBotCommand;
-    public registerCommand(name:string, shortCode, callback, manual):aBotCommand;
-    public registerCommand(name:string|aBotCommand, shortCode?, callback?, manual?):aBotCommand {
-        if(typeof name !== typeof "test") var co = new aBotcommand();
-        else var co = name;
+    public registerCommand(command:aSpectrumCommand):aSpectrumCommand;
+    public registerCommand(name:string, shortCode, callback, manual):aSpectrumCommand;
+    public registerCommand(name:string|aSpectrumCommand, shortCode?, callback?, manual?):aSpectrumCommand {
+        var co = null;
+        if(typeof name !== typeof "test") {
+            co = new aBotCommand(shortCode, callback, name, manual);
+        }
+        else {
+            co = name;
+        }
 
         let id = this._commandList.push(co);
-        co.register(id);
+        co.listenerID = id;
 
         return co;
     }
@@ -86,7 +91,7 @@ export class SpectrumCommands {
     public unRegisterCommand(co) {
         if(typeof co !== typeof 123) {
             co = co.ID;
-            co.unRegister();
+            co.listenerID = null;
         }
         this._commandList.splice(co, 1);
     }

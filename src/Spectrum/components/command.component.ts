@@ -4,6 +4,7 @@
 
 import { Community } from './../interfaces/community.interface';
 import { Lobby } from './../interfaces/lobby.interface';
+import { aSpectrumCommand } from './../interfaces/command.interface';
 import { SpectrumLobby } from './lobby.component';
 
 /**
@@ -12,9 +13,9 @@ import { SpectrumLobby } from './lobby.component';
  * 
  * @class aBotCommand
  */
-export class aBotCommand {
+export class aBotCommand implements aSpectrumCommand {
 
-    public ID;
+    public listenerID;
     public shortCode;
     public callback;
     public name;
@@ -25,25 +26,5 @@ export class aBotCommand {
         this.callback = callback;
         this.name = name;
         this.manual = manual;
-    } 
-
-    public setID(id:number) {
-        this.ID = id;
-    }
-
-    public unsetID() {
-        this.ID = null;
-    }
-
-    public register(id:number) {
-        this.ID = id;
-    }
-
-    public unRegister() {
-        this.ID = null;
-    }
-
-    public isRegistered() {
-        return this.ID !== null;
     }
 }
