@@ -7,6 +7,7 @@ import { receivedTextMessage } from './../interfaces/receivedTextMessage.interfa
 import { aSpectrumCommand } from './../interfaces/command.interface';
 import { Broadcaster } from './broadcaster.service';
 import { RSI } from './../../';
+import { aBotCommand } from '../components/command.component';
 
 /** @class SpectrumCommand */
 export class SpectrumCommands {
@@ -36,7 +37,7 @@ export class SpectrumCommands {
 
         for(var i = 0; i < this._commandList.length; i++) {
             let command = this._commandList[i];
-            let re = new RegExp( String(this.prefix+" "+command.shortCode).toLowerCase(), );
+            let re = new RegExp( String("^"+this.prefix+" "+command.shortCode).toLowerCase(), );
 
             let matchs = message.plaintext.toLowerCase().match(re);
 
@@ -47,20 +48,47 @@ export class SpectrumCommands {
     public setPrefix(prefix:string) {
         this.prefix = prefix.toLowerCase();
     }
+    
+    /**
+     * Registers a command and listen for it.
+     * Either supply aBotCommand or argument to create one.
+     * @param command the aBotCommand to listen to
+     * @param name the name of the command
+     * @param shortCode the shortcode to listen for
+     * @param callback the function to call when this command is used
+     * @param manual an explanation of what this command does.
+     * @return the aBotCommand object that we are now listening for.
+     */
+    public registerCommand(command:aBotCommand):aBotCommand;
+    public registerCommand(name:string, shortCode, callback, manual):aBotCommand;
+    public registerCommand(name:string|aBotCommand, shortCode?, callback?, manual?):aBotCommand {
+        if(typeof name !== typeof "test") var co = new aBotcommand();
+        else var co = name;
 
-    public addCommand(name, shortCode, callback, manual): number {
-        let co: aSpectrumCommand = {
-            manual: manual,
-            shortCode: shortCode,
-            callback: callback,
-            name: name,
-        }
+        let id = this._commandList.push(co);
+        co.register(id);
 
-        return this._commandList.push(co);
+        return co;
     }
 
-    public removeCommand(commandId) {
-        this._commandList.splice(commandId, 1);
+    /**
+     * Alias of registerCommand
+     */
+    public addCommand(name, shortCode, callback, manual) {
+        return this.registerCommand(name,shortCode,callback,manual);
+    }
+    
+    /** 
+     * Unbinds a command and stop listening to it.
+     */
+    public unRegisterCommand(command:aBotCommand);
+    public unRegisterCommand(commandId:number);
+    public unRegisterCommand(co) {
+        if(typeof co !== typeof 123) {
+            co = co.ID;
+            co.unRegister();
+        }
+        this._commandList.splice(co, 1);
     }
 
     public getCommandList(): aSpectrumCommand[] {
