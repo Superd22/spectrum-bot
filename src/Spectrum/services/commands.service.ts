@@ -30,7 +30,7 @@ export class SpectrumCommands {
         let bot = this.Broadcaster.getMember();
         let message = payload.message;
 
-        if(Number(bot.id) == Number(message.member.id)) return false;
+        //if(Number(bot.id) == Number(message.member.id)) return false;
         if(message.plaintext.toLowerCase().indexOf(this.prefix) == -1) return false;
 
         let lobby = new SpectrumLobby(message.lobby_id);
