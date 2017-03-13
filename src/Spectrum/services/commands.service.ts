@@ -40,7 +40,8 @@ export class SpectrumCommands {
             let re = new RegExp( String("^"+this.prefix+" "+command.shortCode).toLowerCase(), );
 
             let matchs = message.plaintext.toLowerCase().match(re);
-
+            console.log("check co");
+            console.log(command);
             if(matchs) command.callback(message, lobby, matchs);
         }
     }
@@ -63,7 +64,7 @@ export class SpectrumCommands {
     public registerCommand(name:string, shortCode, callback, manual):aSpectrumCommand;
     public registerCommand(name:string|aSpectrumCommand, shortCode?, callback?, manual?):aSpectrumCommand {
         var co = null;
-        if(typeof name !== typeof "test") {
+        if(typeof name === typeof "test") {
             co = new aBotCommand(shortCode, callback, name, manual);
         }
         else {

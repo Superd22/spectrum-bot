@@ -12,7 +12,7 @@ export interface aSpectrumCommand {
     /** Manual of the command */
     manual:string,
     /** callback function on message */
-    callback: (message?:receivedTextMessage, lobby?:SpectrumLobby, matchs?:Array<any>) => {}
+    callback: (message?:receivedTextMessage, lobby?:SpectrumLobby, matchs?:Array<any>) => any
     /** the ID of the active listener for this command */
     listenerID:number;
 }
