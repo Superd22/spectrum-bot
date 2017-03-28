@@ -40,6 +40,7 @@ export class Broadcaster {
             this.handleMessages(message);
         });
 
+        this.keepAlive();
     }
 
     /**
