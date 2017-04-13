@@ -5,6 +5,7 @@
 import { RSIApiResponse } from './../interfaces/RSIApiResponse.interface';
 import { ApiResponse } from './../interfaces/APIResponse.interface';
 
+var cookieStore = require('tough-cookie-file-store');
 const popsicle = require('popsicle');
 const rl = require('readline');
 
@@ -23,7 +24,7 @@ export class Service {
     /** a collection of tokens */
     private tokens = {};
     /** cookieJar for api calls */
-    private cookieJar = popsicle.jar();
+    private cookieJar = popsicle.jar(new cookieStore(__dirname+"/../../../cache/cookie.json"));
     private input = rl.createInterface(process.stdin, process.stdout, null);
 
     private static _instance: Service = new Service();
@@ -123,6 +124,10 @@ export class Service {
                         else {
                             if (res.body.code == "ErrMultiStepRequired") {
                                 return this.multiStepAuth().then((res) => { console.log("okay in login()"); });
+                            }
+                            if(res.body.code == "ErrCaptchaRequired") {
+                                console.log("Captcha triggered, please resolve it on the website...");
+                                return false;
                             }
                         }
                     });

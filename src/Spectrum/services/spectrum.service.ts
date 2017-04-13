@@ -27,7 +27,7 @@ export class Service {
     /** main wss endpoint */
     private spectrumUrl = "wss://spectrum-gw.robertsspaceindustries.com/";
 
-    private state:State;
+    private state: State;
 
     /**
      * 
@@ -38,8 +38,8 @@ export class Service {
             else this.wssConnecFailed(error);
         });
 
-        this.wss.on('connect', (connection:WebSocketConnection) => {
-            this.wssCo = connection;                
+        this.wss.on('connect', (connection: WebSocketConnection) => {
+            this.wssCo = connection;
             this.state.setWsConnected(this.wssCo);
             if (callback) callback(connection);
             else this.wssConnected(connection);
@@ -53,9 +53,9 @@ export class Service {
      * @param password the password to launch spectrum with
      * @return a promise which is true when the connection is ready
      */
-    public initSpectrum():Promise<boolean>;
-    public initSpectrum(username, password):Promise<boolean>;
-    public initSpectrum(username?, password?):Promise<boolean> {
+    public initSpectrum(): Promise<boolean>;
+    public initSpectrum(username, password): Promise<boolean>;
+    public initSpectrum(username?, password?): Promise<boolean> {
         console.log("login rsi");
 
         if (username && password) {
@@ -63,16 +63,44 @@ export class Service {
             this.rsi.setPassword(password);
         }
 
-        return this.loginRsi().then((loggedIn) => {
-            console.log("ok in spectrum");
-            return this.identify().then((payload:Identify) => {
-                console.log("Connecting to wss");
-                this.state = new State(payload);
-                this.wss.connect(this.spectrumUrl + "?token=" + payload.token, null);
+        // Check if we're already connected
+        return this.identify().then((payload: Identify) => {
+            console.log(payload.member);
+            if (payload.member !== null && payload.member.id) {
+                console.log("init ws on cookie.");
+                return this.initWs(payload);
+            }
 
-                return true;
+            // We're not connected, so we launch the process.
+            return this.loginRsi().then((loggedIn) => {
+
+                if (loggedIn === false) {
+                    // We wanted to login and we couldn't, exit.
+                    process.exit(1);
+                }
+
+                console.log("did rsi login");
+                return this.identify().then((payload: Identify) => {
+                    console.log("did rsi login");
+                    return this.initWs(payload);
+                });
             });
+
         });
+
+    }
+
+    /**
+     * Used internally to trigger the ws subscribtion when we're identified to spectrum
+     * @param payload the Identify packet payload
+     * @return if the connection was successfull
+     */
+    private initWs(payload: Identify): boolean {
+        console.log("Connecting to wss");
+        this.state = new State(payload);
+        this.wss.connect(this.spectrumUrl + "?token=" + payload.token, null);
+
+        return true;
     }
 
     /**
@@ -83,7 +111,7 @@ export class Service {
      * @param password the password
      * @return a promise which is true when the connection is ready
      */
-    public initAsUser(username, password):Promise<boolean> {
+    public initAsUser(username, password): Promise<boolean> {
         return this.initSpectrum(username, password);
     }
 
@@ -109,7 +137,7 @@ export class Service {
      * @return 
      */
     private identify(): Promise<Identify> {
-        return this.rsi.post("api/spectrum/auth/identify").then((res:RSIApiResponse) => {
+        return this.rsi.post("api/spectrum/auth/identify").then((res: RSIApiResponse) => {
             let data = res.data;
 
             console.log("IDENTIFY OK");
@@ -159,7 +187,7 @@ export class Service {
      * @return the State object
      * @property state
      */
-    public getState():State {
+    public getState(): State {
         return this.state;
     }
 
@@ -170,14 +198,14 @@ export class Service {
      * @param monickerOrHandle the text to search by
      * @return an array of Users sorted by best likelyhood as calculated by RSI
      */
-    public LookForUserByName(monickerOrHandle:string):Promise<SpectrumUser[]> {
-        return this.rsi.PostAPIAutoComplete(monickerOrHandle).then( (payload:RSIApiResponse) => {
+    public LookForUserByName(monickerOrHandle: string): Promise<SpectrumUser[]> {
+        return this.rsi.PostAPIAutoComplete(monickerOrHandle).then((payload: RSIApiResponse) => {
             let data = payload.data;
-            
-            var results=[];
-            
-            if(data && data.hits && data.hits.hits) {
-                data.hits.hits.forEach( (hit) => {
+
+            var results = [];
+
+            if (data && data.hits && data.hits.hits) {
+                data.hits.hits.forEach((hit) => {
                     results.push(new SpectrumUser(hit._source));
                 });
             }
