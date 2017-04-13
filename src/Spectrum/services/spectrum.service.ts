@@ -26,7 +26,8 @@ export class Service {
     private clientId;
     /** main wss endpoint */
     private spectrumUrl = "wss://spectrum-gw.robertsspaceindustries.com/";
-
+    /** backup payload */
+    private _payload: Identify;
     private state: State;
 
     /**
@@ -43,6 +44,13 @@ export class Service {
             this.state.setWsConnected(this.wssCo);
             if (callback) callback(connection);
             else this.wssConnected(connection);
+        });
+
+        this.wss.on('close', (reasonCode, description) => {
+            console.debug("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
+            console.debug("[DEBUG] Desc: " + description);
+            console.log("Attempting to relaunch ws");
+            this.launchWS();
         });
     }
 
@@ -97,9 +105,16 @@ export class Service {
      */
     private initWs(payload: Identify): boolean {
         console.log("Connecting to wss");
+        this._payload = payload;
         this.state = new State(payload);
-        this.wss.connect(this.spectrumUrl + "?token=" + payload.token, null);
+        return this.launchWS();
+    }
 
+    /**
+     * Convenience method to launch spectrum ws
+     */
+    public launchWS(): boolean {
+        this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
         return true;
     }
 

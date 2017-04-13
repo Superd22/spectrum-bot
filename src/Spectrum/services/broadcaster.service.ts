@@ -49,7 +49,7 @@ export class Broadcaster {
     private keepAlive() {
         // Spectrum seems to just send a raw 8 for keepalive...
         this.broadCastMessage(8, true);
-        setTimeout(() => this.keepAlive(), 60*60*1000);
+        setTimeout(() => this.keepAlive(), 60*30*1000);
     }
 
     public setBot(botM) {
@@ -77,7 +77,10 @@ export class Broadcaster {
      * @throws Error on no ws connection.
      */
     public broadCastMessage(msg:any, raw:boolean=false) {
-        if(!this._ws.connected) throw new Error("Error: WebSocket isn't connected");
+        if(!this._ws.connected) {
+
+            throw new Error("Error: WebSocket isn't connected");
+        }
 
         let payload = raw ? msg : JSON.stringify(msg);
         console.log("[WSS] : SENDING MESSAGE " + payload);
