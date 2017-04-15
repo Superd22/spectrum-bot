@@ -45,13 +45,6 @@ export class Service {
             if (callback) callback(connection);
             else this.wssConnected(connection);
         });
-
-        this.wss.on('close', (reasonCode, description) => {
-            console.debug("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
-            console.debug("[DEBUG] Desc: " + description);
-            console.log("Attempting to relaunch ws");
-            this.launchWS();
-        });
     }
 
     /**
@@ -173,8 +166,12 @@ export class Service {
         connection.on('error', function (error) {
             console.log("Connection Error: " + error.toString());
         });
-        connection.on('close', function () {
-            console.log('echo-protocol Connection Closed');
+        
+        connection.on('close', (reasonCode, description) => {
+            console.debug("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
+            console.debug("[DEBUG] Desc: " + description);
+            console.log("Attempting to relaunch ws");
+            this.launchWS();
         });
     }
 
