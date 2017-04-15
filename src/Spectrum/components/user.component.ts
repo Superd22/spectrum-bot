@@ -98,4 +98,16 @@ export class SpectrumUser {
     public closeOnPrivateMessage() {
         this.broadcaster.removeListener(this._pmListener);
     }
+
+    /**
+     * Generate a mention for this user to be used for sending a message to a lobby/forum
+     * @see TextMessage.sendPlainTextMessage()
+     * @throws error on nickname or id not exist
+     * @return a mention rich-text to be parsed by sendPlainTextMessage
+     */
+    public mention():string {
+        if(this._user && this._user.nickname && this._user.id)
+            return "<scAPIM>@"+this._user.nickname+":"+this._user.id+"</scAPIM>";
+        else throw new Error("User does not have a nickname/id");
+    }
 }

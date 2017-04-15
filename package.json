@@ -10,12 +10,13 @@
   "author": "Super d",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^7.0.12",
     "draft-js": "^0.10.0",
     "popsicle": "^9.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "tough-cookie-file-store": "^1.1.1",
-    "typescript": "^2.1.6",
+    "typescript": "^2.2.2",
     "websocket": "^1.0.24"
   },
   "devDependencies": {

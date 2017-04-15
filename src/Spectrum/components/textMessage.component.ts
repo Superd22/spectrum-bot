@@ -56,7 +56,7 @@ export class SpectrumTextMessage {
 
     }
 
-    public static generateContentStateFromText(text: string, delimiter?: string, disableEmojis = false) {
+    public static generateContentStateFromText(text: string, delimiter?: string, disableEmojis = false, disableMentions = false) {
         let base = ContentState.createFromText(text, delimiter);
 
         let blocks = base.getBlocksAsArray();
@@ -72,14 +72,18 @@ export class SpectrumTextMessage {
 
         for (var i = 0; i < blocks.length; i++) {
 
+            if (!disableMentions) {
+                curEntity = SpectrumTextMessage.findMentionsInText(blocks[i].text, curEntity);
+            }
+
             if (!disableEmojis) {
-                curEntity = SpectrumTextMessage.findEmojiInText(blocks[i].text, curEntity["EntityMap"]);
+                curEntity = SpectrumTextMessage.findEmojiInText(curEntity);
             }
 
             let m = {
                 key: blocks[i].key,
                 type: blocks[i].type,
-                text: blocks[i].text,
+                text: curEntity["plainText"],
                 entityRanges: curEntity["entityRanges"],
                 inlineStyleRanges: [],
                 data: blocks[i].data,
@@ -92,8 +96,42 @@ export class SpectrumTextMessage {
         return { blocks: finalBlocks, entityMap: curEntity["EntityMap"] };
     }
 
-    public static findEmojiInText(text, entityMap): { entityRanges: any, EntityMap: any } {
+    public static findMentionsInText(text, curEntity): { entityRanges: any, EntityMap: any, plainText:string } {
         var entityRanges = [];
+        let menCheck = new RegExp(/<scAPIM>@([^ ]+):(\d+)<\/scAPIM>/, 'g');
+        var m;
+
+        let entityMap = curEntity["EntityMap"];
+
+        while ( (m = menCheck.exec(text)) !== null) {
+            /** This is easier than emojis as spectrum currently doesn't give a shit and will treat multiple
+             *  mention to the same guy as different mentions
+             */
+
+            // Add the mention to the entity map
+            let eObj = Object.keys(entityMap).length;
+            entityMap[eObj] = { type: "MENTION", mutability: "IMMUTABLE", data: { id: m[2] } };
+
+            let mention = "@" + m[1];
+
+            // Cut the mention to "@Handle"
+            text = text.replace(m[0], mention);
+
+
+            // Flag this spot as a mention
+            entityRanges.push({
+                offset: text.indexOf(mention),
+                length: mention.length,
+                key: eObj,
+            });
+        }
+
+        return { entityRanges: entityRanges, EntityMap: entityMap, plainText: text };
+    }
+
+    public static findEmojiInText(curEntity): { entityRanges: any, EntityMap: any, plainText:string } {
+        let entityRanges = curEntity["entityRanges"] || [];
+        let entityMap = curEntity["EntityMap"];
 
         if (!this._emojis) {
             for (var eName in emojioneList) this._emojis += eName + "|";
@@ -106,17 +144,20 @@ export class SpectrumTextMessage {
         let emoCheck = new RegExp(this._emojis, 'g');
 
         var m;
+        let text = curEntity.plainText;
         while ((m = emoCheck.exec(text)) !== null) {
-            console.log(entityMap);
+
+            // Check if we need to push to the entityMap
             let eObj = Object.keys(entityMap);
             var key = eObj.map((e) => e['type'] == "EMOJI" ? e['data'] : null).indexOf(m[0]);
-            console.log(key);
+
+            // Emojis seem to be unique in the map.
             if (key == -1) {
                 entityMap[eObj.length] = { data: m[0], mutability: "IMMUTABLE", type: "EMOJI" };
                 key = eObj.length;
             }
 
-
+            // Push to the entity Range now that we have the corresponding map
             entityRanges.push({
                 offset: m.index,
                 length: m[0].length,
@@ -124,7 +165,7 @@ export class SpectrumTextMessage {
             });
         }
 
-        return { entityRanges: entityRanges, EntityMap: entityMap };
+        return { entityRanges: entityRanges, EntityMap: entityMap, plainText: curEntity.plainText };
     }
 
     public static fetchEmbedMediaId(url: string): Promise<string> {
