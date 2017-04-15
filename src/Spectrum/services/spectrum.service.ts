@@ -166,10 +166,10 @@ export class Service {
         connection.on('error', function (error) {
             console.log("Connection Error: " + error.toString());
         });
-        
+
         connection.on('close', (reasonCode, description) => {
-            console.debug("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
-            console.debug("[DEBUG] Desc: " + description);
+            console.log("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
+            console.log("[DEBUG] Desc: " + description);
             console.log("Attempting to relaunch ws");
             this.launchWS();
         });

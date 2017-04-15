@@ -119,9 +119,9 @@ export class State {
      */
     public getCommunityByName(name: string): SpectrumCommunity {
         let n = name.toLowerCase();
-        return this.communities.find((co: SpectrumCommunity) => {
-            return co.getRaw().name.toLowerCase() == n;
-        }) || null;
+        return this.communities.find((co: SpectrumCommunity) =>
+            co.getRaw().name.toLowerCase() == n
+        ) || null;
     }
 
     public getCommunities(): SpectrumCommunity[] {
@@ -136,6 +136,15 @@ export class State {
         return this.Broadcaster.addListener("message.new", m => callback(m.message), {
             message: null
         });
+    }
+
+    /**
+     * Sets the bot public presence on spectrum
+     * @param status the status
+     * @param info the "sub-status"
+     */
+    public setBotPresence(status: "away" | "online" | "playing" | "do_not_disturb" | "invisible", info?: string) {
+        return this.RSI.post("api/spectrum/member/presence/setStatus", { status: status, info: info });
     }
 
 
