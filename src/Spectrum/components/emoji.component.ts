@@ -593,9 +593,8 @@ export let emojioneList = {
     { unicode: ["1f590-1f3fc"], fname: "1f590-1f3fc", uc: "1f590-1f3fc", isCanonical: !1 },
     ":hand_splayed_tone1:":
     { unicode: ["1f590-1f3fb"], fname: "1f590-1f3fb", uc: "1f590-1f3fb", isCanonical: !0 },
-    ":raised_hand_with_fingers_splayed_tone1:": {
-        unicode: ["1f590-1f3fb"], fname: "1f590-1f3fb", uc: "1f590-1f3fb", isCanonical: !1
-    },
+    ":raised_hand_with_fingers_splayed_tone1:":
+    { unicode: ["1f590-1f3fb"], fname: "1f590-1f3fb", uc: "1f590-1f3fb", isCanonical: !1 },
     ":man_dancing_tone5:":
     { unicode: ["1f57a-1f3ff"], fname: "1f57a-1f3ff", uc: "1f57a-1f3ff", isCanonical: !0 },
     ":male_dancer_tone5:":
@@ -1266,9 +1265,8 @@ export let emojioneList = {
     { unicode: ["1f1f8-1f1fe"], fname: "1f1f8-1f1fe", uc: "1f1f8-1f1fe", isCanonical: !0 },
     ":sy:":
     { unicode: ["1f1f8-1f1fe"], fname: "1f1f8-1f1fe", uc: "1f1f8-1f1fe", isCanonical: !1 },
-    ":flag_sx:": {
-        unicode: ["1f1f8-1f1fd"], fname: "1f1f8-1f1fd", uc: "1f1f8-1f1fd", isCanonical: !0
-    },
+    ":flag_sx:":
+    { unicode: ["1f1f8-1f1fd"], fname: "1f1f8-1f1fd", uc: "1f1f8-1f1fd", isCanonical: !0 },
     ":sx:":
     { unicode: ["1f1f8-1f1fd"], fname: "1f1f8-1f1fd", uc: "1f1f8-1f1fd", isCanonical: !1 },
     ":flag_sv:":
@@ -1999,10 +1997,8 @@ export let emojioneList = {
     { unicode: ["1f1e7-1f1fc"], fname: "1f1e7-1f1fc", uc: "1f1e7-1f1fc", isCanonical: !1 },
     ":flag_bv:":
     { unicode: ["1f1e7-1f1fb"], fname: "1f1e7-1f1fb", uc: "1f1e7-1f1fb", isCanonical: !0 },
-    ":bv:": {
-        unicode: ["1f1e7-1f1fb"], fname: "1f1e7-1f1fb",
-        uc: "1f1e7-1f1fb", isCanonical: !1
-    },
+    ":bv:":
+    { unicode: ["1f1e7-1f1fb"], fname: "1f1e7-1f1fb", uc: "1f1e7-1f1fb", isCanonical: !1 },
     ":flag_bt:":
     { unicode: ["1f1e7-1f1f9"], fname: "1f1e7-1f1f9", uc: "1f1e7-1f1f9", isCanonical: !0 },
     ":bt:":
@@ -2723,9 +2719,8 @@ export let emojioneList = {
     { unicode: ["23ee-fe0f", "23ee"], fname: "23ee", uc: "23ee", isCanonical: !0 },
     ":previous_track:":
     { unicode: ["23ee-fe0f", "23ee"], fname: "23ee", uc: "23ee", isCanonical: !1 },
-    ":play_pause:": {
-        unicode: ["23ef-fe0f", "23ef"], fname: "23ef", uc: "23ef", isCanonical: !0
-    },
+    ":play_pause:":
+    { unicode: ["23ef-fe0f", "23ef"], fname: "23ef", uc: "23ef", isCanonical: !0 },
     ":stopwatch:":
     { unicode: ["23f1-fe0f", "23f1"], fname: "23f1", uc: "23f1", isCanonical: !0 },
     ":timer:":
@@ -3576,9 +3571,8 @@ export let emojioneList = {
     { unicode: ["1f44e"], fname: "1f44e", uc: "1f44e", isCanonical: !1 },
     ":clap:":
     { unicode: ["1f44f"], fname: "1f44f", uc: "1f44f", isCanonical: !0 },
-    ":open_hands:": {
-        unicode: ["1f450"], fname: "1f450", uc: "1f450", isCanonical: !0
-    },
+    ":open_hands:":
+    { unicode: ["1f450"], fname: "1f450", uc: "1f450", isCanonical: !0 },
     ":crown:":
     { unicode: ["1f451"], fname: "1f451", uc: "1f451", isCanonical: !0 },
     ":womans_hat:":
@@ -4433,10 +4427,8 @@ export let emojioneList = {
     { unicode: ["1f4b7"], fname: "1f4b7", uc: "1f4b7", isCanonical: !0 },
     ":mailbox_with_mail:":
     { unicode: ["1f4ec"], fname: "1f4ec", uc: "1f4ec", isCanonical: !0 },
-    ":mailbox_with_no_mail:": {
-        unicode: ["1f4ed"],
-        fname: "1f4ed", uc: "1f4ed", isCanonical: !0
-    },
+    ":mailbox_with_no_mail:":
+    { unicode: ["1f4ed"], fname: "1f4ed", uc: "1f4ed", isCanonical: !0 },
     ":postal_horn:":
     { unicode: ["1f4ef"], fname: "1f4ef", uc: "1f4ef", isCanonical: !0 },
     ":no_mobile_phones:":
