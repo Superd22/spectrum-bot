@@ -55,7 +55,8 @@ Dependencies : nodejs.
  2. run `npm install` to download/install dependencies.
   1. depending on your setup, you might need to install globally ts-node & typescript `npm install -g ts-node typescript`
  3. create app/config.ts using the config.sample.ts template with the desired account
- 4. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot.
+ 4. (create an empty bot/cache/cookie.json)
+ 5. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot.
 
 ## What's implemented
 - Send an unformated text message to text lobby
