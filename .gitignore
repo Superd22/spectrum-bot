@@ -88,3 +88,4 @@ $RECYCLE.BIN/
 app/config.ts
 cache/
 cache/**
+lib/
