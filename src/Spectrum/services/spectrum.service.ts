@@ -171,7 +171,11 @@ export class Service {
             console.log("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
             console.log("[DEBUG] Desc: " + description);
             console.log("Attempting to relaunch ws");
-            this.launchWS();
+
+            /** Dirty hack.
+             * @todo try and figure out how to do it without re-identify
+             */
+            this.initSpectrum();
         });
     }
 
