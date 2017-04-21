@@ -1,3 +1,4 @@
+import { State } from './state.service';
 /**
  * @module Spectrum
  */ /** */
@@ -12,11 +13,12 @@ import { WebSocketConnection } from 'websocket';
  */
 export class Broadcaster {
     /** the WebSocket connection */
-    protected _ws:WebSocketConnection;
+    protected _ws: WebSocketConnection;
     /** the singleton Broadcaster */
-    protected static _instance:Broadcaster = new Broadcaster();
+    protected static _instance: Broadcaster = new Broadcaster();
+    protected _state: State;
     /** our message listeners */
-    protected _listerners=[];
+    protected _listerners = [];
     protected member;
 
     /**
@@ -34,22 +36,13 @@ export class Broadcaster {
      * Sets the WS once connected and starts listening
      * @param ws the ws to spectrum
      */
-    public setWs(ws:WebSocketConnection) {
+    public setWs(ws: WebSocketConnection, state: State) {
         this._ws = ws;
+        this._state = state;
+
         this._ws.on('message', (message) => {
             this.handleMessages(message);
         });
-
-        this.keepAlive();
-    }
-
-    /**
-     * Broadcast a keep alive msg for the ws stream
-     */
-    private keepAlive() {
-        // Spectrum seems to just send a raw 8 for keepalive...
-        this.broadCastMessage(8, true);
-        setTimeout(() => this.keepAlive(), 60*30*1000);
     }
 
     public setBot(botM) {
@@ -66,7 +59,7 @@ export class Broadcaster {
      * @throws Error on no broadcaster init
      */
     public static getInstance(): Broadcaster {
-        if(!Broadcaster._instance) throw new Error("Error: No Instance of BroadCaster. Did you Call Spectrum.Init() ?")
+        if (!Broadcaster._instance) throw new Error("Error: No Instance of BroadCaster. Did you Call Spectrum.Init() ?")
         return Broadcaster._instance;
     }
 
@@ -76,8 +69,8 @@ export class Broadcaster {
      * @param raw send as raw data or stringified. defaults to stringified
      * @throws Error on no ws connection.
      */
-    public broadCastMessage(msg:any, raw:boolean=false) {
-        if(!this._ws.connected) {
+    public broadCastMessage(msg: any, raw: boolean = false) {
+        if (!this._ws.connected) {
 
             throw new Error("Error: WebSocket isn't connected");
         }
@@ -98,12 +91,12 @@ export class Broadcaster {
         }
 
         let payload = JSON.parse(message.utf8Data);
-        for(var i=0; i < this._listerners.length; i++) {
+        for (var i = 0; i < this._listerners.length; i++) {
             let listener = this._listerners[i];
-            if(!payload.type || payload.type.indexOf(listener.type) !== 0) continue;
+            if (!payload.type || payload.type.indexOf(listener.type) !== 0) continue;
 
-            if(this.testObjects(payload, listener.content)) {
-                console.log("calling LISTENER "+i);
+            if (this.testObjects(payload, listener.content)) {
+                console.log("calling LISTENER " + i);
                 listener.callback(payload);
             }
         }
@@ -114,26 +107,26 @@ export class Broadcaster {
     * Test between two objects
     * @todo do this better ? idk
     */
-    private testObjects(obj1,obj2) {
-        if(obj2 === null) return true;
-        if(obj1 == obj2 && !(obj2 instanceof Object)) return true;
+    private testObjects(obj1, obj2) {
+        if (obj2 === null) return true;
+        if (obj1 == obj2 && !(obj2 instanceof Object)) return true;
 
-        if(obj2 instanceof Object)
-        for(var p in obj2) {
-            // Doesn't exist and we wanted it.
-            if(!obj1[p]) return false;
-            // Exist but mismatch
-            if(obj1[p] != obj2[p]) {
-                // wildcard is okay
-                if(obj2[p] === null) continue;
-            
-                // Not a wildcard and can't recurse
-                if (!(obj2[p] instanceof Object)) return false;
+        if (obj2 instanceof Object)
+            for (var p in obj2) {
+                // Doesn't exist and we wanted it.
+                if (!obj1[p]) return false;
+                // Exist but mismatch
+                if (obj1[p] != obj2[p]) {
+                    // wildcard is okay
+                    if (obj2[p] === null) continue;
 
-                // Can recurse
-                if(!this.testObjects(obj1[p],obj2[p])) return false;     
+                    // Not a wildcard and can't recurse
+                    if (!(obj2[p] instanceof Object)) return false;
+
+                    // Can recurse
+                    if (!this.testObjects(obj1[p], obj2[p])) return false;
+                }
             }
-        }
 
         return true;
     }
@@ -145,7 +138,7 @@ export class Broadcaster {
      * @param callback the function to call on hit
      * @return the id of the newly created listener
      */
-    public addListener(messageType, callback, content=null):number {
+    public addListener(messageType, callback, content = null): number {
         return this._listerners.push(
             {
                 type: messageType,
@@ -154,14 +147,20 @@ export class Broadcaster {
             }
         );
     }
+    /**
+     * Returns the state associated to this broadcaster instance
+     */
+    public getState(): State {
+        return this._state;
+    }
 
     /**
      * Removes a Listener 
      * @param listenerId the id given by AddListener
      */
-    public removeListener(listenerId:number) {
-        if(this._listerners[listenerId])
-            this._listerners.splice( listenerId , 1 );
+    public removeListener(listenerId: number) {
+        if (this._listerners[listenerId])
+            this._listerners.splice(listenerId, 1);
     }
 
 }

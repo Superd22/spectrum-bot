@@ -1,3 +1,4 @@
+import { Broadcaster } from './broadcaster.service';
 /**
  * @module Spectrum
  */ /** */
@@ -19,7 +20,7 @@ export class Service {
     /** Wss Client for spectrum */
     private wss: WebSocketClient = new wssClient();
     /** Wss Connection for spectrum */
-    private wssCo: WebSocketConnection;
+    public wssCo: WebSocketConnection;
     /** the RSI API instance */
     private rsi: RSI = RSI.getInstance();
     /** clientId used as x-tavern-id for some calls */
@@ -107,7 +108,8 @@ export class Service {
      * Convenience method to launch spectrum ws
      */
     public launchWS(): boolean {
-        this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
+        console.log('[DEBUG] Connecting to WS');
+        let t = this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
         return true;
     }
 
@@ -172,10 +174,11 @@ export class Service {
             console.log("[DEBUG] Desc: " + description);
             console.log("Attempting to relaunch ws");
 
-            /** Dirty hack.
-             * @todo try and figure out how to do it without re-identify
-             */
-            this.initSpectrum();
+            // Re-launch wss.
+            this.launchWS();
+
+            // Tell the state to restore itself
+            this.state.restoreWS();
         });
     }
 

@@ -1,3 +1,4 @@
+import { Lobby } from './../interfaces/lobby.interface';
 /**
  * @module Spectrum
  */ /** */
@@ -33,7 +34,7 @@ export class State {
     protected roles;
 
     /** used internally to represent what lobbies we're listening to */
-    protected _SubscribedLobbies: SpectrumLobby[];
+    protected _SubscribedLobbies: SpectrumLobby[] = [];
     /** used internally to store the original state of things */
     protected _originalIdentify: Identify;
 
@@ -73,11 +74,27 @@ export class State {
     }
 
 
+    /**
+     * Method to re-send our current state to Spectrum on connection drop
+     * 
+     */
+    public restoreWS() {
+        // Re-subscribe to our previous lobbies
+        this.whenReady().then((ready) => {
+            if (ready) {
+                this._SubscribedLobbies.forEach((lobby) => {
+                    console.log("[DEBUG] Restored lobby " + lobby.getLobby().name);
+                    this.Broadcaster.broadCastMessage(lobby.buildSubscribtionMessage());
+                });
+            }
+        })
+    }
+
     public setWsConnected(ws: WebSocketConnection) {
         this.ws = ws;
 
         this.Broadcaster = Broadcaster.getInstance();
-        this.Broadcaster.setWs(ws);
+        this.Broadcaster.setWs(ws, this);
         this.Broadcaster.setBot(this.member);
 
         this.Broadcaster.addListener("broadcaster.ready", () => {
@@ -93,6 +110,28 @@ export class State {
      */
     public getSubscribedLobbies(): SpectrumLobby[] {
         return this._SubscribedLobbies;
+    }
+
+    /**
+     * Subscribes to a given lobby
+     * @param lobby the lobby to subscribe to
+     */
+    public subscribeToLobby(lobby: SpectrumLobby) {
+        this._SubscribedLobbies.push(lobby);
+        this.Broadcaster.broadCastMessage(lobby.buildSubscribtionMessage());
+    }
+
+    /**
+     * Checks if the supplied lobby is currently subscribed
+     * @param lobby a SpectrumLobby object
+     * @param id the id of the loby
+     * @return whether or not we're subscribed to this lobby
+     */
+    public isSubscribedToLobby(lobby: SpectrumLobby): boolean;
+    public isSubscribedToLobby(id: number): boolean;
+    public isSubscribedToLobby(final): boolean {
+        if (typeof final !== typeof 123) final = final.getLobby().id;
+        return this._SubscribedLobbies.findIndex((lobby: SpectrumLobby) => Number(lobby.getLobby().id) === final) > -1
     }
 
     /**

@@ -29,11 +29,11 @@ export class SpectrumLobby {
      * Create a new SpectrumLobby
      * @param lobby the rsi lobby info
      */
-    constructor(lobby:number);
-    constructor(lobby:Lobby);
-    constructor(lobby:any) {
-        console.log(typeof lobby );
-        if(typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
+    constructor(lobby: number);
+    constructor(lobby: Lobby);
+    constructor(lobby: any) {
+        console.log(typeof lobby);
+        if (typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
         else this._lobby = lobby;
     }
 
@@ -43,7 +43,7 @@ export class SpectrumLobby {
      * @param highlight_role_id the role id to take (color of the post)
      * @return A promise on the rsi api call 
      */
-    public sendPlainTextMessage(text:string, highlight_role_id=null):Promise<SpectrumTextMessage> {
+    public sendPlainTextMessage(text: string, highlight_role_id = null): Promise<SpectrumTextMessage> {
         let m = this.generateTextPayload(text, null, highlight_role_id);
         return this.doPostMessage(m);
     }
@@ -55,19 +55,19 @@ export class SpectrumLobby {
      * @param highlight_role_id the role id to take (color of the post)
      * @return information on the created post
      */
-    public sendTextMessageWithEmbed(text:string, embedUrl:string, highlight_role_id=null):Promise<SpectrumTextMessage> {
-        if(!embedUrl) return this.sendPlainTextMessage(text,highlight_role_id);
+    public sendTextMessageWithEmbed(text: string, embedUrl: string, highlight_role_id = null): Promise<SpectrumTextMessage> {
+        if (!embedUrl) return this.sendPlainTextMessage(text, highlight_role_id);
 
         return SpectrumTextMessage.fetchEmbedMediaId(embedUrl).then((embedId) => {
             let m = this.generateTextPayload(text, embedId, highlight_role_id);
             return this.doPostMessage(m);
-        });   
+        });
     }
 
     /**
      * @todo create interface to validate postData
      */
-    private doPostMessage(postData):Promise<SpectrumTextMessage> {
+    private doPostMessage(postData): Promise<SpectrumTextMessage> {
         return this.rsi.post("api/spectrum/message/create", postData).then((res) => {
             return new SpectrumTextMessage(res.data);
         });
@@ -100,14 +100,14 @@ export class SpectrumLobby {
         return this.rsi.post("api/spectrum/message/edit", m).then(res => console.log(res.data));
     }
 
-    private generateTextPayload(text, mediaId=null, highlightId=null) {
+    private generateTextPayload(text, mediaId = null, highlightId = null) {
         return {
-                content_state: SpectrumTextMessage.generateContentStateFromText(text),
-                highlight_role_id: highlightId,
-                lobby_id: this._lobby.id,
-                media_id: mediaId,
-                plaintext: text,
-            };
+            content_state: SpectrumTextMessage.generateContentStateFromText(text),
+            highlight_role_id: highlightId,
+            lobby_id: this._lobby.id,
+            media_id: mediaId,
+            plaintext: text,
+        };
     }
 
     public getHistory() {
@@ -131,7 +131,11 @@ export class SpectrumLobby {
      * It is needed to subscribe to a channel to get any update from it (new message/reaction...)
      */
     public subscribe() {
-        this.broadcaster.broadCastMessage(this.buildSubscribtionMessage());
+        this.broadcaster.getState().subscribeToLobby(this);
+    }
+
+    public isSubscribed(): boolean {
+        return this.broadcaster.getState().isSubscribedToLobby(this);
     }
 
     /**
@@ -176,7 +180,7 @@ export class SpectrumLobby {
         this.broadcaster.removeListener(this._messageListener);
     }
 
-    public getLobby() {
+    public getLobby(): Lobby {
         return this._lobby;
     }
 
