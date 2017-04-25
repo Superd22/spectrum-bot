@@ -51,12 +51,10 @@ export class SpectrumCommands {
         //    let args[] = ... something to get the third-Nth token (command args)
         //
         //    // no regex matching so faster since its a simple compare
-        //    this._commandMap.forEach((value:aSpectrumCommand, key:string)=>{
-        //      if (key === parsedShortCode) {
-        //        value.callback(payload.message, lobby, parsedCommand.args);
-        //        return;
-        //      }
-        //    });
+        //    if (this._commandMap.has(parsedShortCode)) {
+        //      this._commandMap[parsedShortCode].callback(payload.message, lobby, args);
+        //      return;
+        //    }
         //  }
 
         this._commandMap.forEach((value:aSpectrumCommand, key:string)=>{
