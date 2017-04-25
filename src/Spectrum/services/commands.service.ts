@@ -9,10 +9,10 @@ import { aBotCommand } from '../components/command.component';
 import { SpectrumLobby } from './../components/lobby.component';
 import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
 
+import { TSMap } from "typescript-map"
+
 /** @class SpectrumCommand */
 export class SpectrumCommands {
-
-    protected _commandList: aSpectrumCommand[] = [];
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
@@ -22,28 +22,51 @@ export class SpectrumCommands {
 
     protected _listenerId:number;
 
+    protected _commandMap: TSMap; // is this initialized?
+
     constructor() {
         this._listenerId = this.Broadcaster.addListener("message.new", this.checkForCommand);
     }
 
     private checkForCommand = (payload:{message:receivedTextMessage}) => {
         let bot = this.Broadcaster.getMember();
-        let message = payload.message;
+        let messageAsLower = payload.message.plaintext.toLowerCase();
 
         //if(Number(bot.id) == Number(message.member.id)) return false;
-        if(message.plaintext.toLowerCase().indexOf(this.prefix) == -1) return false;
+        if(messageAsLower.indexOf(this.prefix) == -1) return false;
 
-        let lobby = new SpectrumLobby(message.lobby_id);
+        // why cant the spectrum message just own a Lobby instance if all it is wrapping is an ID?
+        let lobby = new SpectrumLobby(payload.message.lobby_id);
 
-        for(var i = 0; i < this._commandList.length; i++) {
-            let command = this._commandList[i];
-            let re = new RegExp( String("^"+this.prefix+" "+command.shortCode).toLowerCase(), );
+        // This should probably just parse out the shortcode and use that as the key
+        // with a direct equality compare rather than regexing.
+        // Its unlikely you would have 2 commands with the same shortcode and different regex
+        // arguments. Better to just map the shortcode and then let the command deal with its own
+        // args. Regex is usually fairly expensive so would be nice to eliminate if possible
+        //
+        // Basically something like
+        //
+        // if ( messageAsLower.startsWith(this.prefix) ) {
+        //    let parsedShortCode = ... something to get the second token (first is prefix)  (.toLowerCase())
+        //    let args[] = ... something to get the third-Nth token (command args)
+        //
+        //    // no regex matching so faster since its a simple compare
+        //    this._commandMap.forEach((value:aSpectrumCommand, key:string)=>{
+        //      if (key === parsedShortCode) {
+        //        value.callback(payload.message, lobby, parsedCommand.args);
+        //        return;
+        //      }
+        //    });
+        //  }
 
-            let matchs = message.plaintext.toLowerCase().match(re);
-            console.log("check co");
-            console.log(command);
-            if(matchs) command.callback(message, lobby, matchs);
-        }
+        this._commandMap.forEach((value:aSpectrumCommand, key:string)=>{
+            let re = new RegExp("^" + key, );
+            let matches = messageAsLower.match(re);
+            if ( matches ) {
+                value.callback(payload.message, lobby, matches);
+                return; // there cant be 2 commands can there?
+            }
+        });
     }
 
     public setPrefix(prefix:string) {
@@ -71,8 +94,10 @@ export class SpectrumCommands {
             co = name;
         }
 
-        let id = this._commandList.push(co);
-        co.listenerID = id;
+        var commandString = this.prefix.toLowerCase() + " " + co.shortCode.toLowerCase();
+        this._commandMap.set(commandString, co);
+
+        co.listenerID = this._commandMap.size; // Why?
 
         return co;
     }
@@ -90,15 +115,17 @@ export class SpectrumCommands {
     public unRegisterCommand(command:aBotCommand);
     public unRegisterCommand(commandId:number);
     public unRegisterCommand(co) {
-        if(typeof co !== typeof 123) {
-            co = co.ID;
-            co.listenerID = null;
-        }
-        this._commandList.splice(co, 1);
+
+        let shortcodeAsLower = co.shortCode.toLowerCase();
+
+        this._commandMap.filter(function(command, key) {
+            return key === shortcodeAsLower;
+        });
+
     }
 
     public getCommandList(): aSpectrumCommand[] {
-        return this._commandList;
+        return this._commandMap.values();
     }
 
 
