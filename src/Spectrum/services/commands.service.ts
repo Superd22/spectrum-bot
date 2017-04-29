@@ -17,12 +17,12 @@ export class SpectrumCommands {
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
     private Broadcaster: Broadcaster=Broadcaster.getInstance();
-
+    /** The prefix for the commands */
     protected prefix:string="\\spbot"
-
+    /** Main listener for commands */
     protected _listenerId:number;
-
-    protected _commandMap: TSMap; // is this initialized?
+    /** Map of commands */
+    protected _commandMap: TSMap<string, aSpectrumCommand>;
 
     constructor() {
         this._listenerId = this.Broadcaster.addListener("message.new", this.checkForCommand);
@@ -94,8 +94,6 @@ export class SpectrumCommands {
 
         var commandString = this.prefix.toLowerCase() + " " + co.shortCode.toLowerCase();
         this._commandMap.set(commandString, co);
-
-        co.listenerID = this._commandMap.size; // Why?
 
         return co;
     }
