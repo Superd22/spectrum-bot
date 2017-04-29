@@ -48,9 +48,6 @@ export class Service {
             this.state.setWsConnected(this.wssCo);
             this.reconnectTTL = 10;
 
-            // Tell the state to restore itself
-            this.state.restoreWS();
-
             if (callback) callback(connection);
             else this.wssConnected(connection);
         });

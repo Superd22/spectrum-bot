@@ -1,3 +1,4 @@
+import { RSIApiResponse } from './../../RSI/interfaces/RSIApiResponse.interface';
 import { Lobby } from './../interfaces/lobby.interface';
 /**
  * @module Spectrum
@@ -45,8 +46,8 @@ export class State {
     /** our websocket connection to spectrum*/
     private ws: WebSocketConnection;
 
-    private _isReady(a) { };
-    private _hasFailed(a) { };
+    private static _isReady(a) { };
+    private static _hasFailed(a) { };
 
     /**
      * Creates a State Object
@@ -66,7 +67,7 @@ export class State {
         this.roles = packet.roles;
     }
 
-    public whenReady(): Promise<boolean> {
+    public static whenReady(): Promise<boolean> {
         return new Promise((success, fail) => {
             this._isReady = success;
             this._hasFailed = fail;
@@ -80,7 +81,7 @@ export class State {
      */
     public restoreWS() {
         // Re-subscribe to our previous lobbies
-        this.whenReady().then((ready) => {
+        State.whenReady().then((ready) => {
             if (ready) {
                 this._SubscribedLobbies.forEach((lobby) => {
                     console.log("[DEBUG] Restored lobby " + lobby.getLobby().name);
@@ -99,7 +100,8 @@ export class State {
 
         this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
-            this._isReady(true);
+            State._isReady(true);
+            this.restoreWS();
         });
     }
 
@@ -182,7 +184,7 @@ export class State {
      * @param status the status
      * @param info the "sub-status"
      */
-    public setBotPresence(status: "away" | "online" | "playing" | "do_not_disturb" | "invisible", info?: string) {
+    public setBotPresence(status: "away" | "online" | "playing" | "do_not_disturb" | "invisible", info?: string): Promise<RSIApiResponse> {
         return this.RSI.post("api/spectrum/member/presence/setStatus", { status: status, info: info });
     }
 
