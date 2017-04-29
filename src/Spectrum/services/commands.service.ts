@@ -22,7 +22,7 @@ export class SpectrumCommands {
     /** Main listener for commands */
     protected _listenerId:number;
     /** Map of commands */
-    protected _commandMap: TSMap<string, aSpectrumCommand>;
+    protected _commandMap: TSMap<string, aSpectrumCommand> = new TSMap<string, aSpectrumCommand>();
 
     constructor() {
         this._listenerId = this.Broadcaster.addListener("message.new", this.checkForCommand);
