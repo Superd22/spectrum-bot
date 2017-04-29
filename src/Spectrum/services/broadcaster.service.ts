@@ -76,7 +76,7 @@ export class Broadcaster {
         }
 
         let payload = raw ? msg : JSON.stringify(msg);
-        console.log("[WSS] : SENDING MESSAGE " + payload);
+        console.log("[WSS] SENDING MESSAGE " + payload);
         this._ws.sendUTF(payload);
     }
 
@@ -87,7 +87,7 @@ export class Broadcaster {
      */
     private handleMessages(message) {
         if (message.type === 'utf8') {
-            console.log("[STATE] Message Received: '" + message.utf8Data + "'");
+            console.log("[WSS] Message Received: '" + message.utf8Data + "'");
         }
 
         let payload = JSON.parse(message.utf8Data);
@@ -96,7 +96,7 @@ export class Broadcaster {
             if (!payload.type || payload.type.indexOf(listener.type) !== 0) continue;
 
             if (this.testObjects(payload, listener.content)) {
-                console.log("calling LISTENER " + i);
+                console.log("[BROADCASTER] Calling LISTENER " + i);
                 listener.callback(payload);
             }
         }

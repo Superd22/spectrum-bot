@@ -32,7 +32,6 @@ export class SpectrumLobby {
     constructor(lobby: number);
     constructor(lobby: Lobby);
     constructor(lobby: any) {
-        console.log(typeof lobby);
         if (typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
         else this._lobby = lobby;
     }

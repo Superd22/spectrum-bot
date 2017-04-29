@@ -63,7 +63,7 @@ export class Service {
     public initSpectrum(): Promise<boolean>;
     public initSpectrum(username, password): Promise<boolean>;
     public initSpectrum(username?, password?): Promise<boolean> {
-        console.log("login rsi");
+        console.log("[SPECTRUM] Login rsi");
 
         if (username && password) {
             this.rsi.setUsername(username);
@@ -74,7 +74,7 @@ export class Service {
         return this.identify().then((payload: Identify) => {
             console.log(payload.member);
             if (payload.member !== null && payload.member.id) {
-                console.log("init ws on cookie.");
+                console.log("[SPECTRUM] Init ws on cookie.");
                 return this.initWs(payload);
             }
 
@@ -86,9 +86,8 @@ export class Service {
                     process.exit(1);
                 }
 
-                console.log("did rsi login");
                 return this.identify().then((payload: Identify) => {
-                    console.log("did rsi login");
+                    console.log("[SPECTRUM] Did rsi login");
                     return this.initWs(payload);
                 });
             });
@@ -103,7 +102,7 @@ export class Service {
      * @return if the connection was successfull
      */
     private initWs(payload: Identify): boolean {
-        console.log("Connecting to wss");
+        console.log("[SPECTRUM] Connecting to wss");
         this._payload = payload;
         this.state = new State(payload);
         return this.launchWS();
@@ -143,9 +142,9 @@ export class Service {
      * @param error the wss connectFailed error
      */
     private wssConnecFailed(error) {
-        console.log('Connect Error: ' + error.toString());
-        console.log('The RSI W.S is probably down.');
-        console.log('Attempting re-connection in 10 secondes ()');
+        console.log('[DEBUG] Connect Error: ' + error.toString());
+        console.log('[DEBUG] The RSI W.S is probably down.');
+        console.log('[DEBUG] Attempting re-connection in 10 secondes ()');
 
         if (this.reconnectTTL > 0) {
             this.reconnectTTL--;
@@ -166,7 +165,7 @@ export class Service {
         return this.rsi.post("api/spectrum/auth/identify").then((res: RSIApiResponse) => {
             let data = res.data;
 
-            console.log("IDENTIFY OK");
+            console.log("[SPECTRUM] IDENTIFY OK");
             this.getTavernId(data.token);
 
             return data;
@@ -179,16 +178,16 @@ export class Service {
      * @todo handle messages
      */
     private wssConnected(connection) {
-        console.log('WebSocket Client Connected');
+        console.log('[DEBUG] WebSocket Client Connected');
 
         connection.on('error', function (error) {
-            console.log("Connection Error: " + error.toString());
+            console.log("[DEBUG] Connection Error: " + error.toString());
         });
 
         connection.on('close', (reasonCode, description) => {
             console.log("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
             console.log("[DEBUG] Desc: " + description);
-            console.log("Attempting to relaunch ws");
+            console.log("[DEBUG] Attempting to relaunch ws");
 
             // Re-launch wss.
             this.launchWS();
