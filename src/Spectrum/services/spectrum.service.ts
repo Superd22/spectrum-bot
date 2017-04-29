@@ -29,7 +29,10 @@ export class Service {
     private spectrumUrl = "wss://spectrum-gw.robertsspaceindustries.com/";
     /** backup payload */
     private _payload: Identify;
+    /** state of the system */
     private state: State;
+    /** amount of reconnect tries we still have */
+    private reconnectTTL: number = 10;
 
     /**
      * 
@@ -43,6 +46,11 @@ export class Service {
         this.wss.on('connect', (connection: WebSocketConnection) => {
             this.wssCo = connection;
             this.state.setWsConnected(this.wssCo);
+            this.reconnectTTL = 10;
+
+            // Tell the state to restore itself
+            this.state.restoreWS();
+
             if (callback) callback(connection);
             else this.wssConnected(connection);
         });
@@ -139,6 +147,17 @@ export class Service {
      */
     private wssConnecFailed(error) {
         console.log('Connect Error: ' + error.toString());
+        console.log('The RSI W.S is probably down.');
+        console.log('Attempting re-connection in 10 secondes ()');
+
+        if (this.reconnectTTL > 0) {
+            this.reconnectTTL--;
+            setTimeout(() => this.launchWS(), 10000);
+        }
+        else {
+            // Drop the bot
+            process.exit(1);
+        }
     }
 
     /**
@@ -176,9 +195,6 @@ export class Service {
 
             // Re-launch wss.
             this.launchWS();
-
-            // Tell the state to restore itself
-            this.state.restoreWS();
         });
     }
 
