@@ -26,7 +26,7 @@ export class Service {
     /** clientId used as x-tavern-id for some calls */
     private clientId;
     /** main wss endpoint */
-    private spectrumUrl = "wss://spectrum-gw.robertsspaceindustries.com/";
+    private spectrumUrl = "wss://robertsspaceindustries.com/ws/spectrum";
     /** backup payload */
     private _payload: Identify;
     /** state of the system */
@@ -199,9 +199,11 @@ export class Service {
      * @param token the token returned by the identify call
      */
     private getTavernId(token) {
-        /** The middle part of the token contains a payload in base64 
+        /** 
+         * [LEGACY]
+         * The middle part of the token contains a payload in base64 
          *  containing current client info, namely the client_id which is required 
-         *  as x-tavern-id for any api call  */
+         *  as x-tavern-id for any api call
         if (token) {
             var parts = token.split(".");
             var decoded = new Buffer(parts[1], 'base64').toString();
@@ -210,7 +212,12 @@ export class Service {
             this.clientId = payload.client_id;
 
             this.rsi.setTavernId(this.clientId);
+        }  */
+
+        if (token) {
+            this.rsi.setTavernId(token);
         }
+
     }
 
     /**
