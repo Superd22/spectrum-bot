@@ -56,7 +56,8 @@ export class SpectrumTextMessage {
 
     }
 
-    public static generateContentStateFromText(text: string, delimiter?: string, disableEmojis = false, disableMentions = false) {
+    public static generateContentStateFromText(textObj: {text: string}, delimiter?: string, disableEmojis = false, disableMentions = false) {
+        let text = textObj.text;
         let base = ContentState.createFromText(text, delimiter);
 
         let blocks = base.getBlocksAsArray();
@@ -80,6 +81,10 @@ export class SpectrumTextMessage {
                 curEntity = SpectrumTextMessage.findEmojiInText(curEntity);
             }
 
+            console.log("finally : \n");
+            console.log(curEntity);
+            console.log("\n\n");
+
             let m = {
                 key: blocks[i].key,
                 type: blocks[i].type,
@@ -92,6 +97,11 @@ export class SpectrumTextMessage {
 
             finalBlocks.push(m);
         }
+
+        textObj.text = "";
+        finalBlocks.forEach(block => {
+            textObj.text += block.text+" \n";
+        });
 
         return { blocks: finalBlocks, entityMap: curEntity["EntityMap"] };
     }
@@ -115,7 +125,11 @@ export class SpectrumTextMessage {
             let mention = "@" + m[1];
 
             // Cut the mention to "@Handle"
+            console.log("##################MENTION##############");
+            console.log(m[0]);
             text = text.replace(m[0], mention);
+            console.log(text);
+            console.log("\n\n");
 
 
             // Flag this spot as a mention

@@ -100,12 +100,13 @@ export class SpectrumLobby {
     }
 
     private generateTextPayload(text, mediaId = null, highlightId = null) {
+        let textObj = {text:text};
         return {
-            content_state: SpectrumTextMessage.generateContentStateFromText(text),
+            content_state: SpectrumTextMessage.generateContentStateFromText(textObj),
             highlight_role_id: highlightId,
             lobby_id: this._lobby.id,
             media_id: mediaId,
-            plaintext: text,
+            plaintext: textObj.text,
         };
     }
 
