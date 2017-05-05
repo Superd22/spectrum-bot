@@ -54,9 +54,18 @@ export class State {
      * @param ws the RSI Spectrum websocket.
      */
     constructor(packet: Identify) {
+        this.newIdentifyPacket(packet);
+    }
+
+    /**
+     * Updates the state with a new identify packet
+     * @param packet the identify packet as sent by the RSI API
+     */
+    public newIdentifyPacket(packet: Identify) {
         this._originalIdentify = packet;
 
         this.bookmarks = packet.bookmarks;
+        this.communities = [];
         packet.communities.forEach((co: Community) => {
             this.communities.push(new SpectrumCommunity(co));
         });

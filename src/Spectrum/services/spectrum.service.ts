@@ -30,9 +30,11 @@ export class Service {
     /** backup payload */
     private _payload: Identify;
     /** state of the system */
-    private state: State;
-    /** amount of reconnect tries we still have */
+    private state: State = null;
+    /** amount of reconnect (on connection loss) tries we still have */
     private reconnectTTL: number = 10;
+    /** amount of reconnect (on ws drop) before identify again */
+    private dropAuthTTL: number = 2;
 
     /**
      * 
@@ -47,6 +49,7 @@ export class Service {
             this.wssCo = connection;
             this.state.setWsConnected(this.wssCo);
             this.reconnectTTL = 10;
+            this.dropAuthTTL = 2;
 
             if (callback) callback(connection);
             else this.wssConnected(connection);
@@ -104,7 +107,8 @@ export class Service {
     private initWs(payload: Identify): boolean {
         console.log("[SPECTRUM] Connecting to wss");
         this._payload = payload;
-        this.state = new State(payload);
+        if (this.state === null) this.state = new State(payload);
+        else this.state.newIdentifyPacket(payload);
         return this.launchWS();
     }
 
@@ -113,7 +117,8 @@ export class Service {
      */
     public launchWS(): boolean {
         console.log('[DEBUG] Connecting to WS');
-        let t = this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
+        this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
+
         return true;
     }
 
@@ -190,7 +195,22 @@ export class Service {
             console.log("[DEBUG] Attempting to relaunch ws");
 
             // Re-launch wss.
-            this.launchWS();
+            if (this.dropAuthTTL > 0) {
+                this.dropAuthTTL--;
+                this.launchWS();
+            }
+            else {
+
+                if (this.dropAuthTTL < -1) {
+                    console.log("[DEBUG] couldn't reconnect to ws after auth, shutting down..");
+                    process.exit(1);
+                }
+
+                console.log("[DEBUG] Attempting to re-auth before relauching ws.");
+                this.initSpectrum();
+
+                this.dropAuthTTL--;
+            }
         });
     }
 
