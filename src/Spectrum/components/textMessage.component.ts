@@ -8,6 +8,8 @@ import { ContentState } from 'draft-js';
 import { RSI } from './../../RSI/';
 import { emojioneList } from './emoji.component';
 
+interface curEntities { entityRanges: any[], EntityMap: any, plainText: string };
+
 export class SpectrumTextMessage {
     protected _message: TextMessage;
     protected static _emojis = "";
@@ -56,7 +58,7 @@ export class SpectrumTextMessage {
 
     }
 
-    public static generateContentStateFromText(textObj: {text: string}, delimiter?: string, disableEmojis = false, disableMentions = false) {
+    public static generateContentStateFromText(textObj: { text: string }, delimiter?: string, disableEmojis = false, disableMentions = false) {
         let text = textObj.text;
         let base = ContentState.createFromText(text, delimiter);
 
@@ -64,7 +66,7 @@ export class SpectrumTextMessage {
         var finalBlocks = [];
         var finalEntities = [];
         var entityMap = {};
-        var curEntity: { EntityMap: any, entityRanges: any } = { EntityMap: {}, entityRanges: [] };
+        var curEntity: curEntities = { EntityMap: {}, entityRanges: [], plainText: null };
 
         /**
          *  blocks: SpectrumTextMessage.generateTextBlocksFromText(text),
@@ -79,6 +81,10 @@ export class SpectrumTextMessage {
 
             if (!disableEmojis) {
                 curEntity = SpectrumTextMessage.findEmojiInText(curEntity);
+            }
+
+            if (!disableMentions && !disableEmojis) {
+                curEntity = SpectrumTextMessage.reorganizeEntities(curEntity);
             }
 
             let m = {
@@ -102,14 +108,32 @@ export class SpectrumTextMessage {
         return { blocks: finalBlocks, entityMap: curEntity["EntityMap"] };
     }
 
-    public static findMentionsInText(text, curEntity): { entityRanges: any, EntityMap: any, plainText:string } {
+    /**
+     * Called after we've parsed every different entitities for rich text in order to sort them.
+     * Apparently, the spectrum back end doesn't like when the entities aren't in the same order they are in text,
+     * and that causes a weird bug where the text will duplicate.
+     * 
+     * This fixes this.
+     * 
+     * @todo report this.
+     */
+    private static reorganizeEntities(curEntity: curEntities): curEntities {
+        // sort the EntityRanges array by offset
+        curEntity.entityRanges.sort((a, b) => {
+            return a.offset - b.offset;
+        });
+
+        return curEntity;
+    }
+
+    public static findMentionsInText(text, curEntity): curEntities {
         var entityRanges = [];
         let menCheck = new RegExp(/<scAPIM>@([^ ]+):(\d+)<\/scAPIM>/, 'g');
         var m;
 
         let entityMap = curEntity["EntityMap"];
 
-        while ( (m = menCheck.exec(text)) !== null) {
+        while ((m = menCheck.exec(text)) !== null) {
             /** This is easier than emojis as spectrum currently doesn't give a shit and will treat multiple
              *  mention to the same guy as different mentions
              */
@@ -135,7 +159,7 @@ export class SpectrumTextMessage {
         return { entityRanges: entityRanges, EntityMap: entityMap, plainText: text };
     }
 
-    public static findEmojiInText(curEntity): { entityRanges: any, EntityMap: any, plainText:string } {
+    public static findEmojiInText(curEntity): curEntities {
         let entityRanges = curEntity["entityRanges"] || [];
         let entityMap = curEntity["EntityMap"];
 
