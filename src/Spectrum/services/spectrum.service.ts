@@ -194,6 +194,8 @@ export class Service {
             console.log("[DEBUG] Desc: " + description);
             console.log("[DEBUG] Attempting to relaunch ws");
 
+            console.log("[DEBUG] ATTEMPT #"+this.dropAuthTTL);
+
             // Re-launch wss.
             if (this.dropAuthTTL > 0) {
                 this.dropAuthTTL--;

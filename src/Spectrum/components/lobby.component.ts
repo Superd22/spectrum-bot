@@ -44,6 +44,11 @@ export class SpectrumLobby {
      */
     public sendPlainTextMessage(text: string, highlight_role_id = null): Promise<SpectrumTextMessage> {
         let m = this.generateTextPayload(text, null, highlight_role_id);
+
+        console.log("paylod:");
+        console.log(JSON.stringify(m,null,2));
+        console.log("\n\n");
+
         return this.doPostMessage(m);
     }
 
