@@ -102,7 +102,7 @@ export class SpectrumTextMessage {
 
         textObj.text = "";
         finalBlocks.forEach(block => {
-            //textObj.text += block.text;
+            textObj.text += block.text;
         });
 
         return { blocks: finalBlocks, entityMap: curEntity["EntityMap"] };
