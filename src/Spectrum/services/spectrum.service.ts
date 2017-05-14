@@ -6,11 +6,10 @@ import { Broadcaster } from './broadcaster.service';
 import { State } from './state.service';
 import { Identify } from './../interfaces/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
-import { WebSocketConnection, WebSocketClient } from 'websocket';
+import { WebSocketConnection, WebSocketClient, client as wssClient } from 'websocket';
 import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
 import { SpectrumUser } from '../components/user.component';
 
-var wssClient = require('websocket').client;
 /**
  * Main API Class for Spectrum BOT
  * Performs every spectrum user actions via wss or api calls
@@ -48,12 +47,15 @@ export class Service {
         this.wss.on('connect', (connection: WebSocketConnection) => {
             this.wssCo = connection;
             this.state.setWsConnected(this.wssCo);
-            this.reconnectTTL = 10;
-            this.dropAuthTTL = 2;
 
             if (callback) callback(connection);
             else this.wssConnected(connection);
         });
+    }
+
+    public resetTTLs() {
+        this.reconnectTTL = 10;
+        this.dropAuthTTL = 2;
     }
 
     /**
@@ -107,7 +109,11 @@ export class Service {
     private initWs(payload: Identify): boolean {
         console.log("[SPECTRUM] Connecting to wss");
         this._payload = payload;
-        if (this.state === null) this.state = new State(payload);
+        if (this.state === null) {
+            this.state = new State(payload);
+
+            this.state.onBroadcasterReady.subscribe( () => this.resetTTLs );
+        }
         else this.state.newIdentifyPacket(payload);
         return this.launchWS();
     }

@@ -1,4 +1,3 @@
-import { Lobby } from './../interfaces/lobby.interface';
 /**
  * @module Spectrum
  */ /** */
@@ -12,7 +11,8 @@ import { Community } from './../interfaces/community.interface';
 import { SpectrumCommunity } from './../components/community.component';
 import { MessageType } from './../enums/messageType.enum';
 import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
-
+import { Lobby } from './../interfaces/lobby.interface';
+import { SignalDispatcher, ISignal } from 'strongly-typed-events';
 
 /**
  * @class State
@@ -48,6 +48,8 @@ export class State {
     private _isReady(a) { };
     private _hasFailed(a) { };
 
+    private _broadcasterReadyEvent = new SignalDispatcher();
+
     /**
      * Creates a State Object
      * @param packet the Identify packet as sent by the RSI API
@@ -55,6 +57,14 @@ export class State {
      */
     constructor(packet: Identify) {
         this.newIdentifyPacket(packet);
+    }
+
+    /**
+     * Return an event each time the broadcaster is sucessfully connected
+     * @return the event
+     */
+    public get onBroadcasterReady(): ISignal {
+        return this._broadcasterReadyEvent.asEvent();
     }
 
     /**
@@ -75,6 +85,10 @@ export class State {
         this.roles = packet.roles;
     }
 
+    /**
+     * Convenience promise to track the first initialization of the API
+     * @return a promise that will be true (and consumed) the next time the broadcaster is up and ready.
+     */
     public whenReady(): Promise<boolean> {
         return new Promise((success, fail) => {
             this._isReady = success;
@@ -95,6 +109,9 @@ export class State {
         });
     }
 
+    /**
+     * Fonction to set the ws status as connected and listen for the ready signal.
+     */
     public setWsConnected(ws: WebSocketConnection) {
         this.ws = ws;
 
@@ -104,6 +121,7 @@ export class State {
 
         this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
+            this._broadcasterReadyEvent.dispatch();
             this.restoreWS();
             this._isReady(true);
         });

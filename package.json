@@ -16,10 +16,11 @@
     "popsicle": "^9.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "strongly-typed-events": "^1.0.1",
     "tough-cookie-file-store": "^1.1.1",
     "typescript": "^2.2.2",
-    "websocket": "^1.0.24",
-    "typescript-map":"^0.0.3"
+    "typescript-map": "^0.0.3",
+    "websocket": "^1.0.24"
   },
   "devDependencies": {
     "@types/core-js": "^0.9.35",
