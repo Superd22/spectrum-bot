@@ -112,7 +112,7 @@ export class Service {
         if (this.state === null) {
             this.state = new State(payload);
 
-            this.state.onBroadcasterReady.subscribe( () => this.resetTTLs );
+            this.state.onBroadcasterReady.subscribe(() => this.resetTTLs());
         }
         else this.state.newIdentifyPacket(payload);
         return this.launchWS();
@@ -200,7 +200,7 @@ export class Service {
             console.log("[DEBUG] Desc: " + description);
             console.log("[DEBUG] Attempting to relaunch ws");
 
-            console.log("[DEBUG] ATTEMPT #"+this.dropAuthTTL);
+            console.log("[DEBUG] ATTEMPT #" + this.dropAuthTTL);
 
             // Re-launch wss.
             if (this.dropAuthTTL > 0) {
