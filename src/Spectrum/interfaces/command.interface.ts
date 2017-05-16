@@ -1,7 +1,8 @@
-import { SpectrumLobby } from './../components/lobby.component';
 /**
  * @module Spectrum
  */ /** */
+
+import { SpectrumLobby } from './../components/lobby.component';
 import { receivedTextMessage } from './receivedTextMessage.interface';
 
 export interface aSpectrumCommand {

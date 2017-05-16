@@ -1,3 +1,13 @@
+/**
+ * @module Spectrum
+ */ /** */
+
+/**
+ * List of available emojis as per 0.3.4a
+ * last updated : 16/05/17
+ * @todo type dis
+ * @todo figure out multi short code emojis
+ */
 export let emojioneList = {
     ":kiss_ww:":
     { unicode: ["1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", "1f469-2764-1f48b-1f469"], fname: "1f469-2764-1f48b-1f469", uc: "1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", isCanonical: !0 },

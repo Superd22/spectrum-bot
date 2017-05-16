@@ -1,8 +1,8 @@
-import { Broadcaster } from './broadcaster.service';
 /**
  * @module Spectrum
  */ /** */
-
+ 
+import { Broadcaster } from './broadcaster.service';
 import { State } from './state.service';
 import { Identify } from './../interfaces/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';

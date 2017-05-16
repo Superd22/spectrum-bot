@@ -1,9 +1,9 @@
-import { State } from './state.service';
+
 /**
  * @module Spectrum
  */ /** */
 
-
+import { State } from './state.service';
 import { WebSocketConnection } from 'websocket';
 
 /**

@@ -73,11 +73,11 @@
 <span class="hljs-keyword">var</span> bot = <span class="hljs-keyword">new</span> Spectrum();
 
 <span class="hljs-comment">// Init the bot as user (you need to declare a config)</span>
-bot.initAsUser(config.username, config.password).then( (isConnected) =&gt; {
+bot.initAsUser(config.username, config.password).then( <span class="hljs-function">(<span class="hljs-params">isConnected</span>) =&gt;</span> {
     <span class="hljs-keyword">let</span> state = bot.getState();
 
     <span class="hljs-comment">// Wait for internal state to be ready</span>
-    state.whenReady().then(() =&gt; {
+    state.whenReady().then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
 
         <span class="hljs-comment">// Get a community</span>
         <span class="hljs-keyword">let</span> global = state.getCommunityByName(<span class="hljs-string">"Star Citizen"</span>);
@@ -90,17 +90,17 @@ bot.initAsUser(config.username, config.password).then( (isConnected) =&gt; {
         testLobby.sendPlainTextMessage(<span class="hljs-string">"Hello this is a test !"</span>);
 
         <span class="hljs-comment">// Look for an user</span>
-        bot.LookForUserByName(<span class="hljs-string">"UserNameOrHandle"</span>).then((users:SpectrumUser[]) =&gt; {
+        bot.LookForUserByName(<span class="hljs-string">"UserNameOrHandle"</span>).then(<span class="hljs-function">(<span class="hljs-params">users:SpectrumUser[]</span>) =&gt;</span> {
             <span class="hljs-keyword">let</span> user = users[<span class="hljs-number">0</span>];
 
             <span class="hljs-keyword">if</span>(user)
             <span class="hljs-comment">// Get a private Lobby with the user</span>
-            user.getPrivateLobbyWithUser().then((pmLobby) =&gt; {
+            user.getPrivateLobbyWithUser().then(<span class="hljs-function">(<span class="hljs-params">pmLobby</span>) =&gt;</span> {
                 <span class="hljs-comment">// subscribe to messages there</span>
                 pmLobby.subscribe();
 
                 <span class="hljs-comment">// Wait till we get a message from that user</span>
-                user.onMessage((message) =&gt; {
+                user.onMessage(<span class="hljs-function">(<span class="hljs-params">message</span>) =&gt;</span> {
                     <span class="hljs-comment">// Answer back !</span>
                     pmLobby.sendPlainTextMessage(<span class="hljs-string">"I got your text !"</span>);
                 });
@@ -111,6 +111,18 @@ bot.initAsUser(config.username, config.password).then( (isConnected) =&gt; {
 
 });
 </code></pre>
+				<h2 id="how-to-set-up-test-the-bot">How to set-up/test the bot</h2>
+				<p>Dependencies : nodejs.</p>
+				<ol>
+					<li>Clone/download the repo </li>
+					<li>run <code>npm install</code> to download/install dependencies.<ol>
+							<li>depending on your setup, you might need to install globally ts-node &amp; typescript <code>npm install -g ts-node typescript</code></li>
+						</ol>
+					</li>
+					<li>create app/config.ts using the config.sample.ts template with the desired account</li>
+					<li>(create an empty bot/cache/cookie.json)</li>
+					<li>run <code>ts-node app/bot.ts</code> or its alias <code>npm start</code>to run the provided sample bot.</li>
+				</ol>
 				<h2 id="what-s-implemented">What&#39;s implemented</h2>
 				<ul>
 					<li>Send an unformated text message to text lobby</li>
@@ -128,12 +140,6 @@ bot.initAsUser(config.username, config.password).then( (isConnected) =&gt; {
 				<ul>
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_spectrum_interfaces_command_interface_.html">"<wbr>Spectrum/interfaces/command.interface"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_spectrum_services_commands_service_.html">"<wbr>Spectrum/services/commands.service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_index_.html">"index"</a>

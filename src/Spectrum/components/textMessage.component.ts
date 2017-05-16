@@ -1,8 +1,8 @@
-import { Broadcaster } from './../services/broadcaster.service';
 /**
  * @module Spectrum
  */ /** */
-
+ 
+import { Broadcaster } from './../services/broadcaster.service';
 import { TextMessage } from '../interfaces/textMessage.interface';
 import { ContentState } from 'draft-js';
 import { RSI } from './../../RSI/';

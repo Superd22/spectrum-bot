@@ -104,6 +104,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="spectrum.broadcaster.html#_listerners" class="tsd-kind-icon">_listerners</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="spectrum.broadcaster.html#_state" class="tsd-kind-icon">_state</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="spectrum.broadcaster.html#_ws" class="tsd-kind-icon">_ws</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="spectrum.broadcaster.html#member" class="tsd-kind-icon">member</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-static"><a href="spectrum.broadcaster.html#_instance" class="tsd-kind-icon">_instance</a></li>
@@ -115,6 +116,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#broadcastmessage" class="tsd-kind-icon">broad<wbr>Cast<wbr>Message</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#getmember" class="tsd-kind-icon">get<wbr>Member</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#getstate" class="tsd-kind-icon">get<wbr>State</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="spectrum.broadcaster.html#handlemessages" class="tsd-kind-icon">handle<wbr>Messages</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#removelistener" class="tsd-kind-icon">remove<wbr>Listener</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="spectrum.broadcaster.html#setbot" class="tsd-kind-icon">set<wbr>Bot</a></li>
@@ -138,7 +140,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L20">Spectrum/services/broadcaster.service.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L22">Spectrum/services/broadcaster.service.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -161,10 +163,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_listerners" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _listerners</h3>
-					<div class="tsd-signature tsd-kind-icon">_listerners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">_listerners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L19">Spectrum/services/broadcaster.service.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L21">Spectrum/services/broadcaster.service.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -174,12 +176,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_state" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _state</h3>
+					<div class="tsd-signature tsd-kind-icon">_state<span class="tsd-signature-symbol">:</span> <a href="spectrum.state.html" class="tsd-signature-type">State</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L19">Spectrum/services/broadcaster.service.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_ws" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _ws</h3>
 					<div class="tsd-signature tsd-kind-icon">_ws<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WebSocketConnection</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L15">Spectrum/services/broadcaster.service.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L16">Spectrum/services/broadcaster.service.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -194,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">member<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L20">Spectrum/services/broadcaster.service.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L22">Spectrum/services/broadcaster.service.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -204,7 +216,7 @@
 					<div class="tsd-signature tsd-kind-icon">_instance<span class="tsd-signature-symbol">:</span> <a href="spectrum.broadcaster.html" class="tsd-signature-type">Broadcaster</a><span class="tsd-signature-symbol"> =&nbsp;new Broadcaster()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L17">Spectrum/services/broadcaster.service.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L18">Spectrum/services/broadcaster.service.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -226,7 +238,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L133">Spectrum/services/broadcaster.service.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L141">Spectrum/services/broadcaster.service.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -264,13 +276,13 @@
 					<a name="broadcastmessage" class="tsd-anchor"></a>
 					<h3>broad<wbr>Cast<wbr>Message</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">broad<wbr>Cast<wbr>Message<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">broad<wbr>Cast<wbr>Message<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, raw<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L67">Spectrum/services/broadcaster.service.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L72">Spectrum/services/broadcaster.service.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -291,6 +303,12 @@
 										<p>the message to send.</p>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> raw: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>send as raw data or stringified. defaults to stringified</p>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -306,10 +324,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L48">Spectrum/services/broadcaster.service.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L52">Spectrum/services/broadcaster.service.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getstate" class="tsd-anchor"></a>
+					<h3>get<wbr>State</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>State<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="spectrum.state.html" class="tsd-signature-type">State</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L153">Spectrum/services/broadcaster.service.ts:153</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the state associated to this broadcaster instance</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="spectrum.state.html" class="tsd-signature-type">State</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -323,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L80">Spectrum/services/broadcaster.service.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L88">Spectrum/services/broadcaster.service.ts:88</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -355,7 +395,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L147">Spectrum/services/broadcaster.service.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L161">Spectrum/services/broadcaster.service.ts:161</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -386,7 +426,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L44">Spectrum/services/broadcaster.service.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L48">Spectrum/services/broadcaster.service.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -403,13 +443,13 @@
 					<a name="setws" class="tsd-anchor"></a>
 					<h3>set<wbr>Ws</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Ws<span class="tsd-signature-symbol">(</span>ws<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebSocketConnection</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Ws<span class="tsd-signature-symbol">(</span>ws<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebSocketConnection</span>, state<span class="tsd-signature-symbol">: </span><a href="spectrum.state.html" class="tsd-signature-type">State</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L37">Spectrum/services/broadcaster.service.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L39">Spectrum/services/broadcaster.service.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -424,6 +464,9 @@
 									<div class="tsd-comment tsd-typography">
 										<p>the ws to spectrum</p>
 									</div>
+								</li>
+								<li>
+									<h5>state: <a href="spectrum.state.html" class="tsd-signature-type">State</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -440,7 +483,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L102">Spectrum/services/broadcaster.service.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L110">Spectrum/services/broadcaster.service.ts:110</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -476,7 +519,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/099974f/src/Spectrum/services/broadcaster.service.ts#L57">Spectrum/services/broadcaster.service.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/Superd22/spectrum-bot/blob/b84b96e/src/Spectrum/services/broadcaster.service.ts#L61">Spectrum/services/broadcaster.service.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -503,12 +546,6 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_spectrum_interfaces_command_interface_.html">"<wbr>Spectrum/interfaces/command.interface"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_spectrum_services_commands_service_.html">"<wbr>Spectrum/services/commands.service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -525,6 +562,9 @@
 						<a href="../enums/spectrum.messagetype.html" class="tsd-kind-icon">Message<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
+						<a href="../enums/spectrum.defaultstarcitizenroles.html" class="tsd-kind-icon">default<wbr>Star<wbr>Citizen<wbr>Roles</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/spectrum.lobbytypes.html" class="tsd-kind-icon">lobby<wbr>Types</a>
 					</li>
 				</ul>
@@ -537,6 +577,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="spectrum.broadcaster.html#_listerners" class="tsd-kind-icon">_listerners</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="spectrum.broadcaster.html#_state" class="tsd-kind-icon">_state</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="spectrum.broadcaster.html#_ws" class="tsd-kind-icon">_ws</a>
@@ -555,6 +598,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="spectrum.broadcaster.html#getmember" class="tsd-kind-icon">get<wbr>Member</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="spectrum.broadcaster.html#getstate" class="tsd-kind-icon">get<wbr>State</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="spectrum.broadcaster.html#handlemessages" class="tsd-kind-icon">handle<wbr>Messages</a>
@@ -582,6 +628,9 @@
 						<a href="spectrum.service.html" class="tsd-kind-icon">Service</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="spectrum.spectrumcommands.html" class="tsd-kind-icon">Spectrum<wbr>Commands</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="spectrum.spectrumcommunity.html" class="tsd-kind-icon">Spectrum<wbr>Community</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
@@ -595,6 +644,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="spectrum.state.html" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="spectrum.abotcommand.html" class="tsd-kind-icon">a<wbr>Bot<wbr>Command</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/spectrum.community.html" class="tsd-kind-icon">Community</a>
@@ -612,10 +664,16 @@
 						<a href="../interfaces/spectrum.user.html" class="tsd-kind-icon">User</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/spectrum.aspectrumcommand.html" class="tsd-kind-icon">a<wbr>Spectrum<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/spectrum.curentities.html" class="tsd-kind-icon">cur<wbr>Entities</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/spectrum.receivedtextmessage.html" class="tsd-kind-icon">received<wbr>Text<wbr>Message</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/spectrum.html#wssclient" class="tsd-kind-icon">wss<wbr>Client</a>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
+						<a href="../modules/spectrum.html#emojionelist" class="tsd-kind-icon">emojione<wbr>List</a>
 					</li>
 				</ul>
 			</nav>
