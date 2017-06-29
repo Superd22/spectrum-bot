@@ -50,18 +50,18 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
 ```
 
 ## How to use for your own bots
-    1. `npm install --save spectrum-bot@Superd22/spectrum-bot` to install the latest version of the api
-    2. `import { Spectrum } from "spectrum-bot"` for typescript or `const Spectrum = require("spectrum-bot");` for ES5
-    3. Follow sample code to start building your own bot
+1. `npm install --save spectrum-bot@Superd22/spectrum-bot` to install the latest version of the api
+2. `import { Spectrum } from "spectrum-bot"` for typescript or `const Spectrum = require("spectrum-bot");` for ES5
+3. Follow sample code to start building your own bot
 
 ## How to dev
 Dependencies : nodejs.
-    1. Clone/download the repo 
-    2. run `npm install` to download/install dependencies.
-        a. depending on your setup, you might need to install globally ts-node & typescript `npm install -g ts-node typescript`
-    3. create app/config.ts using the config.sample.ts template with the desired account
-    4. (create an empty bot/cache/cookie.json)
-    5. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot. 
+1. Clone/download the repo 
+2. run `npm install` to download/install dependencies.
+    - depending on your setup, you might need to install globally ts-node & typescript `npm install -g ts-node typescript`
+3. create app/config.ts using the config.sample.ts template with the desired account
+4. (create an empty bot/cache/cookie.json)
+5. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot. 
 
 
 ## What's implemented
