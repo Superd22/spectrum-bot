@@ -1,5 +1,4 @@
 import { TestShared } from './_.shared';
-import { config } from './../app/config';
 import { RSI } from '..';
 import { } from 'jasmine';
 
@@ -41,8 +40,8 @@ describe("RSI Service", function (this: ThisContext) {
         */
 
         it("Should loggin with good username/password", async () => {
-            this.rsi.setUsername(config.username);
-            this.rsi.setPassword(config.password);
+            this.rsi.setUsername(TestShared.config.username);
+            this.rsi.setPassword(TestShared.config.password);
 
             let login = await this.rsi.login();
 

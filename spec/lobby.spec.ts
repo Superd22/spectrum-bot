@@ -1,6 +1,5 @@
 import { Broadcaster } from './../src/Spectrum/services/broadcaster.service';
 import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
-import { config } from './../app/config';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 
@@ -13,12 +12,12 @@ describe("Text Lobby", () => {
     let testCommunity: SpectrumCommunity;
 
     it("Should find the test community", () => {
-        testCommunity = TestInstance.bot.getState().getCommunityByName(config._testCommunity);
+        testCommunity = TestInstance.bot.getState().getCommunityByName(TestShared.config._testCommunity);
         expect(testCommunity).toBeTruthy();
     });
 
     it("Should find the test lobby", () => {
-        TestInstance.lobby = testCommunity.getLobbyByName(config._testChannel);
+        TestInstance.lobby = testCommunity.getLobbyByName(TestShared.config._testChannel);
         expect(TestInstance.lobby).toBeTruthy();
     });
 

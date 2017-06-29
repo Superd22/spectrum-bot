@@ -1,4 +1,3 @@
-import { config } from './../app/config';
 import { install as jCoInstall } from 'jasmine-co';
 import { } from 'jasmine';
 
@@ -8,6 +7,19 @@ import { } from 'jasmine';
 export class TestShared {
     /** contains the console object */
     private static oldConsole = Object.assign({}, console);
+    private static _config = null;
+    public static get config() {
+        if (!this._config) {
+            try {
+                this._config = require('./../app/config');
+            } catch (ex) {
+                this._config = Object.assign({}, process.env);
+            }
+        }
+
+        return this._config;
+    }
+
 
     /**
      * Will prevent console loging
@@ -53,7 +65,7 @@ export class TestShared {
     }
 
     public static testLobbyDependentSetUp() {
-        if (!config._testChannel || !config._testCommunity)
+        if (!this.config._testChannel || !this.config._testCommunity)
             pending('No test community/lobby declared in config');
     }
 

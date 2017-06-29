@@ -2,7 +2,6 @@ import { TestShared } from './_.shared';
 import { TestInstance } from './_.instance';
 import { User } from './../src/Spectrum/interfaces/user.interface';
 import { SpectrumUser } from './../src/Spectrum/components/user.component';
-import { config } from './../app/config';
 import { Spectrum } from '..';
 import { } from 'jasmine';
 
@@ -15,7 +14,7 @@ describe("Spectrum Service", () => {
     });
 
     it("Should launch spectrum", async () => {
-        let spectrum = await TestInstance.bot.initSpectrum(config.username, config.password);
+        let spectrum = await TestInstance.bot.initSpectrum(TestShared.config.username, TestShared.config.password);
 
         expect(spectrum).toBeTruthy();
     });

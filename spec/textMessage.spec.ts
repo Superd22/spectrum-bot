@@ -2,7 +2,6 @@ import { SpectrumUser } from './../src/Spectrum/components/user.component';
 import { SpectrumTextMessage } from './../src/Spectrum/components/textMessage.component';
 import { Broadcaster } from './../src/Spectrum/services/broadcaster.service';
 import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
-import { config } from './../app/config';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 
