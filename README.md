@@ -50,7 +50,7 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
 ```
 
 ## How to use for your own bots
-1. `npm install --save spectrum-bot@Superd22/spectrum-bot` to install the latest version of the api
+1. `npm install --save spectrum-bot` to install the latest version of the api
 2. `import { Spectrum } from "spectrum-bot"` for typescript or `const Spectrum = require("spectrum-bot");` for ES5
 3. Follow sample code to start building your own bot
 
