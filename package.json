@@ -18,7 +18,7 @@
     "react-dom": "^15.4.2",
     "rxjs": "^5.4.1",
     "tough-cookie-file-store": "^1.1.1",
-    "typescript": "^2.3.4",
+    "typescript": "2.3.4",
     "typescript-map": "^0.0.3",
     "websocket": "^1.0.24"
   },
