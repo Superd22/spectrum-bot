@@ -33,7 +33,12 @@ export class SpectrumLobby {
     constructor(lobby: Lobby);
     constructor(lobby: any) {
         if (typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
-        else this._lobby = lobby;
+        else {
+            this._lobby = lobby;
+            this._lobby.id = Number(lobby.id);
+            this._lobby.community_id = Number(lobby.community_id);
+            this._lobby.online_members_count = Number(lobby.online_members_count);
+        }
     }
 
     /**

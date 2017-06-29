@@ -111,25 +111,40 @@ export class Service {
      */
     public login(): Promise<any> {
         return this.getBaseToken().then((res) => {
+            // We need to try to login
             if (this.pwd && this.user)
                 return popsicle.post(this.pop({ url: this.rsi + "api/account/signin", body: { password: this.pwd, username: this.user } }))
                     .use(popsicle.plugins.parse('json')).then((res) => {
-                        console.log(res.body);
+                        // We're succesfully logged-in
                         if (res.body.success == 1) {
                             console.log("LOGIN OK");
                             return res.body;
                         }
 
+                        // We have an issue
                         else {
+                            // We need to trigger MFA
                             if (res.body.code == "ErrMultiStepRequired") {
                                 return this.multiStepAuth().then((res) => { console.log("okay in login()"); });
                             }
+
+                            // We need to trigger captcha.
                             if (res.body.code == "ErrCaptchaRequired") {
                                 console.log("Captcha triggered, please resolve it on the website...");
                                 return false;
                             }
+
+                            if (res.body.code == "ErrWrongPassword_username") {
+                                console.log("Wrong credentials.");
+                                return false;
+                            }
+                            // we have an unexpected error, we couldn't login.
+                            console.log("Unexpected login Error", res.body);
+                            return false;
                         }
                     });
+            // We don't need to perform a log-in.
+            else return new Promise((resolve) => { resolve(true) });
         });
     }
 
@@ -139,7 +154,7 @@ export class Service {
     private multiStepAuth(): Promise<any> {
         console.log("Need MFA code");
 
-        return this.askForCode().then(res => { console.log("OK IN MULTISTEPAUTH"); return res; });
+        return this.askForCode().then(res => { return res; });
     }
 
     /**

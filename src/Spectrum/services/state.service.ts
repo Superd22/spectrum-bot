@@ -1,3 +1,5 @@
+import { User } from './../interfaces/user.interface';
+import { ReplaySubject } from 'rxjs';
 /**
  * @module Spectrum
  */ /** */
@@ -12,7 +14,7 @@ import { SpectrumCommunity } from './../components/community.component';
 import { MessageType } from './../enums/messageType.enum';
 import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
 import { Lobby } from './../interfaces/lobby.interface';
-import { SignalDispatcher, ISignal } from 'strongly-typed-events';
+import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
 
 /**
  * @class State
@@ -25,7 +27,7 @@ export class State {
     /** the communities we have access to */
     protected communities: SpectrumCommunity[] = [];
     /** information on the bot member */
-    protected member;
+    protected member: User;
     /** notifications of the bot */
     protected notifications;
     /** the list of private lobbies (i.e private messages) */
@@ -48,7 +50,7 @@ export class State {
     private _isReady(a) { };
     private _hasFailed(a) { };
 
-    private _broadcasterReadyEvent = new SignalDispatcher();
+    private _broadcasterReadyEvent = new ReplaySubject<boolean>(1);
 
     /**
      * Creates a State Object
@@ -63,8 +65,12 @@ export class State {
      * Return an event each time the broadcaster is sucessfully connected
      * @return the event
      */
-    public get onBroadcasterReady(): ISignal {
-        return this._broadcasterReadyEvent.asEvent();
+    public get onBroadcasterReady(): ReplaySubject<boolean> {
+        return this._broadcasterReadyEvent;
+    }
+
+    public getMember(): User {
+        return this.member;
     }
 
     /**
@@ -79,7 +85,10 @@ export class State {
         packet.communities.forEach((co: Community) => {
             this.communities.push(new SpectrumCommunity(co));
         });
+
         this.member = packet.member;
+        this.member.id = Number(packet.member.id);
+
         this.notifications = packet.notifications;
         this.private_lobbies = packet.private_lobbies;
         this.roles = packet.roles;
@@ -90,10 +99,7 @@ export class State {
      * @return a promise that will be true (and consumed) the next time the broadcaster is up and ready.
      */
     public whenReady(): Promise<boolean> {
-        return new Promise((success, fail) => {
-            this._isReady = success;
-            this._hasFailed = fail;
-        });
+        return this.onBroadcasterReady.filter((status) => status === true).first().toPromise();
     }
 
 
@@ -121,9 +127,8 @@ export class State {
 
         this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
-            this._broadcasterReadyEvent.dispatch();
+            this._broadcasterReadyEvent.next(true);
             this.restoreWS();
-            this._isReady(true);
         });
     }
 
@@ -177,6 +182,9 @@ export class State {
     /**
      * Returns a community the bot can see by name
      * CASE INSENSITIVE
+     * 
+     * this is currently not updated before refresh.
+     * 
      * @param name the name the category
      * @return Community if found, null otherwise.
      */
@@ -187,6 +195,9 @@ export class State {
         ) || null;
     }
 
+    /**
+     * Return the communities the bot can see 
+     */
     public getCommunities(): SpectrumCommunity[] {
         return this.communities;
     }
@@ -199,6 +210,28 @@ export class State {
         return this.Broadcaster.addListener("message.new", m => callback(m.message), {
             message: null
         });
+    }
+
+    /**
+     * Declare a custom ws listener
+     * @param messageType the type of message to listen for
+     * @param callback the callback function to call when this listener is triggered
+     * @param content the content of the message to check against
+     * 
+     * @return the unique id of the listener.
+     */
+    public onCustomListener(messageType, callback: IBroadcasterListenerCallback, content = null) {
+        return this.Broadcaster.addListener(messageType, callback, content);
+    }
+
+    /**
+     * Removes a custom listener,
+     * We will stop listening for the listener and calling its callback.
+     * 
+     * @param listenerId the listener id to stop listening to. 
+     */
+    public removeCustomListener(listenerId: number) {
+        this.Broadcaster.removeListener(listenerId);
     }
 
     /**

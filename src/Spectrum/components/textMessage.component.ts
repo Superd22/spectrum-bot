@@ -1,7 +1,7 @@
 /**
  * @module Spectrum
  */ /** */
- 
+
 import { Broadcaster } from './../services/broadcaster.service';
 import { TextMessage } from '../interfaces/textMessage.interface';
 import { ContentState } from 'draft-js';
@@ -127,35 +127,40 @@ export class SpectrumTextMessage {
     }
 
     public static findMentionsInText(text, curEntity): curEntities {
-        var entityRanges = [];
-        let menCheck = new RegExp(/<scAPIM>@([^ ]+):(\d+)<\/scAPIM>/, 'g');
-        var m;
+        let entityRanges = [];
+        let menCheck = new RegExp(/<scAPIM>@([^ ]+?):(\d+)<\/scAPIM>/gi);
+        let m = menCheck.exec(text);
 
         let entityMap = curEntity["EntityMap"];
 
-        while ((m = menCheck.exec(text)) !== null) {
-            /** This is easier than emojis as spectrum currently doesn't give a shit and will treat multiple
-             *  mention to the same guy as different mentions
+        // Resets regex cursor.
+        text.match(menCheck);
+
+        while (m != null) {
+            /** 
+             * This is easier than emojis as spectrum currently doesn't give a shit and will treat multiple
+             * mention to the same guy as different mentions
              */
 
             // Add the mention to the entity map
             let eObj = Object.keys(entityMap).length;
-            entityMap[eObj] = { type: "MENTION", mutability: "IMMUTABLE", data: { id: m[2] } };
+            entityMap[eObj] = { type: "MENTION", mutability: "IMMUTABLE", data: { id: Number(m[2]) } };
 
             let mention = "@" + m[1];
+
+            // Flag this spot as a mention
+            entityRanges.push({
+                offset: text.indexOf(m[0]),
+                length: mention.length,
+                key: eObj,
+            });
 
             // Cut the mention to "@Handle"
             text = text.replace(m[0], mention);
 
-
-            // Flag this spot as a mention
-            entityRanges.push({
-                offset: text.indexOf(mention),
-                length: mention.length,
-                key: eObj,
-            });
+            m = menCheck.exec(text);
         }
-
+        
         return { entityRanges: entityRanges, EntityMap: entityMap, plainText: text };
     }
 

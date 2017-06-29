@@ -24,6 +24,8 @@ export class SpectrumUser {
      */
     constructor(user:User) {
         this._user = user;
+
+        this._user.id = Number(this._user.id);
     }
 
     /**

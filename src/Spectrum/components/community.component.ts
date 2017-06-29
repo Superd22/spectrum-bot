@@ -24,6 +24,8 @@ export class SpectrumCommunity {
      */
     constructor(co:Community) {
         this._community = co;
+        this._community.id = Number(co.id);
+
         this._community.lobbies.forEach( (l:Lobby) => {
             this._lobbies.push(new SpectrumLobby(l));
         });

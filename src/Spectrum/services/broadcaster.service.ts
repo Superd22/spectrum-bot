@@ -1,3 +1,4 @@
+import { IBroadcasterListener } from './../interfaces/broadcaster-listener.interface';
 
 /**
  * @module Spectrum
@@ -5,6 +6,7 @@
 
 import { State } from './state.service';
 import { WebSocketConnection } from 'websocket';
+import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
 
 /**
  * ## Broadcaster
@@ -18,7 +20,7 @@ export class Broadcaster {
     protected static _instance: Broadcaster = new Broadcaster();
     protected _state: State;
     /** our message listeners */
-    protected _listerners = [];
+    protected _listerners: Map<number, IBroadcasterListener> = new Map<number, IBroadcasterListener>();
     protected member;
 
     /**
@@ -91,15 +93,15 @@ export class Broadcaster {
         }
 
         let payload = JSON.parse(message.utf8Data);
-        for (var i = 0; i < this._listerners.length; i++) {
-            let listener = this._listerners[i];
-            if (!payload.type || payload.type.indexOf(listener.type) !== 0) continue;
+
+        this._listerners.forEach((listener, i) => {
+            if (!payload.type || payload.type.indexOf(listener.type) !== 0) return;
 
             if (this.testObjects(payload, listener.content)) {
                 console.log("[BROADCASTER] Calling LISTENER " + i);
                 listener.callback(payload);
             }
-        }
+        });
 
     }
 
@@ -138,15 +140,29 @@ export class Broadcaster {
      * @param callback the function to call on hit
      * @return the id of the newly created listener
      */
-    public addListener(messageType, callback, content = null): number {
-        return this._listerners.push(
+    public addListener(messageType: string, callback: IBroadcasterListenerCallback, content = null): number {
+        let key = this.lowestUnUsedId();
+        this._listerners.set(key,
             {
                 type: messageType,
                 content: content,
                 callback: callback,
             }
         );
+
+        return key;
     }
+
+    /**
+     * Returns the lowest un-used id for in our listeners map.
+     * @return number the lowest index that can be safely set in.
+     */
+    private lowestUnUsedId(): number {
+        for (let i = 0; i <= this._listerners.size; i++) {
+            if (!this._listerners.has(i)) return i;
+        }
+    }
+
     /**
      * Returns the state associated to this broadcaster instance
      */
@@ -159,8 +175,9 @@ export class Broadcaster {
      * @param listenerId the id given by AddListener
      */
     public removeListener(listenerId: number) {
-        if (this._listerners[listenerId])
-            this._listerners.splice(listenerId, 1);
+        if (this._listerners[listenerId]) {
+            this._listerners.delete(listenerId);
+        }
     }
 
 }
