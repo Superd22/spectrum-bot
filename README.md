@@ -1,5 +1,5 @@
 # Spectrum bot
-Is a crude NodeJs api to do stuff with Star Citizen's Spectrum (v0.0.3c)
+Is a crude NodeJs api to do stuff with Star Citizen's Spectrum (v0.3.5u)
 
 ## Docs
 You can find the Documentation in the `Docs/` folder or at https://superd22.github.io/spectrum-bot/
@@ -49,17 +49,23 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
 });
 ```
 
-## How to set-up/test the bot
+## How to use for your own bots
+    1. `npm install --save spectrum-bot@Superd22/spectrum-bot` to install the latest version of the api
+    2. `import { Spectrum } from "spectrum-bot"` for typescript or `const Spectrum = require("spectrum-bot");` for ES5
+    3. Follow sample code to start building your own bot
+
+## How to dev
 Dependencies : nodejs.
- 1. Clone/download the repo 
- 2. run `npm install` to download/install dependencies.
-  1. depending on your setup, you might need to install globally ts-node & typescript `npm install -g ts-node typescript`
- 3. create app/config.ts using the config.sample.ts template with the desired account
- 4. (create an empty bot/cache/cookie.json)
- 5. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot.
+    1. Clone/download the repo 
+    2. run `npm install` to download/install dependencies.
+        a. depending on your setup, you might need to install globally ts-node & typescript `npm install -g ts-node typescript`
+    3. create app/config.ts using the config.sample.ts template with the desired account
+    4. (create an empty bot/cache/cookie.json)
+    5. run `ts-node app/bot.ts` or its alias `npm start`to run the provided sample bot. 
+
 
 ## What's implemented
-- Send an unformated text message to text lobby
+- Send a text message to text lobby (emoji + mention support)
 - Send an embed (video/link/image) text message to lobby
 - Get Lobby
 - Get User
