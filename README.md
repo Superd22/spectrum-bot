@@ -1,4 +1,4 @@
-# Spectrum bot
+# Spectrum bot [![Build Status](https://travis-ci.org/Superd22/spectrum-bot.svg?branch=master)](https://travis-ci.org/Superd22/spectrum-bot)
 Is a crude NodeJs api to do stuff with Star Citizen's Spectrum (v0.3.5u)
 
 ## Docs
