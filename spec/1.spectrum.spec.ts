@@ -1,6 +1,5 @@
 import { TestShared } from './_.shared';
 import { TestInstance } from './_.instance';
-import { User } from './../src/Spectrum/interfaces/user.interface';
 import { SpectrumUser } from './../src/Spectrum/components/user.component';
 import { Spectrum } from '..';
 import { } from 'jasmine';

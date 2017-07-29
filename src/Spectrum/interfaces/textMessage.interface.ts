@@ -2,7 +2,7 @@
  * @module Spectrum
  */ /** */
 
-export interface TextMessage {
+export interface ISpectrumTextMessage {
     /** the plaintext content of the message */
     plaintext:string,
     /** the id of the lobby in which this text is posted */

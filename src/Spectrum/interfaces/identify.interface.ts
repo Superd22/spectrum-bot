@@ -2,7 +2,7 @@
  * @module Spectrum
  */ /** */
  
-export interface Identify {
+export interface ISpectrumIdentifyPacket {
     bookmarks,
     communities,
     config,

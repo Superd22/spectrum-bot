@@ -11,12 +11,12 @@ export class TestShared {
     public static get config() {
         if (!this._config) {
             try {
-                this._config = require('./../app/config');
+                this._config = require('./../app/config').config;
             } catch (ex) {
                 this._config = Object.assign({}, process.env);
             }
         }
-
+        
         return this._config;
     }
 

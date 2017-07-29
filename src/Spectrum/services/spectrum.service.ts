@@ -2,9 +2,9 @@
  * @module Spectrum
  */ /** */
  
-import { Broadcaster } from './broadcaster.service';
-import { State } from './state.service';
-import { Identify } from './../interfaces/identify.interface';
+import { SpectrumBroadcaster } from './broadcaster.service';
+import { SpectrumState } from './state.service';
+import { ISpectrumIdentifyPacket } from './../interfaces/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
 import { WebSocketConnection, WebSocketClient, client as wssClient } from 'websocket';
 import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
@@ -15,7 +15,7 @@ import { SpectrumUser } from '../components/user.component';
  * Performs every spectrum user actions via wss or api calls
  * @class Spectrum
  */
-export class Service {
+export class SpectrumService {
     /** Wss Client for spectrum */
     private wss: WebSocketClient = new wssClient();
     /** Wss Connection for spectrum */
@@ -27,9 +27,9 @@ export class Service {
     /** main wss endpoint */
     private spectrumUrl = "wss://robertsspaceindustries.com/ws/spectrum";
     /** backup payload */
-    private _payload: Identify;
+    private _payload: ISpectrumIdentifyPacket;
     /** state of the system */
-    private state: State = null;
+    private state: SpectrumState = null;
     /** amount of reconnect (on connection loss) tries we still have */
     private reconnectTTL: number = 10;
     /** amount of reconnect (on ws drop) before identify again */
@@ -76,9 +76,9 @@ export class Service {
         }
 
         // Check if we're already connected
-        return this.identify().then((payload: Identify) => {
+        return this.identify().then((payload: ISpectrumIdentifyPacket) => {
             console.log(payload.member);
-            if (payload.member !== null && payload.member.id) {
+            if (payload.member && payload.member.id) {
                 console.log("[SPECTRUM] Init ws on cookie.");
                 return this.initWs(payload);
             }
@@ -91,7 +91,7 @@ export class Service {
                     process.exit(1);
                 }
 
-                return this.identify().then((payload: Identify) => {
+                return this.identify().then((payload: ISpectrumIdentifyPacket) => {
                     console.log("[SPECTRUM] Did rsi login");
                     return this.initWs(payload);
                 });
@@ -106,11 +106,11 @@ export class Service {
      * @param payload the Identify packet payload
      * @return if the connection was successfull
      */
-    private initWs(payload: Identify): boolean {
+    private initWs(payload: ISpectrumIdentifyPacket): boolean {
         console.log("[SPECTRUM] Connecting to wss");
         this._payload = payload;
         if (this.state === null) {
-            this.state = new State(payload);
+            this.state = new SpectrumState(payload);
 
             this.state.onBroadcasterReady.subscribe(() => this.resetTTLs());
         }
@@ -172,7 +172,7 @@ export class Service {
      * Will populate token and x-tavern-id
      * @return 
      */
-    private identify(): Promise<Identify> {
+    private identify(): Promise<ISpectrumIdentifyPacket> {
         return this.rsi.post("api/spectrum/auth/identify").then((res: RSIApiResponse) => {
             let data = res.data;
 
@@ -253,7 +253,7 @@ export class Service {
      * @return the State object
      * @property state
      */
-    public getState(): State {
+    public getState(): SpectrumState {
         return this.state;
     }
 

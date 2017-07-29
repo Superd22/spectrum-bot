@@ -2,8 +2,8 @@
  * @module Spectrum
  */ /** */
 
-import { Broadcaster } from './../services/broadcaster.service';
-import { TextMessage } from '../interfaces/textMessage.interface';
+import { SpectrumBroadcaster } from './../services/broadcaster.service';
+import { ISpectrumTextMessage } from '../interfaces/textMessage.interface';
 import { ContentState } from 'draft-js';
 import { RSI } from './../../RSI/';
 import { emojioneList } from './emoji.component';
@@ -11,13 +11,13 @@ import { emojioneList } from './emoji.component';
 interface curEntities { entityRanges: any[], EntityMap: any, plainText: string };
 
 export class SpectrumTextMessage {
-    protected _message: TextMessage;
+    protected _message: ISpectrumTextMessage;
     protected static _emojis = "";
     /** instance of RSI Spectrum ws */
-    private broadcaster: Broadcaster = Broadcaster.getInstance();
+    private broadcaster: SpectrumBroadcaster = SpectrumBroadcaster.getInstance();
     protected _reactionListener;
 
-    constructor(message: TextMessage)
+    constructor(message: ISpectrumTextMessage)
     constructor(plainText: string, lobby_id?);
     constructor(message, lobby_id?) {
         if (typeof message == "string") {

@@ -4,7 +4,7 @@ import { IBroadcasterListener } from './../interfaces/broadcaster-listener.inter
  * @module Spectrum
  */ /** */
 
-import { State } from './state.service';
+import { SpectrumState } from './state.service';
 import { WebSocketConnection } from 'websocket';
 import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
 
@@ -13,12 +13,12 @@ import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener
  * Handles the broadcast of every WS messages
  * @class Broadcaster
  */
-export class Broadcaster {
+export class SpectrumBroadcaster {
     /** the WebSocket connection */
     protected _ws: WebSocketConnection;
     /** the singleton Broadcaster */
-    protected static _instance: Broadcaster = new Broadcaster();
-    protected _state: State;
+    protected static _instance: SpectrumBroadcaster = new SpectrumBroadcaster();
+    protected _state: SpectrumState;
     /** our message listeners */
     protected _listerners: Map<number, IBroadcasterListener> = new Map<number, IBroadcasterListener>();
     protected member;
@@ -28,17 +28,17 @@ export class Broadcaster {
      * @throws Error Throws an error on double instanciation
      */
     constructor() {
-        if (Broadcaster._instance) {
+        if (SpectrumBroadcaster._instance) {
             throw new Error("Error: Instantiation failed: Use Broadcast.getInstance() instead of new.");
         }
-        Broadcaster._instance = this;
+        SpectrumBroadcaster._instance = this;
     }
 
     /**
      * Sets the WS once connected and starts listening
      * @param ws the ws to spectrum
      */
-    public setWs(ws: WebSocketConnection, state: State) {
+    public setWs(ws: WebSocketConnection, state: SpectrumState) {
         this._ws = ws;
         this._state = state;
 
@@ -60,9 +60,9 @@ export class Broadcaster {
      * @return The instance
      * @throws Error on no broadcaster init
      */
-    public static getInstance(): Broadcaster {
-        if (!Broadcaster._instance) throw new Error("Error: No Instance of BroadCaster. Did you Call Spectrum.Init() ?")
-        return Broadcaster._instance;
+    public static getInstance(): SpectrumBroadcaster {
+        if (!SpectrumBroadcaster._instance) throw new Error("Error: No Instance of BroadCaster. Did you Call Spectrum.Init() ?")
+        return SpectrumBroadcaster._instance;
     }
 
     /**
@@ -166,7 +166,7 @@ export class Broadcaster {
     /**
      * Returns the state associated to this broadcaster instance
      */
-    public getState(): State {
+    public getState(): SpectrumState {
         return this._state;
     }
 

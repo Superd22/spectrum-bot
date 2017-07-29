@@ -2,7 +2,7 @@
  * @module Spectrum
  */ /** */
 
-export interface Lobby {
+export interface ISpectrumLobby {
     /** doesn't seem used rn */
     color?,
     /** the community id (= Community/Org) the lobby belongs to */

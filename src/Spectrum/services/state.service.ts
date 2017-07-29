@@ -1,4 +1,4 @@
-import { User } from './../interfaces/user.interface';
+import { ISpectrumUser } from './../interfaces/user.interface';
 import { ReplaySubject } from 'rxjs';
 /**
  * @module Spectrum
@@ -6,14 +6,14 @@ import { ReplaySubject } from 'rxjs';
 
 import { Websocket, WebSocketConnection } from 'websocket';
 import { SpectrumLobby } from './../components/lobby.component';
-import { Identify } from './../interfaces/identify.interface';
+import { ISpectrumIdentifyPacket } from './../interfaces/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
-import { Broadcaster } from './broadcaster.service';
-import { Community } from './../interfaces/community.interface';
+import { SpectrumBroadcaster } from './broadcaster.service';
+import { ISpectrumCommunity } from './../interfaces/community.interface';
 import { SpectrumCommunity } from './../components/community.component';
 import { MessageType } from './../enums/messageType.enum';
 import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
-import { Lobby } from './../interfaces/lobby.interface';
+import { ISpectrumLobby } from './../interfaces/lobby.interface';
 import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
 
 /**
@@ -21,13 +21,13 @@ import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener
  * Represents the current state of our Spectrum informations
  * watching the websocket to synchronise server-side and client-side information 
  */
-export class State {
+export class SpectrumState {
     /** the currently bookmarked channels */
     protected bookmarks;
     /** the communities we have access to */
     protected communities: SpectrumCommunity[] = [];
     /** information on the bot member */
-    protected member: User;
+    protected member: ISpectrumUser;
     /** notifications of the bot */
     protected notifications;
     /** the list of private lobbies (i.e private messages) */
@@ -38,12 +38,12 @@ export class State {
     /** used internally to represent what lobbies we're listening to */
     protected _SubscribedLobbies: SpectrumLobby[] = [];
     /** used internally to store the original state of things */
-    protected _originalIdentify: Identify;
+    protected _originalIdentify: ISpectrumIdentifyPacket;
 
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
-    private Broadcaster: Broadcaster;
+    private Broadcaster: SpectrumBroadcaster;
     /** our websocket connection to spectrum*/
     private ws: WebSocketConnection;
 
@@ -57,7 +57,7 @@ export class State {
      * @param packet the Identify packet as sent by the RSI API
      * @param ws the RSI Spectrum websocket.
      */
-    constructor(packet: Identify) {
+    constructor(packet: ISpectrumIdentifyPacket) {
         this.newIdentifyPacket(packet);
     }
 
@@ -69,7 +69,7 @@ export class State {
         return this._broadcasterReadyEvent;
     }
 
-    public getMember(): User {
+    public getMember(): ISpectrumUser {
         return this.member;
     }
 
@@ -77,12 +77,12 @@ export class State {
      * Updates the state with a new identify packet
      * @param packet the identify packet as sent by the RSI API
      */
-    public newIdentifyPacket(packet: Identify) {
+    public newIdentifyPacket(packet: ISpectrumIdentifyPacket) {
         this._originalIdentify = packet;
 
         this.bookmarks = packet.bookmarks;
         this.communities = [];
-        packet.communities.forEach((co: Community) => {
+        packet.communities.forEach((co: ISpectrumCommunity) => {
             this.communities.push(new SpectrumCommunity(co));
         });
 
@@ -121,7 +121,7 @@ export class State {
     public setWsConnected(ws: WebSocketConnection) {
         this.ws = ws;
 
-        this.Broadcaster = Broadcaster.getInstance();
+        this.Broadcaster = SpectrumBroadcaster.getInstance();
         this.Broadcaster.setWs(ws, this);
         this.Broadcaster.setBot(this.member);
 

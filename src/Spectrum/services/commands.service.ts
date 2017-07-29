@@ -3,7 +3,7 @@
  */ /** */
 
 import { aSpectrumCommand } from './../interfaces/command.interface';
-import { Broadcaster } from './broadcaster.service';
+import { SpectrumBroadcaster } from './broadcaster.service';
 import { RSI } from './../../';
 import { aBotCommand } from '../components/command.component';
 import { SpectrumLobby } from './../components/lobby.component';
@@ -16,7 +16,7 @@ export class SpectrumCommands {
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
-    private Broadcaster: Broadcaster=Broadcaster.getInstance();
+    private Broadcaster: SpectrumBroadcaster=SpectrumBroadcaster.getInstance();
     /** The prefix for the commands */
     protected prefix:string="\\spbot"
     /** Main listener for commands */

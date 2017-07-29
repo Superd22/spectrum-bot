@@ -2,8 +2,8 @@
  * @module Spectrum
  */ /** */
 
-import { Community } from './../interfaces/community.interface';
-import { Lobby } from './../interfaces/lobby.interface';
+import { ISpectrumCommunity } from './../interfaces/community.interface';
+import { ISpectrumLobby } from './../interfaces/lobby.interface';
 import { SpectrumLobby } from './lobby.component';
 
 /**
@@ -15,18 +15,18 @@ import { SpectrumLobby } from './lobby.component';
 export class SpectrumCommunity {
 
     /** the community rsi api object  */
-    protected _community:Community;
+    protected _community:ISpectrumCommunity;
     /** an array of lobbies the bot can see in this community */
     protected _lobbies:SpectrumLobby[]=[];
 
     /**
      * @param co the community object sent by RSI
      */
-    constructor(co:Community) {
+    constructor(co:ISpectrumCommunity) {
         this._community = co;
         this._community.id = Number(co.id);
 
-        this._community.lobbies.forEach( (l:Lobby) => {
+        this._community.lobbies.forEach( (l:ISpectrumLobby) => {
             this._lobbies.push(new SpectrumLobby(l));
         });
     }
@@ -40,7 +40,7 @@ export class SpectrumCommunity {
     }
 
     public getLobbyById(id:number):SpectrumLobby {
-        let i = this._community.lobbies.findIndex( (l:Lobby) => {
+        let i = this._community.lobbies.findIndex( (l:ISpectrumLobby) => {
             return l.id == id;
         });
 
@@ -50,7 +50,7 @@ export class SpectrumCommunity {
 
     public getLobbyByName(name:string):SpectrumLobby {
         let n = name.toLowerCase();
-        let i = this._community.lobbies.findIndex( (l:Lobby) => {
+        let i = this._community.lobbies.findIndex( (l:ISpectrumLobby) => {
             return l.name.toLowerCase() == n;
         });
 
@@ -63,7 +63,7 @@ export class SpectrumCommunity {
      * @param _community
      * @return the community object in RSI api format
      */
-    public getRaw():Community {
+    public getRaw():ISpectrumCommunity {
         return this._community;
     }
 

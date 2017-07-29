@@ -2,9 +2,9 @@
  * @module Spectrum
  */ /** */
 
-import { User } from '../interfaces/user.interface';
+import { ISpectrumUser } from '../interfaces/user.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
-import { Broadcaster } from '../services/broadcaster.service';
+import { SpectrumBroadcaster } from '../services/broadcaster.service';
 import { SpectrumLobby } from './lobby.component';
 import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
 
@@ -12,9 +12,9 @@ import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface
  * @class SpectrumUser
  */
 export class SpectrumUser {
-    protected _user:User;
+    protected _user:ISpectrumUser;
     private rsi: RSI = RSI.getInstance();
-    private broadcaster:Broadcaster = Broadcaster.getInstance();
+    private broadcaster:SpectrumBroadcaster = SpectrumBroadcaster.getInstance();
     protected privateLobby:SpectrumLobby;
     private _pmListener:number;
     private _messageListener:number;
@@ -22,7 +22,7 @@ export class SpectrumUser {
     /**
      * @param user the user info as returned by RSI
      */
-    constructor(user:User) {
+    constructor(user:ISpectrumUser) {
         this._user = user;
 
         this._user.id = Number(this._user.id);
@@ -32,7 +32,7 @@ export class SpectrumUser {
      * Public getter for user
      * @return the raw user info
      */
-    public getUser():User {
+    public getUser():ISpectrumUser {
         return this._user;
     }
 

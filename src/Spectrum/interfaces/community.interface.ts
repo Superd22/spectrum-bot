@@ -2,9 +2,9 @@
  * @module Spectrum
  */ /** */
  
-import { Lobby } from './lobby.interface';
+import { ISpectrumLobby } from './lobby.interface';
 
-export interface Community {
+export interface ISpectrumCommunity {
     /** the numerical id of the community  */
     id:number,
     /** the type of community {public|private} */
@@ -18,7 +18,7 @@ export interface Community {
     /** the url for the community banner */
     banner:string,
     /** an array of acessible lobby */
-    lobbies:Lobby[],
+    lobbies:ISpectrumLobby[],
     /** idk */
     forum_channel_groups:any,
     roles:any,

@@ -3,8 +3,8 @@
  */ /** */
 
 import { Service as RSI } from './../../RSI/services/rsi.service';
-import { Lobby } from './../interfaces/lobby.interface';
-import { Broadcaster } from './../services/broadcaster.service';
+import { ISpectrumLobby } from './../interfaces/lobby.interface';
+import { SpectrumBroadcaster } from './../services/broadcaster.service';
 import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
 import { SpectrumTextMessage } from './textMessage.component';
 
@@ -15,13 +15,13 @@ import { SpectrumTextMessage } from './textMessage.component';
 export class SpectrumLobby {
 
     /** used internally to store the rsi lobby info */
-    private _lobby: Lobby | any;
+    private _lobby: ISpectrumLobby | any;
     /** used internally to store the rsi community info */
     private _community;
     /** instance of RSI api */
     private rsi: RSI = RSI.getInstance();
     /** instance of RSI Spectrum ws */
-    private broadcaster: Broadcaster = Broadcaster.getInstance();
+    private broadcaster: SpectrumBroadcaster = SpectrumBroadcaster.getInstance();
     /** Our message listener */
     private _messageListener: number;
 
@@ -30,7 +30,7 @@ export class SpectrumLobby {
      * @param lobby the rsi lobby info
      */
     constructor(lobby: number);
-    constructor(lobby: Lobby);
+    constructor(lobby: ISpectrumLobby);
     constructor(lobby: any) {
         if (typeof lobby == 'number' || typeof lobby == 'string') this._lobby = { id: lobby, name: null };
         else {
@@ -190,7 +190,7 @@ export class SpectrumLobby {
         this.broadcaster.removeListener(this._messageListener);
     }
 
-    public getLobby(): Lobby {
+    public getLobby(): ISpectrumLobby {
         return this._lobby;
     }
 

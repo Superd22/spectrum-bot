@@ -1,5 +1,5 @@
 import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
-import { State } from './../src/Spectrum/services/state.service';
+import { SpectrumState } from './../src/Spectrum/services/state.service';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 
@@ -7,7 +7,7 @@ import { } from 'jasmine';
 
 
 interface StateTest {
-    state: State;
+    state: SpectrumState;
 }
 
 
@@ -17,7 +17,7 @@ describe("State Service", function (this: StateTest) {
     it("Should be gettable from Spectrum Service", () => {
         this.state = TestInstance.bot.getState();
 
-        expect(this.state instanceof State).toBe(true);
+        expect(this.state instanceof SpectrumState).toBe(true);
     });
 
     it("Should be ready eventually", async () => {

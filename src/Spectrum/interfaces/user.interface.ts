@@ -6,7 +6,7 @@
  * Describes the user data as returned by the RSI API
  * @interface User
  */
-export interface User {
+export interface ISpectrumUser {
     /** url for the avatar of the user */
     avatar:string,
     /** Community Monicker of the user */

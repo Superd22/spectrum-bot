@@ -2,8 +2,8 @@
  * @module Spectrum
  */ /** */
 
-import { Community } from './../interfaces/community.interface';
-import { Lobby } from './../interfaces/lobby.interface';
+import { ISpectrumCommunity } from './../interfaces/community.interface';
+import { ISpectrumLobby } from './../interfaces/lobby.interface';
 import { aSpectrumCommand } from './../interfaces/command.interface';
 import { SpectrumLobby } from './lobby.component';
 
