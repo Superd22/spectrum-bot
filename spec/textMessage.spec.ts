@@ -1,7 +1,7 @@
-import { SpectrumUser } from './../src/Spectrum/components/user.component';
-import { SpectrumTextMessage } from './../src/Spectrum/components/textMessage.component';
+import { SpectrumUser } from '../src/Spectrum/components/shared/user.component';
+import { SpectrumTextMessage } from '../src/Spectrum/components/chat/textMessage.component';
 import { SpectrumBroadcaster } from './../src/Spectrum/services/broadcaster.service';
-import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
+import { SpectrumCommunity } from '../src/Spectrum/components/shared/community.component';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 

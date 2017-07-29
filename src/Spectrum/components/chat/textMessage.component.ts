@@ -2,11 +2,11 @@
  * @module Spectrum
  */ /** */
 
-import { SpectrumBroadcaster } from './../services/broadcaster.service';
-import { ISpectrumTextMessage } from '../interfaces/textMessage.interface';
+import { SpectrumBroadcaster } from '../../services/broadcaster.service';
+import { ISpectrumTextMessage } from '../../interfaces/textMessage.interface';
 import { ContentState } from 'draft-js';
-import { RSI } from './../../RSI/';
-import { emojioneList } from './emoji.component';
+import { RSI } from '../../../RSI';
+import { emojioneList } from '../shared/emoji.component';
 
 interface curEntities { entityRanges: any[], EntityMap: any, plainText: string };
 

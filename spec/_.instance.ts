@@ -1,4 +1,4 @@
-import { SpectrumLobby } from './../src/Spectrum/components/lobby.component';
+import { SpectrumLobby } from '../src/Spectrum/components/chat/lobby.component';
 import { Spectrum } from '..';
 
 export class TestInstance {

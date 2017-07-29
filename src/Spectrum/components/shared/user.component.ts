@@ -2,11 +2,11 @@
  * @module Spectrum
  */ /** */
 
-import { ISpectrumUser } from '../interfaces/user.interface';
-import { Service as RSI } from './../../RSI/services/rsi.service';
-import { SpectrumBroadcaster } from '../services/broadcaster.service';
-import { SpectrumLobby } from './lobby.component';
-import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
+import { ISpectrumUser } from '../../interfaces/user.interface';
+import { Service as RSI } from '../../../RSI/services/rsi.service';
+import { SpectrumBroadcaster } from '../../services/broadcaster.service';
+import { SpectrumLobby } from '../chat/lobby.component';
+import { receivedTextMessage } from '../../interfaces/receivedTextMessage.interface';
 
 /**
  * @class SpectrumUser

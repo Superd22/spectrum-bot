@@ -1,5 +1,5 @@
 import { SpectrumBroadcaster } from './../src/Spectrum/services/broadcaster.service';
-import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
+import { SpectrumCommunity } from '../src/Spectrum/components/shared/community.component';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 

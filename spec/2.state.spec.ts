@@ -1,4 +1,4 @@
-import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
+import { SpectrumCommunity } from '../src/Spectrum/components/shared/community.component';
 import { SpectrumState } from './../src/Spectrum/services/state.service';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';

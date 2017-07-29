@@ -5,12 +5,12 @@ import { ReplaySubject } from 'rxjs';
  */ /** */
 
 import { Websocket, WebSocketConnection } from 'websocket';
-import { SpectrumLobby } from './../components/lobby.component';
+import { SpectrumLobby } from '../components/chat/lobby.component';
 import { ISpectrumIdentifyPacket } from './../interfaces/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
 import { SpectrumBroadcaster } from './broadcaster.service';
 import { ISpectrumCommunity } from './../interfaces/community.interface';
-import { SpectrumCommunity } from './../components/community.component';
+import { SpectrumCommunity } from '../components/shared/community.component';
 import { MessageType } from './../enums/messageType.enum';
 import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
 import { ISpectrumLobby } from './../interfaces/lobby.interface';
