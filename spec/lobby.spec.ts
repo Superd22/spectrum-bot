@@ -23,7 +23,6 @@ describe("Text Lobby", () => {
 
     it("Should be able to subscribe to a lobby", () => {
         expect(TestInstance.lobby.isSubscribed()).toBe(false);
-        console.log(TestInstance.lobby);
         TestInstance.lobby.subscribe();
         expect(TestInstance.lobby.isSubscribed()).toBe(true);
     });

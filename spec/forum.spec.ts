@@ -17,7 +17,7 @@ describe("Channel (forum)", () => {
     });
 
     it("Should find the test channel", () => {
-        TestInstance.channel = testCommunity.getChannel(TestShared.config._testChannelId);
+        TestInstance.channel = testCommunity.getChannel(Number(TestShared.config._testChannelId));
         expect(TestInstance.channel).toBeTruthy();
     });
 
