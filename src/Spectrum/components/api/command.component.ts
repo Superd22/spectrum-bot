@@ -2,10 +2,10 @@
  * @module Spectrum
  */ /** */
 
-import { ISpectrumCommunity } from './../interfaces/community.interface';
-import { ISpectrumLobby } from './../interfaces/lobby.interface';
-import { aSpectrumCommand } from './../interfaces/command.interface';
-import { SpectrumLobby } from './lobby.component';
+import { ISpectrumCommunity } from '../../interfaces/spectrum/community/community.interface';
+import { ISpectrumLobby } from '../../interfaces/spectrum/community/chat/lobby.interface';
+import { aSpectrumCommand } from '../../interfaces/api/command.interface';
+import { SpectrumLobby } from '../chat/lobby.component';
 
 /**
  * #

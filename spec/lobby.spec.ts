@@ -1,5 +1,5 @@
 import { SpectrumBroadcaster } from './../src/Spectrum/services/broadcaster.service';
-import { SpectrumCommunity } from './../src/Spectrum/components/community.component';
+import { SpectrumCommunity } from '../src/Spectrum/components/shared/community.component';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 
@@ -17,7 +17,7 @@ describe("Text Lobby", () => {
     });
 
     it("Should find the test lobby", () => {
-        TestInstance.lobby = testCommunity.getLobbyByName(TestShared.config._testChannel);
+        TestInstance.lobby = testCommunity.getLobbyByName(TestShared.config._testLobby);
         expect(TestInstance.lobby).toBeTruthy();
     });
 

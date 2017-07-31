@@ -1,6 +1,6 @@
 import { config } from './config';
 import { Spectrum } from '..';
-import { SpectrumUser } from '../src/Spectrum/components/user.component';
+import { SpectrumUser } from '../src/Spectrum/components/shared/user.component';
 
 var bot = new Spectrum();
 

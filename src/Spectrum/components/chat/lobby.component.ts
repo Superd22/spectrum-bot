@@ -2,10 +2,10 @@
  * @module Spectrum
  */ /** */
 
-import { Service as RSI } from './../../RSI/services/rsi.service';
-import { ISpectrumLobby } from './../interfaces/lobby.interface';
-import { SpectrumBroadcaster } from './../services/broadcaster.service';
-import { receivedTextMessage } from '../interfaces/receivedTextMessage.interface';
+import { Service as RSI } from '../../../RSI/services/rsi.service';
+import { ISpectrumLobby } from '../../interfaces/spectrum/community/chat/lobby.interface';
+import { SpectrumBroadcaster } from '../../services/broadcaster.service';
+import { receivedTextMessage } from '../../interfaces/spectrum/community/chat/receivedTextMessage.interface';
 import { SpectrumTextMessage } from './textMessage.component';
 
 /**
@@ -190,7 +190,7 @@ export class SpectrumLobby {
         this.broadcaster.removeListener(this._messageListener);
     }
 
-    public getLobby(): ISpectrumLobby {
+    public get lobby(): ISpectrumLobby {
         return this._lobby;
     }
 

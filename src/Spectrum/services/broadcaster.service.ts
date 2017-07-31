@@ -1,4 +1,4 @@
-import { IBroadcasterListener } from './../interfaces/broadcaster-listener.interface';
+import { IBroadcasterListener } from '../interfaces/api/broadcaster-listener.interface';
 
 /**
  * @module Spectrum
@@ -6,7 +6,7 @@ import { IBroadcasterListener } from './../interfaces/broadcaster-listener.inter
 
 import { SpectrumState } from './state.service';
 import { WebSocketConnection } from 'websocket';
-import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
+import { IBroadcasterListenerCallback } from "../interfaces/api/broadcaster-listener-callback.interface";
 
 /**
  * ## Broadcaster

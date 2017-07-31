@@ -17,6 +17,8 @@ export let config = {
 
     /** community name in which to test the api */
     _testCommunity: "",
-    /** channel name (that exists in previous community) in which to test the api */
-    _testChannel: "",
+    /** channel id (that exists in previous community) in which to test the api */
+    _testChannelId: "",
+    /** lobby name (that exists in previous community) in which to test the api */
+    _testLobby: "",
 };

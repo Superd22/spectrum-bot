@@ -4,11 +4,11 @@
  
 import { SpectrumBroadcaster } from './broadcaster.service';
 import { SpectrumState } from './state.service';
-import { ISpectrumIdentifyPacket } from './../interfaces/identify.interface';
+import { ISpectrumIdentifyPacket } from '../interfaces/spectrum/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
 import { WebSocketConnection, WebSocketClient, client as wssClient } from 'websocket';
 import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
-import { SpectrumUser } from '../components/user.component';
+import { SpectrumUser } from '../components/shared/user.component';
 
 /**
  * Main API Class for Spectrum BOT

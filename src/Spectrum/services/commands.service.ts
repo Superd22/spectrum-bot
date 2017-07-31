@@ -2,12 +2,12 @@
  * @module Spectrum
  */ /** */
 
-import { aSpectrumCommand } from './../interfaces/command.interface';
+import { aSpectrumCommand } from '../interfaces/api/command.interface';
 import { SpectrumBroadcaster } from './broadcaster.service';
 import { RSI } from './../../';
-import { aBotCommand } from '../components/command.component';
-import { SpectrumLobby } from './../components/lobby.component';
-import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
+import { aBotCommand } from '../components/api/command.component';
+import { SpectrumLobby } from '../components/chat/lobby.component';
+import { receivedTextMessage } from '../interfaces/spectrum/community/chat/receivedTextMessage.interface';
 
 import { TSMap } from "typescript-map"
 
