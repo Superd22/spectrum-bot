@@ -45,7 +45,7 @@ describe("State Service", function (this: StateTest) {
     describe("Communities", () => {
 
         function ensureIsStarCitizenCommunity(community: SpectrumCommunity) {
-            let co = community.getRaw();
+            let co = community.community;
 
             return (co.id == 1);
         }
@@ -76,7 +76,7 @@ describe("State Service", function (this: StateTest) {
 
             accessibleLobbies.forEach((lobby) => {
                 if (!hasAccess) {
-                    hasAccess = (lobby.getLobby().id == 1);
+                    hasAccess = (lobby.lobby.id == 1);
                 }
             });
 

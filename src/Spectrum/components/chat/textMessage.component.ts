@@ -3,7 +3,7 @@
  */ /** */
 
 import { SpectrumBroadcaster } from '../../services/broadcaster.service';
-import { ISpectrumTextMessage } from '../../interfaces/textMessage.interface';
+import { ISpectrumTextMessage } from '../../interfaces/spectrum/community/chat/textMessage.interface';
 import { ContentState } from 'draft-js';
 import { RSI } from '../../../RSI';
 import { emojioneList } from '../shared/emoji.component';

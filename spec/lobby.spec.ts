@@ -17,12 +17,13 @@ describe("Text Lobby", () => {
     });
 
     it("Should find the test lobby", () => {
-        TestInstance.lobby = testCommunity.getLobbyByName(TestShared.config._testChannel);
+        TestInstance.lobby = testCommunity.getLobbyByName(TestShared.config._testLobby);
         expect(TestInstance.lobby).toBeTruthy();
     });
 
     it("Should be able to subscribe to a lobby", () => {
         expect(TestInstance.lobby.isSubscribed()).toBe(false);
+        console.log(TestInstance.lobby);
         TestInstance.lobby.subscribe();
         expect(TestInstance.lobby.isSubscribed()).toBe(true);
     });

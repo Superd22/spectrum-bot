@@ -1,4 +1,4 @@
-import { ISpectrumUser } from './../interfaces/user.interface';
+import { ISpectrumUser } from '../interfaces/spectrum/user.interface';
 import { ReplaySubject } from 'rxjs';
 /**
  * @module Spectrum
@@ -6,15 +6,15 @@ import { ReplaySubject } from 'rxjs';
 
 import { Websocket, WebSocketConnection } from 'websocket';
 import { SpectrumLobby } from '../components/chat/lobby.component';
-import { ISpectrumIdentifyPacket } from './../interfaces/identify.interface';
+import { ISpectrumIdentifyPacket } from '../interfaces/spectrum/identify.interface';
 import { Service as RSI } from './../../RSI/services/rsi.service';
 import { SpectrumBroadcaster } from './broadcaster.service';
-import { ISpectrumCommunity } from './../interfaces/community.interface';
+import { ISpectrumCommunity } from '../interfaces/spectrum/community/community.interface';
 import { SpectrumCommunity } from '../components/shared/community.component';
 import { MessageType } from './../enums/messageType.enum';
-import { receivedTextMessage } from './../interfaces/receivedTextMessage.interface';
-import { ISpectrumLobby } from './../interfaces/lobby.interface';
-import { IBroadcasterListenerCallback } from "../interfaces/broadcaster-listener-callback.interface";
+import { receivedTextMessage } from '../interfaces/spectrum/community/chat/receivedTextMessage.interface';
+import { ISpectrumLobby } from '../interfaces/spectrum/community/chat/lobby.interface';
+import { IBroadcasterListenerCallback } from "../interfaces/api/broadcaster-listener-callback.interface";
 
 /**
  * @class State
@@ -110,7 +110,7 @@ export class SpectrumState {
     private restoreWS() {
         // Re-subscribe to our previous lobbies
         this._SubscribedLobbies.forEach((lobby) => {
-            console.log("[DEBUG] Restored lobby " + lobby.getLobby().name);
+            console.log("[DEBUG] Restored lobby " + lobby.lobby.name);
             this.Broadcaster.broadCastMessage(lobby.buildSubscribtionMessage());
         });
     }
@@ -159,8 +159,8 @@ export class SpectrumState {
     public isSubscribedToLobby(lobby: SpectrumLobby): boolean;
     public isSubscribedToLobby(id: number): boolean;
     public isSubscribedToLobby(final): boolean {
-        if (typeof final !== typeof 123) final = final.getLobby().id;
-        return this._SubscribedLobbies.findIndex((lobby: SpectrumLobby) => Number(lobby.getLobby().id) === final) > -1
+        if (typeof final !== typeof 123) final = final.lobby.id;
+        return this._SubscribedLobbies.findIndex((lobby: SpectrumLobby) => Number(lobby.lobby.id) === final) > -1
     }
 
     /**
@@ -171,7 +171,7 @@ export class SpectrumState {
         var lobbies = [];
 
         this.communities.forEach(community => {
-            community.getLobbies().forEach(lob => {
+            community.lobbies.forEach(lob => {
                 lobbies.push(lob);
             });
         });
@@ -191,7 +191,7 @@ export class SpectrumState {
     public getCommunityByName(name: string): SpectrumCommunity {
         let n = name.toLowerCase();
         return this.communities.find((co: SpectrumCommunity) =>
-            co.getRaw().name.toLowerCase() == n
+            co.community.name.toLowerCase() == n
         ) || null;
     }
 

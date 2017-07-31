@@ -16,7 +16,7 @@ export class TestShared {
                 this._config = Object.assign({}, process.env);
             }
         }
-        
+
         return this._config;
     }
 
@@ -64,9 +64,20 @@ export class TestShared {
         this.afterEach();
     }
 
+    public static testCommunityDependentSetUp() {
+        if (!this.config._testCommunity) pending("No test Community declared in config");
+    }
+
+    public static testChannelDependentSetUp() {
+        TestShared.testCommunityDependentSetUp();
+        if (!this.config._testChannelId)
+            pending('No test channel declared in config');
+    }
+
     public static testLobbyDependentSetUp() {
-        if (!this.config._testChannel || !this.config._testCommunity)
-            pending('No test community/lobby declared in config');
+        TestShared.testCommunityDependentSetUp();
+        if (!this.config._testLobby)
+            pending('No test lobby declared in config');
     }
 
 }
