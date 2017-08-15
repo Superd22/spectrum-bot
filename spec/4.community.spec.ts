@@ -1,7 +1,7 @@
-import { SpectrumLobby } from './../src/Spectrum/components/chat/lobby.component';
-import { SpectrumChannel } from './../src/Spectrum/components/forum/channel.component';
-import { SpectrumBroadcaster } from './../src/Spectrum/services/broadcaster.service';
-import { SpectrumCommunity } from '../src/Spectrum/components/shared/community.component';
+import { SpectrumLobby } from './../src/';
+import { SpectrumChannel } from './../src/';
+import { SpectrumBroadcaster } from './../src/';
+import { SpectrumCommunity } from '../src/';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 

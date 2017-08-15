@@ -1,6 +1,6 @@
 import { SpectrumChannel } from './../src/Spectrum/components/forum/channel.component';
 import { SpectrumLobby } from '../src/Spectrum/components/chat/lobby.component';
-import { Spectrum } from '..';
+import { Spectrum } from '../src/';
 
 export class TestInstance {
     public static bot: Spectrum = null;

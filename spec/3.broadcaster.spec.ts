@@ -1,4 +1,4 @@
-import { SpectrumBroadcaster } from './../src/Spectrum/services/broadcaster.service';
+import { SpectrumBroadcaster } from './../src/';
 import { TestInstance } from './_.instance';
 import { TestShared } from './_.shared';
 

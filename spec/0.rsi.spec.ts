@@ -1,5 +1,5 @@
 import { TestShared } from './_.shared';
-import { RSI } from '..';
+import { RSI } from '../src/';
 import { } from 'jasmine';
 
 
