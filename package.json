@@ -7,7 +7,7 @@
     "test": "jasmine-ts \"spec/**/*.spec.ts\"",
     "start": "ts-node app/bot.ts",
     "build": "tsc -d -p src/ --outdir lib/",
-    "prepare": "npm run build"
+    "prepare": "npm run build && mkdir -p cache/ && touch cache/cookie.json"
   },
   "author": {
     "name": "David FAIN",
