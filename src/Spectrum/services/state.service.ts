@@ -1,5 +1,4 @@
-import { ISpectrumUser } from '../interfaces/spectrum/user.interface';
-import { ReplaySubject } from 'rxjs';
+
 /**
  * @module Spectrum
  */ /** */
@@ -15,6 +14,9 @@ import { MessageType } from './../enums/messageType.enum';
 import { receivedTextMessage } from '../interfaces/spectrum/community/chat/receivedTextMessage.interface';
 import { ISpectrumLobby } from '../interfaces/spectrum/community/chat/lobby.interface';
 import { IBroadcasterListenerCallback } from "../interfaces/api/broadcaster-listener-callback.interface";
+import { ISpectrumUser } from '../interfaces/spectrum/user.interface';
+import { ReplaySubject } from 'rxjs';
+import { RSIApiResponse } from './../../RSI/interfaces/RSIApiResponse.interface';
 
 /**
  * @class State

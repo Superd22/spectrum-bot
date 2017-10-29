@@ -126,7 +126,7 @@ export class SpectrumTextMessage {
         return curEntity;
     }
 
-    public static findMentionsInText(text, curEntity): curEntities {
+    private static findMentionsInText(text, curEntity): curEntities {
         let entityRanges = [];
         let menCheck = new RegExp(/<scAPIM>@([^ ]+?):(\d+)<\/scAPIM>/gi);
         let m = menCheck.exec(text);
@@ -164,7 +164,7 @@ export class SpectrumTextMessage {
         return { entityRanges: entityRanges, EntityMap: entityMap, plainText: text };
     }
 
-    public static findEmojiInText(curEntity): curEntities {
+    private static findEmojiInText(curEntity): curEntities {
         let entityRanges = curEntity["entityRanges"] || [];
         let entityMap = curEntity["EntityMap"];
 

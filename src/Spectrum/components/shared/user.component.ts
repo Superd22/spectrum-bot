@@ -1,3 +1,4 @@
+
 /**
  * @module Spectrum
  */ /** */
@@ -7,6 +8,7 @@ import { Service as RSI } from '../../../RSI/services/rsi.service';
 import { SpectrumBroadcaster } from '../../services/broadcaster.service';
 import { SpectrumLobby } from '../chat/lobby.component';
 import { receivedTextMessage } from '../../interfaces/spectrum/community/chat/receivedTextMessage.interface';
+import { SpectrumTextMessage } from './../chat/textMessage.component';
 
 /**
  * @class SpectrumUser

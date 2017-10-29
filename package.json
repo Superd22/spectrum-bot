@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jasmine-ts \"spec/**/*.spec.ts\"",
     "start": "ts-node app/bot.ts",
-    "install": "./bin/install.sh"
+    "build": "tsc -d -p src/ --outdir lib/",
+    "prepare": "npm run build"
   },
   "author": {
     "name": "David FAIN",
