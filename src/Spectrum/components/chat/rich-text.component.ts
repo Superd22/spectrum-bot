@@ -1,7 +1,7 @@
 import { DraftJSEntityLinkFactory } from './entities/common/link.entity';
 import { DraftJSEntityMentionFactory } from './entities/common/mention.entity';
 import { DraftJSEntityEmojiFactory } from './entities/common/emoji.entity';
-import { ContentState, Entity, SelectionState, Modifier, convertToRaw } from 'draft-js';
+import { ContentState, Entity, SelectionState, Modifier, convertToRaw, RawDraftContentState } from 'draft-js';
 
 /**
  * Handles the creation & parsing of rich text to be sent to the db
@@ -105,11 +105,12 @@ export class SpectrumRichText implements ISpectrumRichText {
     /**
      * Returns a json representation of this rich text as expected by the spectrum back-end
      */
-    public toJson() {
+    public toJson():ISpectrumDraftJSRichText {
         return convertToRaw(this._contentState);
     }
 }
 
+export type ISpectrumDraftJSRichText = RawDraftContentState;
 
 export interface ISpectrumRichText {
     toJson(): any
