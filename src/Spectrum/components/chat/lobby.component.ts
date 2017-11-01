@@ -1,3 +1,4 @@
+import { SpectrumRichText } from './rich-text.component';
 /**
  * @module Spectrum
  */ /** */
@@ -51,7 +52,7 @@ export class SpectrumLobby {
         let m = this.generateTextPayload(text, null, highlight_role_id);
 
         console.log("paylod:");
-        console.log(JSON.stringify(m,null,2));
+        console.log(JSON.stringify(m, null, 2));
         console.log("\n\n");
 
         return this.doPostMessage(m);
@@ -110,9 +111,9 @@ export class SpectrumLobby {
     }
 
     private generateTextPayload(text, mediaId = null, highlightId = null) {
-        let textObj = {text:text};
+        let textObj = { text: text };
         return {
-            content_state: SpectrumTextMessage.generateContentStateFromText(textObj),
+            content_state: new SpectrumRichText(text).toJson(),
             highlight_role_id: highlightId,
             lobby_id: this._lobby.id,
             media_id: mediaId,

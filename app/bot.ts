@@ -1,5 +1,5 @@
 import { config } from './config';
-import { Spectrum } from '..';
+import { Spectrum } from '../src/';
 import { SpectrumUser } from '../src/Spectrum/components/shared/user.component';
 
 var bot = new Spectrum();
@@ -12,14 +12,14 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
     state.whenReady().then(() => {
 
         // Get a community
-        let global = state.getCommunityByName("Star Citizen");
+        let global = state.getCommunityByName("Sibylla");
         // Get a lobby in that community
-        let testLobby = global.getLobbyByName("general");
+        let testLobby = global.getLobbyByName("test");
 
         // Get events from Lobby
         testLobby.subscribe();
         // Send a nice text
-        testLobby.sendPlainTextMessage("Hello this is a test !");
+        testLobby.sendPlainTextMessage("**Hello** *this* is a `test` ! :flag-fr: ");
 
         // Look for an user
         bot.LookForUserByName("UserNameOrHandle").then((users:SpectrumUser[]) => {
