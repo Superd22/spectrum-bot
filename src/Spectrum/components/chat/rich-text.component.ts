@@ -1,3 +1,4 @@
+import { DraftJSEntityEmojiFactory } from './entities/common/emoji.entity';
 import { ContentState, Entity, SelectionState, Modifier, convertToRaw } from 'draft-js';
 
 /**
@@ -38,7 +39,13 @@ export class SpectrumRichText implements ISpectrumRichText {
      */
     protected richParse() {
         this.applyInlineStyle();
+        this.parseEntities();
     }
+
+    protected parseEntities() {
+       this._contentState = new DraftJSEntityEmojiFactory(this._contentState).parseEmojis();
+    }
+
 
     /**
      * Applies inline styling (bold/italic/striketrhough...) on the content

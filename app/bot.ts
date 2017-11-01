@@ -19,7 +19,7 @@ bot.initAsUser(config.username, config.password).then( (isConnected) => {
         // Get events from Lobby
         testLobby.subscribe();
         // Send a nice text
-        testLobby.sendPlainTextMessage("**Hello** *this* is a `test` ! :flag-fr: ");
+        testLobby.sendPlainTextMessage("**Hello** :pizza: *this* is a `test`  **booold *italic inside* lol** ! :pizza: https://google.fr ");
 
         // Look for an user
         bot.LookForUserByName("UserNameOrHandle").then((users:SpectrumUser[]) => {
