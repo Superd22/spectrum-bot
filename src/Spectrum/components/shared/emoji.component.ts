@@ -8,7 +8,7 @@
  * @todo type dis
  * @todo figure out multi short code emojis
  */
-export let emojioneList = {
+export const emojioneList = {
     ":kiss_ww:": { unicode: ["1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", "1f469-2764-1f48b-1f469"], fname: "1f469-2764-1f48b-1f469", uc: "1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", isCanonical: !0 },
     ":couplekiss_ww:": { unicode: ["1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", "1f469-2764-1f48b-1f469"], fname: "1f469-2764-1f48b-1f469", uc: "1f469-200d-2764-fe0f-200d-1f48b-200d-1f469", isCanonical: !1 },
     ":kiss_mm:": { unicode: ["1f468-200d-2764-fe0f-200d-1f48b-200d-1f468", "1f468-2764-1f48b-1f468"], fname: "1f468-2764-1f48b-1f468", uc: "1f468-200d-2764-fe0f-200d-1f48b-200d-1f468", isCanonical: !0 },
@@ -2382,4 +2382,4 @@ export let emojioneList = {
     ":heavy_division_sign:": { unicode: ["2797"], fname: "2797", uc: "2797", isCanonical: !0 },
     ":curly_loop:": { unicode: ["27b0"], fname: "27b0", uc: "27b0", isCanonical: !0 },
     ":loop:": { unicode: ["27bf"], fname: "27bf", uc: "27bf", isCanonical: !0 }
-};
+}

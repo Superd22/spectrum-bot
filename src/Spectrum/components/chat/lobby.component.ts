@@ -1,3 +1,4 @@
+import { SpectrumRichText } from './rich-text.component';
 /**
  * @module Spectrum
  */ /** */
@@ -51,7 +52,7 @@ export class SpectrumLobby {
         let m = this.generateTextPayload(text, null, highlight_role_id);
 
         console.log("paylod:");
-        console.log(JSON.stringify(m,null,2));
+        console.log(JSON.stringify(m, null, 2));
         console.log("\n\n");
 
         return this.doPostMessage(m);
@@ -109,14 +110,21 @@ export class SpectrumLobby {
         return this.rsi.post("api/spectrum/message/edit", m).then(res => console.log(res.data));
     }
 
-    private generateTextPayload(text, mediaId = null, highlightId = null) {
-        let textObj = {text:text};
+    /**
+     * Create the text payload for this lobby
+     * @param text the text that will be parsed
+     * @param mediaId the media id for embeds
+     * @param highlightId the group id to use for the highlight
+     */
+    private generateTextPayload(text: string, mediaId = null, highlightId = null) {
+        let textObj = { text: text };
+        const contentState = new SpectrumRichText(text);
         return {
-            content_state: SpectrumTextMessage.generateContentStateFromText(textObj),
+            content_state: contentState.toJson(),
             highlight_role_id: highlightId,
             lobby_id: this._lobby.id,
             media_id: mediaId,
-            plaintext: textObj.text,
+            plaintext: contentState.plainText
         };
     }
 
