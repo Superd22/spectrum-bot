@@ -1,3 +1,4 @@
+import { SpectrumRichText } from './../chat/rich-text.component';
 import { SpectrumTextMessage } from './../chat/textMessage.component';
 import { ISpectrumChannelLabel } from './../../interfaces/spectrum/community/forum/channel-label.interface';
 import { ISpectrumThread } from './../../interfaces/spectrum/community/forum/thread.interface';
@@ -96,7 +97,7 @@ export class SpectrumChannel {
     private generateTextPayload(text, mediaId = null, highlightId = null) {
         let textObj = { text: text };
         return {
-            content_state: SpectrumTextMessage.generateContentStateFromText(textObj),
+            content_state: new SpectrumRichText(text).toJson(),
             highlight_role_id: highlightId,
             plaintext: textObj.text,
         };

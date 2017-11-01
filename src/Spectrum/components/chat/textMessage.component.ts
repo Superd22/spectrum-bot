@@ -63,7 +63,7 @@ export class SpectrumTextMessage {
         let text = textObj.text;
         let base = ContentState.createFromText(text, delimiter);
 
-        let blocks = base.getBlocksAsArray();
+        let blocks = <any[]>base.getBlocksAsArray();
         var finalBlocks = [];
         var finalEntities = [];
         var entityMap = {};

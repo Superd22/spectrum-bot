@@ -1,6 +1,7 @@
 import { emojioneList } from './../../../shared/emoji.component';
 import { ContentState, ContentBlock, Modifier, SelectionState } from 'draft-js';
 import { IDraftJSEntity } from './../../rich-text.component';
+import { DraftJSEntityFactory } from './_.entity.factory';
 
 export interface IDraftJSEntityEmoji extends IDraftJSEntity<"EMOJI", string> { }
 export class DraftJSEntityEmoji implements IDraftJSEntityEmoji {
@@ -11,13 +12,12 @@ export class DraftJSEntityEmoji implements IDraftJSEntityEmoji {
         this.data = emoji;
     }
 }
-export class DraftJSEntityEmojiFactory {
-    protected _state: ContentState
+export class DraftJSEntityEmojiFactory extends DraftJSEntityFactory {
     /** regex for any given emoji */
     private static _emojis: string;
 
     constructor(state: ContentState) {
-        this._state = state;
+        super(state);
 
         // Build the regex once
         if (!DraftJSEntityEmojiFactory._emojis) {
@@ -26,25 +26,11 @@ export class DraftJSEntityEmojiFactory {
     }
 
     /**
-     * Parse the emojis in the supplied state
-     * @return ContentState with parsed emojis
-     */
-    public parseEmojis(): ContentState {
-        this._state = this._state.getBlockMap().reduce((state, block) => {
-            state = this.parseEmojiInBlock(state, block);
-
-            return state;
-        }, this._state);
-
-        return this._state;
-    }
-
-    /**
      * Parse emojis in a given block
      * @param state 
      * @param block 
      */
-    protected parseEmojiInBlock(state: ContentState, block: ContentBlock) {
+    protected parseBlock(state: ContentState, block: ContentBlock) {
         // if we're a code block; no markup.
         if ("code-block" === block.getType())
             return state;
@@ -75,6 +61,7 @@ export class DraftJSEntityEmojiFactory {
                     }),
                     emojiId
                 );
+
 
                 // Remove the emoji from our buffer
                 text = text.replace(match[0], "");

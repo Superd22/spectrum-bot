@@ -1,3 +1,5 @@
+import { DraftJSEntityLinkFactory } from './entities/common/link.entity';
+import { DraftJSEntityMentionFactory } from './entities/common/mention.entity';
 import { DraftJSEntityEmojiFactory } from './entities/common/emoji.entity';
 import { ContentState, Entity, SelectionState, Modifier, convertToRaw } from 'draft-js';
 
@@ -29,7 +31,6 @@ export class SpectrumRichText implements ISpectrumRichText {
      * Constructs the content state and tries to parse it.
      */
     protected constructContentState() {
-        console.log("constructing from plaintext");
         this._contentState = ContentState.createFromText(this._plainMsg);
         this.richParse();
     }
@@ -43,7 +44,9 @@ export class SpectrumRichText implements ISpectrumRichText {
     }
 
     protected parseEntities() {
-       this._contentState = new DraftJSEntityEmojiFactory(this._contentState).parseEmojis();
+        this._contentState = new DraftJSEntityLinkFactory(this._contentState).parse()
+        this._contentState = new DraftJSEntityEmojiFactory(this._contentState).parse();
+        this._contentState = new DraftJSEntityMentionFactory(this._contentState).parse();
     }
 
 
@@ -51,7 +54,6 @@ export class SpectrumRichText implements ISpectrumRichText {
      * Applies inline styling (bold/italic/striketrhough...) on the content
      */
     protected applyInlineStyle() {
-        console.log("parsing inline");
         this._contentState = this._contentState.getBlockMap().reduce((state, block) => {
             // if we're a code block; no markup.
             if ("code-block" === block.getType())
