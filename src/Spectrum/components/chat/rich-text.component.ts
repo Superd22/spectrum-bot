@@ -4,7 +4,7 @@ import { DraftJSEntityEmojiFactory } from './entities/common/emoji.entity';
 import { ContentState, Entity, SelectionState, Modifier, convertToRaw } from 'draft-js';
 
 /**
- * Handles the creation of rich text
+ * Handles the creation & parsing of rich text to be sent to the db
  */
 export class SpectrumRichText implements ISpectrumRichText {
 
@@ -17,6 +17,10 @@ export class SpectrumRichText implements ISpectrumRichText {
         STRIKETHROUGH: /(~~(?![~]))((?:[^~]|~(?!~))+)(~~)/g,
         UNDERLINE: /(__(?![_]))((?:[^_]|_(?!_))+)(__)/g
     };
+
+    public get plainText():string {
+        return this._contentState.getPlainText();
+    }
 
     /**
      * Creates a rich text message as expected by Spectrum
@@ -43,9 +47,13 @@ export class SpectrumRichText implements ISpectrumRichText {
         this.parseEntities();
     }
 
+    /**
+     * Parse entities (link/emojis/mentions ...)
+     */
     protected parseEntities() {
         this._contentState = new DraftJSEntityLinkFactory(this._contentState).parse()
         this._contentState = new DraftJSEntityEmojiFactory(this._contentState).parse();
+        // Mention is destructive and needs to be done **last**.
         this._contentState = new DraftJSEntityMentionFactory(this._contentState).parse();
     }
 
