@@ -1,4 +1,4 @@
-import { SpectrumRichText } from './rich-text.component';
+
 /**
  * @module Spectrum
  */ /** */
@@ -8,6 +8,9 @@ import { ISpectrumLobby } from '../../interfaces/spectrum/community/chat/lobby.i
 import { SpectrumBroadcaster } from '../../services/broadcaster.service';
 import { receivedTextMessage } from '../../interfaces/spectrum/community/chat/receivedTextMessage.interface';
 import { SpectrumTextMessage } from './textMessage.component';
+import { ISpectrumTextMessage, ISpectrumTextPacket } from '../../index';
+import { SpectrumRichText, ISpectrumDraftJSRichText } from './rich-text.component';
+import { convertFromRaw } from 'draft-js';
 
 /**
  * Used internal to represent a spectrum text lobby
@@ -46,38 +49,67 @@ export class SpectrumLobby {
      * Sends a plain text message to the lobby
      * @param text the text to send
      * @param highlight_role_id the role id to take (color of the post)
+     * @deprecated 
+     * @see sendMessage
      * @return A promise on the rsi api call 
      */
     public sendPlainTextMessage(text: string, highlight_role_id = null): Promise<SpectrumTextMessage> {
-        let m = this.generateTextPayload(text, null, highlight_role_id);
+        return this.sendMessage(text, highlight_role_id);
+    }
 
-        console.log("paylod:");
-        console.log(JSON.stringify(m, null, 2));
-        console.log("\n\n");
+    /**
+     * Sends a text message to the given lobby
+     * @param text the text to send
+     * @param contentState the raw contentState to send
+     * @param textMessage the textmessage to send (will take its content)
+     * @param highlight_role_id the id of the highlight to go for
+     */
+    public sendMessage(text: string, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessage(contentState: ISpectrumDraftJSRichText, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessage(textMessage: ISpectrumTextMessage, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessage(text: string | ISpectrumDraftJSRichText | ISpectrumTextMessage, highlight_role_id?: any): Promise<SpectrumTextMessage> {
+        const m = this.generateTextPayload(<any>text, null, highlight_role_id);
 
         return this.doPostMessage(m);
     }
 
     /**
+     * Sends a text message with an embed to the given lobby
+     * @param text the text to send
+     * @param contentState the raw contentState to send
+     * @param textMessage the textmessage to send (will take its content)
+     * @param embedUrl the url of the embed to join
+     * @param highlight_role_id the id of the highlight to go for
+     */
+    public sendMessageEmbed(text: string, embedUrl: string, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessageEmbed(contentState: ISpectrumDraftJSRichText, embedUrl: string, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessageEmbed(textMessage: ISpectrumTextMessage, embedUrl: string, highlight_role_id?: any): Promise<SpectrumTextMessage>
+    public sendMessageEmbed(text: string | ISpectrumDraftJSRichText | ISpectrumTextMessage, embedUrl: string, highlight_role_id?: any): Promise<SpectrumTextMessage> {
+        if (!embedUrl) return this.sendMessage(<any>text);
+
+        return SpectrumTextMessage.fetchEmbedMediaId(embedUrl).then((embedId) => {
+            let m = this.generateTextPayload(<any>text, embedId, highlight_role_id);
+            return this.doPostMessage(m);
+        });
+    }
+
+    /**
      * Sends a text messages with an embeded link
+     * @deprecated
+     * @see sendMessageEmbed
      * @param text the text to send
      * @param url the url of the object to embed
      * @param highlight_role_id the role id to take (color of the post)
      * @return information on the created post
      */
     public sendTextMessageWithEmbed(text: string, embedUrl: string, highlight_role_id = null): Promise<SpectrumTextMessage> {
-        if (!embedUrl) return this.sendPlainTextMessage(text, highlight_role_id);
-
-        return SpectrumTextMessage.fetchEmbedMediaId(embedUrl).then((embedId) => {
-            let m = this.generateTextPayload(text, embedId, highlight_role_id);
-            return this.doPostMessage(m);
-        });
+        return this.sendMessageEmbed(text, embedUrl, highlight_role_id);
     }
 
     /**
      * @todo create interface to validate postData
      */
-    private doPostMessage(postData): Promise<SpectrumTextMessage> {
+    private doPostMessage(postData: ISpectrumTextPacket): Promise<SpectrumTextMessage> {
         return this.rsi.post("api/spectrum/message/create", postData).then((res) => {
             return new SpectrumTextMessage(res.data);
         });
@@ -116,15 +148,38 @@ export class SpectrumLobby {
      * @param mediaId the media id for embeds
      * @param highlightId the group id to use for the highlight
      */
-    private generateTextPayload(text: string, mediaId = null, highlightId = null) {
-        let textObj = { text: text };
-        const contentState = new SpectrumRichText(text);
+    private generateTextPayload(text: string, mediaId?, highlightId?): ISpectrumTextPacket
+    private generateTextPayload(contentState: ISpectrumDraftJSRichText, mediaId?, highlightId?): ISpectrumTextPacket
+    private generateTextPayload(message: ISpectrumTextMessage, mediaId?, highlightId?): ISpectrumTextPacket
+    private generateTextPayload(text: string | ISpectrumDraftJSRichText | ISpectrumTextMessage, mediaId = null, highlightId = null): ISpectrumTextPacket {
+        let contentState: ISpectrumDraftJSRichText;
+        let plainText: string;
+
+        if (typeof text === typeof "abc") {
+            const rich = new SpectrumRichText(<string>text);
+            contentState = rich.toJson();
+            plainText = rich.plainText
+        }
+
+        else if ((<ISpectrumDraftJSRichText>text).blocks) {
+            contentState = <ISpectrumDraftJSRichText>text;
+            plainText = convertFromRaw(<ISpectrumDraftJSRichText>text).getPlainText();
+        }
+
+        else if ((<ISpectrumTextMessage>text).content_state.blocks) {
+            contentState = (<ISpectrumTextMessage>text).content_state;
+            plainText = convertFromRaw((<ISpectrumTextMessage>text).content_state).getPlainText();
+        }
+
+        else throw "couldn't convert text payload";
+
+
         return {
-            content_state: contentState.toJson(),
+            content_state: contentState,
             highlight_role_id: highlightId,
             lobby_id: this._lobby.id,
             media_id: mediaId,
-            plaintext: contentState.plainText
+            plaintext: plainText
         };
     }
 

@@ -10,6 +10,7 @@ export class SpectrumRichText implements ISpectrumRichText {
 
     protected _plainMsg: string;
     protected _contentState: ContentState;
+    protected _raw: RawDraftContentState;
     protected _styles = {
         BOLD: /(\*\*(?![\*]))((?:[^*]|\*(?!\*))+)(\*\*)/g,
         ITALIC: /(\*)([^*]+)(\*)/g,
@@ -18,17 +19,23 @@ export class SpectrumRichText implements ISpectrumRichText {
         UNDERLINE: /(__(?![_]))((?:[^_]|_(?!_))+)(__)/g
     };
 
-    public get plainText():string {
+    public get plainText(): string {
         return this._contentState.getPlainText();
     }
 
     /**
      * Creates a rich text message as expected by Spectrum
+     * @param contentState the contentState already generated
      * @param textMsg the text of the message
      */
-    constructor(textMsg: string) {
-        this._plainMsg = textMsg;
-        this.constructContentState();
+    constructor(contentState: ISpectrumDraftJSRichText)
+    constructor(textMsg: string)
+    constructor(text: string | ISpectrumDraftJSRichText) {
+        if (typeof text === typeof "abc") {
+            this._plainMsg = <string>text;
+            this.constructContentState();
+        }
+        else this._raw = <ISpectrumDraftJSRichText>text;
     }
 
     /**
@@ -105,7 +112,8 @@ export class SpectrumRichText implements ISpectrumRichText {
     /**
      * Returns a json representation of this rich text as expected by the spectrum back-end
      */
-    public toJson():ISpectrumDraftJSRichText {
+    public toJson(): ISpectrumDraftJSRichText {
+        if (this._raw) return this._raw;
         return convertToRaw(this._contentState);
     }
 }
