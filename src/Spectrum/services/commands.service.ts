@@ -16,24 +16,23 @@ export class SpectrumCommands {
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
-    private Broadcaster: SpectrumBroadcaster=SpectrumBroadcaster.getInstance();
+    private Broadcaster: SpectrumBroadcaster = SpectrumBroadcaster.getInstance();
     /** The prefix for the commands */
-    protected prefix:string="\\spbot"
-    /** Main listener for commands */
-    protected _listenerId:number;
+    protected prefix: string = "\\spbot"
     /** Map of commands */
     protected _commandMap: TSMap<string, aSpectrumCommand> = new TSMap<string, aSpectrumCommand>();
 
     constructor() {
-        this._listenerId = this.Broadcaster.addListener("message.new", this.checkForCommand);
+        this.Broadcaster.addListener("message.new", this.checkForCommand);
+        this.Broadcaster.addListener("message.edit", this.checkForCommand);
     }
 
-    private checkForCommand = (payload:{message:receivedTextMessage}) => {
+    private checkForCommand = (payload: { message: receivedTextMessage }) => {
         let bot = this.Broadcaster.getMember();
         let messageAsLower = payload.message.plaintext.toLowerCase();
 
         //if(Number(bot.id) == Number(message.member.id)) return false;
-        if(messageAsLower.indexOf(this.prefix) == -1) return false;
+        if (messageAsLower.indexOf(this.prefix) == -1) return false;
 
         // why cant the spectrum message just own a Lobby instance if all it is wrapping is an ID?
         let lobby = new SpectrumLobby(payload.message.lobby_id);
@@ -57,20 +56,20 @@ export class SpectrumCommands {
         //    }
         //  }
 
-        this._commandMap.forEach((value:aSpectrumCommand, key:string)=>{
+        this._commandMap.forEach((value: aSpectrumCommand, key: string) => {
             let re = new RegExp("^" + key, );
             let matches = messageAsLower.match(re);
-            if ( matches ) {
+            if (matches) {
                 value.callback(payload.message, lobby, matches);
                 return; // there cant be 2 commands can there?
             }
         });
     }
 
-    public setPrefix(prefix:string) {
+    public setPrefix(prefix: string) {
         this.prefix = prefix.toLowerCase();
     }
-    
+
     /**
      * Registers a command and listen for it.
      * Either supply aBotCommand or argument to create one.
@@ -81,11 +80,11 @@ export class SpectrumCommands {
      * @param manual an explanation of what this command does.
      * @return the aSpectrumCommand object that we are now listening for.
      */
-    public registerCommand(command:aSpectrumCommand):aSpectrumCommand;
-    public registerCommand(name:string, shortCode, callback, manual):aSpectrumCommand;
-    public registerCommand(name:string|aSpectrumCommand, shortCode?, callback?, manual?):aSpectrumCommand {
+    public registerCommand(command: aSpectrumCommand): aSpectrumCommand;
+    public registerCommand(name: string, shortCode, callback, manual): aSpectrumCommand;
+    public registerCommand(name: string | aSpectrumCommand, shortCode?, callback?, manual?): aSpectrumCommand {
         var co = null;
-        if(typeof name === typeof "test") {
+        if (typeof name === typeof "test") {
             co = new aBotCommand(shortCode, callback, name, manual);
         }
         else {
@@ -102,19 +101,19 @@ export class SpectrumCommands {
      * Alias of registerCommand
      */
     public addCommand(name, shortCode, callback, manual) {
-        return this.registerCommand(name,shortCode,callback,manual);
+        return this.registerCommand(name, shortCode, callback, manual);
     }
-    
+
     /** 
      * Unbinds a command and stop listening to it.
      */
-    public unRegisterCommand(command:aBotCommand);
-    public unRegisterCommand(commandId:number);
+    public unRegisterCommand(command: aBotCommand);
+    public unRegisterCommand(commandId: number);
     public unRegisterCommand(co) {
 
         let shortcodeAsLower = co.shortCode.toLowerCase();
 
-        this._commandMap.filter(function(command, key) {
+        this._commandMap.filter(function (command, key) {
             return key === shortcodeAsLower;
         });
 
