@@ -1,4 +1,4 @@
-# Spectrum bot [![Build Status](https://gitlab.com/Superd221/spectrum-bot/badges/master/build.svg)](https://gitlab.com/Superd221/spectrum-bot/pipelines)[![Coverage](https://gitlab.com/Superd221/spectrum-bot/badges/master/coverage.svg)](https://gitlab.com/Superd221/spectrum-bot/pipelines)
+# Spectrum bot [![Build Status](https://gitlab.com/Superd221/spectrum-bot/badges/master/build.svg)](https://gitlab.com/Superd221/spectrum-bot/pipelines) [![Coverage](https://gitlab.com/Superd221/spectrum-bot/badges/master/coverage.svg)](https://gitlab.com/Superd221/spectrum-bot/pipelines)
 Is a crude NodeJs api to do stuff with Star Citizen's Spectrum (v0.3.5u)
 
 ## Docs
