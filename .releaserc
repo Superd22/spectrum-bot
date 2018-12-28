@@ -1,0 +1,22 @@
+{
+  "branch": "develop",
+  "tagFormat": "${version}",
+  "plugins": [
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
+    ["@semantic-release/npm", {
+      "pkgRoot": "lib",
+    }],
+  ],
+  "publish": [
+    "@semantic-release/github",
+    "@semantic-release/npm"
+  ],
+  "prepare": [
+    "@semantic-release/changelog",
+    {
+      "path": "@semantic-release/git",
+      "message": "release ${nextRelease.version} skip-ci\n\n${nextRelease.notes}"
+    }
+  ]
+}

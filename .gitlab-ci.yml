@@ -1,0 +1,43 @@
+image: node:8
+services:
+  - docker:17.09-dind
+
+cache:
+  paths:
+    - node_modules
+
+stages:
+  - test
+  - build
+  - publish
+
+test:
+  stage: test
+  before_script:
+    - echo "$BOT_CONFIG" > app/config.ts
+  script:
+    - npm i
+    - npm run test
+  
+build:
+  stage: build
+  before_script:
+    - echo "$BOT_CONFIG" > app/config.ts
+  script:
+    - npm run build
+  artifacts:
+    paths:
+    - lib
+
+publish:
+  stage: publish
+  only:
+    - master
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /skip-ci/
+  before_script:
+    - cp package.json lib/package.json
+  script:
+    - npx semantic-release
+  when: manual
