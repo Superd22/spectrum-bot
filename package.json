@@ -1,53 +1,61 @@
 {
-  "name": "spectrum-bot",
-  "version": "1.2.0",
-  "description": "A crude API for StarCitizen's SPECTRUM@^0.3.5",
-  "main": "index.js",
-  "scripts": {
-    "test": "jasmine-ts \"spec/**/*.spec.ts\"",
-    "start": "ts-node app/bot.ts",
-    "build": "tsc -d -p src/ --outdir lib/",
-    "prepare": "npm run build && mkdir -p cache/ && touch cache/cookie.json"
-  },
-  "author": {
-    "name": "David FAIN",
-    "email": "superd001@gmail.com",
-    "url": "https://github.com/Superd22"
-  },
-  "repository": "Superd22/spectrum-bot",
-  "license": "MIT",
-  "dependencies": {
-    "@types/node": "^7.0.12",
-    "draft-js": "^0.10.0",
-    "draft-js-emoji-plugin": "^2.0.0-rc9",
-    "popsicle": "^10.0.1",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "rxjs": "^6.3.3",
-    "tough-cookie-file-store": "^1.1.1",
-    "typedi": "^0.8.0",
-    "typescript": "3.2.2",
-    "typescript-map": "^0.0.6",
-    "websocket": "^1.0.24"
-  },
-  "devDependencies": {
-    "@semantic-release/changelog": "^3.0.2",
-    "@semantic-release/commit-analyzer": "^6.1.0",
-    "@semantic-release/git": "^7.0.7",
-    "@semantic-release/github": "^5.2.8",
-    "@semantic-release/npm": "^5.1.3",
-    "@semantic-release/release-notes-generator": "^7.1.4",
-    "@types/core-js": "^2.5.0",
-    "@types/draft-js": "^0.10.16",
-    "@types/jasmine": "^3.3.5",
-    "@types/node": "^10.12.18",
-    "jasmine": "^3.3.1",
-    "jasmine-co": "^1.2.2",
-    "jasmine-spec-reporter": "^4.1.1",
-    "jasmine-ts": "^0.3.0",
-    "semantic-release": "^15.13.2",
-    "ts-node": "^7.0.1",
-    "typedoc": "^0.13.0",
-    "typedoc-plugin-external-module-name": "^1.1.3"
-  }
+    "name": "spectrum-bot",
+    "version": "1.2.0",
+    "description": "A crude API for StarCitizen's SPECTRUM@^0.3.5",
+    "main": "index.js",
+    "scripts": {
+        "test": "jasmine-ts --config=jasmine.json",
+        "coverage": "nyc  -r text -e .ts -x \"spec/**.spec.ts\" npm run test",
+        "coverage:html": "nyc  -r html -e .ts -x \"spec/**.spec.ts\" npm run test",
+        "start": "ts-node app/bot.ts",
+        "build": "tsc -d -p src/ --outdir lib/",
+        "prepare": "npm run build && mkdir -p cache/ && touch cache/cookie.json"
+    },
+    "author": {
+        "name": "David FAIN",
+        "email": "superd001@gmail.com",
+        "url": "https://github.com/Superd22"
+    },
+    "repository": "Superd22/spectrum-bot",
+    "license": "MIT",
+    "dependencies": {
+        "@types/node": "^7.0.12",
+        "draft-js": "^0.10.0",
+        "draft-js-emoji-plugin": "^2.0.0-rc9",
+        "popsicle": "^10.0.1",
+        "react": "^16.7.0",
+        "react-dom": "^16.7.0",
+        "reflect-metadata": "^0.1.12",
+        "require-glob": "^3.2.0",
+        "rxjs": "^6.3.3",
+        "tough-cookie-file-store": "^1.1.1",
+        "typedi": "^0.8.0",
+        "typescript": "3.2.2",
+        "typescript-map": "^0.0.6",
+        "websocket": "^1.0.24"
+    },
+    "devDependencies": {
+        "@semantic-release/changelog": "^3.0.2",
+        "@semantic-release/commit-analyzer": "^6.1.0",
+        "@semantic-release/git": "^7.0.7",
+        "@semantic-release/github": "^5.2.8",
+        "@semantic-release/npm": "^5.1.3",
+        "@semantic-release/release-notes-generator": "^7.1.4",
+        "@types/core-js": "^2.5.0",
+        "@types/draft-js": "^0.10.16",
+        "@types/jasmine": "^3.3.5",
+        "@types/node": "^10.12.18",
+        "jasmine": "^3.3.1",
+        "jasmine-co": "^1.2.2",
+        "jasmine-spec-reporter": "^4.1.1",
+        "jasmine-ts": "^0.3.0",
+        "nyc": "^13.1.0",
+        "semantic-release": "^15.13.2",
+        "ts-node": "^7.0.1",
+        "typedoc": "^0.13.0",
+        "typedoc-plugin-external-module-name": "^1.1.3"
+    },
+    "nyc": {
+        "include": ["src/**"]
+    }
 }
