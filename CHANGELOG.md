@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/Superd22/spectrum-bot/compare/2.0.2...2.0.3) (2018-12-28)
+
+
+### Bug Fixes
+
+* export SpectrumCommand decorator ([93ed065](https://github.com/Superd22/spectrum-bot/commit/93ed065))
+
 ## [2.0.2](https://github.com/Superd22/spectrum-bot/compare/2.0.1...2.0.2) (2018-12-28)
 
 
