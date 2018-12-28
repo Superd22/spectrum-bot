@@ -87,4 +87,4 @@ $RECYCLE.BIN/
 
 app/config.ts
 lib/
-cache/
+cache/*.json
