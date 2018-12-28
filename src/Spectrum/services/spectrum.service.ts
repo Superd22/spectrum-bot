@@ -1,20 +1,22 @@
 /**
  * @module Spectrum
  */ /** */
- 
-import { SpectrumBroadcaster } from './broadcaster.service';
-import { SpectrumState } from './state.service';
-import { ISpectrumIdentifyPacket } from '../interfaces/spectrum/identify.interface';
-import { Service as RSI } from './../../RSI/services/rsi.service';
-import { WebSocketConnection, WebSocketClient, client as wssClient } from 'websocket';
-import { RSIApiResponse } from '../../RSI/interfaces/RSIApiResponse.interface';
-import { SpectrumUser } from '../components/shared/user.component';
+
+import { SpectrumBroadcaster } from "./broadcaster.service";
+import { SpectrumState } from "./state.service";
+import { ISpectrumIdentifyPacket } from "../interfaces/spectrum/identify.interface";
+import { RSIService as RSI } from "./../../RSI/services/rsi.service";
+import { WebSocketConnection, WebSocketClient, client as wssClient } from "websocket";
+import { RSIApiResponse } from "../../RSI/interfaces/RSIApiResponse.interface";
+import { SpectrumUser } from "../components/shared/user.component";
+import { Service } from "typedi";
 
 /**
  * Main API Class for Spectrum BOT
  * Performs every spectrum user actions via wss or api calls
  * @class Spectrum
  */
+@Service()
 export class SpectrumService {
     /** Wss Client for spectrum */
     private wss: WebSocketClient = new wssClient();
@@ -36,15 +38,15 @@ export class SpectrumService {
     private dropAuthTTL: number = 2;
 
     /**
-     * 
+     *
      */
     constructor(callback?, errorCallback?) {
-        this.wss.on('connectFailed', (error) => {
+        this.wss.on("connectFailed", error => {
             if (errorCallback) errorCallback(error);
             else this.wssConnecFailed(error);
         });
 
-        this.wss.on('connect', (connection: WebSocketConnection) => {
+        this.wss.on("connect", (connection: WebSocketConnection) => {
             this.wssCo = connection;
             this.state.setWsConnected(this.wssCo);
 
@@ -84,8 +86,7 @@ export class SpectrumService {
             }
 
             // We're not connected, so we launch the process.
-            return this.loginRsi().then((loggedIn) => {
-
+            return this.loginRsi().then(loggedIn => {
                 if (loggedIn === false) {
                     // We wanted to login and we couldn't, exit.
                     process.exit(1);
@@ -96,9 +97,7 @@ export class SpectrumService {
                     return this.initWs(payload);
                 });
             });
-
         });
-
     }
 
     /**
@@ -113,8 +112,7 @@ export class SpectrumService {
             this.state = new SpectrumState(payload);
 
             this.state.onBroadcasterReady.subscribe(() => this.resetTTLs());
-        }
-        else this.state.newIdentifyPacket(payload);
+        } else this.state.newIdentifyPacket(payload);
         return this.launchWS();
     }
 
@@ -122,8 +120,11 @@ export class SpectrumService {
      * Convenience method to launch spectrum ws
      */
     public launchWS(): boolean {
-        console.log('[DEBUG] Connecting to WS');
-        this.wss.connect(this.spectrumUrl + "?token=" + this._payload.token, null);
+        console.log("[DEBUG] Connecting to WS");
+        this.wss.connect(
+            this.spectrumUrl + "?token=" + this._payload.token,
+            null
+        );
 
         return true;
     }
@@ -141,7 +142,7 @@ export class SpectrumService {
     }
 
     /**
-     * Ensures the RSI Login is sucesfull 
+     * Ensures the RSI Login is sucesfull
      * @todo actually do it.
      */
     private loginRsi() {
@@ -153,15 +154,14 @@ export class SpectrumService {
      * @param error the wss connectFailed error
      */
     private wssConnecFailed(error) {
-        console.log('[DEBUG] Connect Error: ' + error.toString());
-        console.log('[DEBUG] The RSI W.S is probably down.');
-        console.log('[DEBUG] Attempting re-connection in 10 secondes ()');
+        console.log("[DEBUG] Connect Error: " + error.toString());
+        console.log("[DEBUG] The RSI W.S is probably down.");
+        console.log("[DEBUG] Attempting re-connection in 10 secondes ()");
 
         if (this.reconnectTTL > 0) {
             this.reconnectTTL--;
             setTimeout(() => this.launchWS(), 10000);
-        }
-        else {
+        } else {
             // Drop the bot
             process.exit(1);
         }
@@ -170,7 +170,7 @@ export class SpectrumService {
     /**
      * First API Call to be made on Spectrum Launch
      * Will populate token and x-tavern-id
-     * @return 
+     * @return
      */
     private identify(): Promise<ISpectrumIdentifyPacket> {
         return this.rsi.post("api/spectrum/auth/identify").then((res: RSIApiResponse) => {
@@ -189,13 +189,13 @@ export class SpectrumService {
      * @todo handle messages
      */
     private wssConnected(connection) {
-        console.log('[DEBUG] WebSocket Client Connected');
+        console.log("[DEBUG] WebSocket Client Connected");
 
-        connection.on('error', function (error) {
+        connection.on("error", function(error) {
             console.log("[DEBUG] Connection Error: " + error.toString());
         });
 
-        connection.on('close', (reasonCode, description) => {
+        connection.on("close", (reasonCode, description) => {
             console.log("[DEBUG] WSS seemed to have closed with error code " + reasonCode);
             console.log("[DEBUG] Desc: " + description);
             console.log("[DEBUG] Attempting to relaunch ws");
@@ -206,9 +206,7 @@ export class SpectrumService {
             if (this.dropAuthTTL > 0) {
                 this.dropAuthTTL--;
                 this.launchWS();
-            }
-            else {
-
+            } else {
                 if (this.dropAuthTTL < -1) {
                     console.log("[DEBUG] couldn't reconnect to ws after auth, shutting down..");
                     process.exit(1);
@@ -245,7 +243,6 @@ export class SpectrumService {
         if (token) {
             this.rsi.setTavernId(token);
         }
-
     }
 
     /**
@@ -264,19 +261,18 @@ export class SpectrumService {
      * @param monickerOrHandle the text to search by
      * @return an array of Users sorted by best likelyhood as calculated by RSI
      */
-    public LookForUserByName(monickerOrHandle: string): Promise<SpectrumUser[]> {
-        return this.rsi.PostAPIAutoComplete(monickerOrHandle).then((payload: RSIApiResponse) => {
-            let data = payload.data;
+    public async LookForUserByName(monickerOrHandle: string): Promise<SpectrumUser[]> {
+        const payload = await this.rsi.PostAPIAutoComplete(monickerOrHandle);
+        let data = payload.data;
 
-            var results = [];
+        var results = [];
 
-            if (data && data.hits && data.hits.hits) {
-                data.hits.hits.forEach((hit) => {
-                    results.push(new SpectrumUser(hit._source));
-                });
-            }
+        if (data && data.hits && data.hits.hits) {
+            data.hits.hits.forEach(hit => {
+                results.push(new SpectrumUser(hit._source));
+            });
+        }
 
-            return results;
-        });
+        return results;
     }
 }

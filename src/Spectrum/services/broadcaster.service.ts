@@ -1,38 +1,30 @@
-import { IBroadcasterListener } from '../interfaces/api/broadcaster-listener.interface';
+import { IBroadcasterListener } from "../interfaces/api/broadcaster-listener.interface"; /** */
 
 /**
  * @module Spectrum
- */ /** */
-
-import { SpectrumState } from './state.service';
-import { WebSocketConnection } from 'websocket';
+ */ 
+import { SpectrumState } from "./state.service";
+import { WebSocketConnection } from "websocket";
 import { IBroadcasterListenerCallback } from "../interfaces/api/broadcaster-listener-callback.interface";
+import { Service, Container } from "typedi";
 
 /**
  * ## Broadcaster
  * Handles the broadcast of every WS messages
  * @class Broadcaster
  */
+@Service()
 export class SpectrumBroadcaster {
     /** the WebSocket connection */
     protected _ws: WebSocketConnection;
-    /** the singleton Broadcaster */
-    protected static _instance: SpectrumBroadcaster = new SpectrumBroadcaster();
+    /** state of spectrum */
     protected _state: SpectrumState;
     /** our message listeners */
-    protected _listerners: Map<number, IBroadcasterListener> = new Map<number, IBroadcasterListener>();
+    protected _listerners: Map<number, IBroadcasterListener> = new Map<
+        number,
+        IBroadcasterListener
+    >();
     protected member;
-
-    /**
-     * Constructs the singleton Broadcaster
-     * @throws Error Throws an error on double instanciation
-     */
-    constructor() {
-        if (SpectrumBroadcaster._instance) {
-            throw new Error("Error: Instantiation failed: Use Broadcast.getInstance() instead of new.");
-        }
-        SpectrumBroadcaster._instance = this;
-    }
 
     /**
      * Sets the WS once connected and starts listening
@@ -42,7 +34,7 @@ export class SpectrumBroadcaster {
         this._ws = ws;
         this._state = state;
 
-        this._ws.on('message', (message) => {
+        this._ws.on("message", message => {
             this.handleMessages(message);
         });
     }
@@ -57,12 +49,10 @@ export class SpectrumBroadcaster {
 
     /**
      * Returns the singleton instance of the Broadcaster
-     * @return The instance
-     * @throws Error on no broadcaster init
+     * @deprecated use Container instead
      */
     public static getInstance(): SpectrumBroadcaster {
-        if (!SpectrumBroadcaster._instance) throw new Error("Error: No Instance of BroadCaster. Did you Call Spectrum.Init() ?")
-        return SpectrumBroadcaster._instance;
+        return Container.get(SpectrumBroadcaster);
     }
 
     /**
@@ -73,7 +63,6 @@ export class SpectrumBroadcaster {
      */
     public broadCastMessage(msg: any, raw: boolean = false) {
         if (!this._ws.connected) {
-
             throw new Error("Error: WebSocket isn't connected");
         }
 
@@ -88,7 +77,7 @@ export class SpectrumBroadcaster {
      * @param message the message received
      */
     private handleMessages(message) {
-        if (message.type === 'utf8') {
+        if (message.type === "utf8") {
             console.log("[WSS] Message Received: '" + message.utf8Data + "'");
         }
 
@@ -102,13 +91,12 @@ export class SpectrumBroadcaster {
                 listener.callback(payload);
             }
         });
-
     }
 
     /**
-    * Test between two objects
-    * @todo do this better ? idk
-    */
+     * Test between two objects
+     * @todo do this better ? idk
+     */
     private testObjects(obj1, obj2) {
         if (obj2 === null) return true;
         if (obj1 == obj2 && !(obj2 instanceof Object)) return true;
@@ -140,15 +128,17 @@ export class SpectrumBroadcaster {
      * @param callback the function to call on hit
      * @return the id of the newly created listener
      */
-    public addListener(messageType: string, callback: IBroadcasterListenerCallback, content = null): number {
+    public addListener(
+        messageType: string,
+        callback: IBroadcasterListenerCallback,
+        content = null
+    ): number {
         let key = this.lowestUnUsedId();
-        this._listerners.set(key,
-            {
-                type: messageType,
-                content: content,
-                callback: callback,
-            }
-        );
+        this._listerners.set(key, {
+            type: messageType,
+            content: content,
+            callback: callback
+        });
 
         return key;
     }
@@ -171,7 +161,7 @@ export class SpectrumBroadcaster {
     }
 
     /**
-     * Removes a Listener 
+     * Removes a Listener
      * @param listenerId the id given by AddListener
      */
     public removeListener(listenerId: number) {
@@ -179,5 +169,4 @@ export class SpectrumBroadcaster {
             this._listerners.delete(listenerId);
         }
     }
-
 }

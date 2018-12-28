@@ -5,5 +5,5 @@
  * @preferred
  * @module RSI
  */ /** */
- 
- export {Service as RSI} from './services/rsi.service';
+
+export { RSIService as RSI } from "./services/rsi.service";

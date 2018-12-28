@@ -3,10 +3,11 @@
         "module": "commonjs",
         "target": "es2015",
         "outDir": "lib",
-        "lib": [ "es2015", "dom" ],
+        "lib": ["es2015", "dom"],
         "sourceMap": true,
         "rootDir": ".",
-        "types": [ "node" ]
+        "types": ["node"],
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules",

@@ -2,20 +2,22 @@
  * @module RSI
  */ /** */
 
-import { RSIApiResponse } from './../interfaces/RSIApiResponse.interface';
-import { ApiResponse } from './../interfaces/APIResponse.interface';
-import * as cookieStore from 'tough-cookie-file-store';
-import * as popsicle from 'popsicle';
-import * as rl from 'readline';
+import { RSIApiResponse } from "./../interfaces/RSIApiResponse.interface";
+import { ApiResponse } from "./../interfaces/APIResponse.interface";
+import { Container, Service } from "typedi";
+import * as cookieStore from "tough-cookie-file-store";
+import * as popsicle from "popsicle";
+import * as rl from "readline";
 
 /**
- * Main API class to handle every call to the RSI-API as well as 
+ * Main API class to handle every call to the RSI-API as well as
  * user-identification.
- * @class Service
+ * @class RSIService
  */
-export class Service {
+@Service()
+export class RSIService {
     /** the username to use for login */
-    private user: string
+    private user: string;
     /** the password to use for login */
     private pwd: string;
     /** main rsi url */
@@ -26,17 +28,13 @@ export class Service {
     private cookieJar = popsicle.jar(new cookieStore(__dirname + "/../../../cache/cookie.json"));
     private input = rl.createInterface(process.stdin, process.stdout, null);
 
-    private static _instance: Service = new Service();
+    constructor() {}
 
-    constructor() {
-        if (Service._instance) {
-            throw new Error("Error: Instantiation failed: Use RSI.getInstance() instead of new.");
-        }
-        Service._instance = this;
-    }
-
-    public static getInstance(): Service {
-        return Service._instance;
+    /**
+     * @deprecated use Container.get(RSIService) instead
+     */
+    public static getInstance(): RSIService {
+        return Container.get(RSIService);
     }
 
     /**
@@ -47,7 +45,7 @@ export class Service {
     private pop(opts: string): any;
     private pop(opts: any): any;
     private pop(opts: any): any {
-        if (typeof opts == 'string') opts = { url: opts };
+        if (typeof opts == "string") opts = { url: opts };
 
         opts.transport = popsicle.createTransport({
             jar: this.cookieJar
@@ -80,12 +78,12 @@ export class Service {
     }
 
     /**
-     * Appends RSI-Token to header 
-     * @param headers 
+     * Appends RSI-Token to header
+     * @param headers
      */
     private appendRSIToken(headers: Object) {
         this.getToken();
-        if (this.tokens['Rsi-Token']) headers["X-Rsi-Token"] = this.tokens['Rsi-Token'];
+        if (this.tokens["Rsi-Token"]) headers["X-Rsi-Token"] = this.tokens["Rsi-Token"];
     }
 
     /**
@@ -110,11 +108,18 @@ export class Service {
      * @return wheter or not we're sucessfully logged-in.
      */
     public login(): Promise<any> {
-        return this.getBaseToken().then((res) => {
+        return this.getBaseToken().then(res => {
             // We need to try to login
             if (this.pwd && this.user)
-                return popsicle.post(this.pop({ url: this.rsi + "api/account/signin", body: { password: this.pwd, username: this.user } }))
-                    .use(popsicle.plugins.parse('json')).then((res) => {
+                return popsicle
+                    .post(
+                        this.pop({
+                            url: this.rsi + "api/account/signin",
+                            body: { password: this.pwd, username: this.user }
+                        })
+                    )
+                    .use(popsicle.plugins.parse("json"))
+                    .then(res => {
                         // We're succesfully logged-in
                         if (res.body.success == 1) {
                             console.log("LOGIN OK");
@@ -125,12 +130,16 @@ export class Service {
                         else {
                             // We need to trigger MFA
                             if (res.body.code == "ErrMultiStepRequired") {
-                                return this.multiStepAuth().then((res) => { console.log("okay in login()"); });
+                                return this.multiStepAuth().then(res => {
+                                    console.log("okay in login()");
+                                });
                             }
 
                             // We need to trigger captcha.
                             if (res.body.code == "ErrCaptchaRequired") {
-                                console.log("Captcha triggered, please resolve it on the website...");
+                                console.log(
+                                    "Captcha triggered, please resolve it on the website..."
+                                );
                                 return false;
                             }
 
@@ -144,7 +153,10 @@ export class Service {
                         }
                     });
             // We don't need to perform a log-in.
-            else return new Promise((resolve) => { resolve(true) });
+            else
+                return new Promise(resolve => {
+                    resolve(true);
+                });
         });
     }
 
@@ -154,39 +166,51 @@ export class Service {
     private multiStepAuth(): Promise<any> {
         console.log("Need MFA code");
 
-        return this.askForCode().then(res => { return res; });
+        return this.askForCode().then(res => {
+            return res;
+        });
     }
 
     /**
      * Prompts the user for a MFA code and tests it until it's wokring.
      */
     private askForCode() {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             console.log("\n");
-            this.input.question("Please input one time MFA code", (code) => {
-                return popsicle.post(this.pop({ url: this.rsi + "api/account/signinMultiStep", body: { code: code, device_name: "bot", device_type: "computer", duration: "session" } })).use(popsicle.plugins.parse('json'))
-                    .then((res) => {
+            this.input.question("Please input one time MFA code", code => {
+                return popsicle
+                    .post(
+                        this.pop({
+                            url: this.rsi + "api/account/signinMultiStep",
+                            body: {
+                                code: code,
+                                device_name: "bot",
+                                device_type: "computer",
+                                duration: "session"
+                            }
+                        })
+                    )
+                    .use(popsicle.plugins.parse("json"))
+                    .then(res => {
                         if (res.body.success == 0) {
                             console.log("RSI : " + res.body.msg);
                             resolve(this.askForCode());
-                        }
-                        else {
+                        } else {
                             console.log("MFA OK.");
                             //this.input.close();
                             resolve(res.body);
                         }
                     });
-
             });
-        })
+        });
     }
 
-    /** 
+    /**
      * Goes to main rsi page to get basic un-authed token
      * @return wheter or not we reached RSI.
      */
     public getBaseToken(): Promise<boolean> {
-        return popsicle.get(this.pop(this.rsi + "connect")).then((res) => res.status == 200);
+        return popsicle.get(this.pop(this.rsi + "connect")).then(res => res.status == 200);
     }
 
     /**
@@ -208,26 +232,32 @@ export class Service {
     /**
      * Sends a POST request to the Service Website.
      * Will append the full Service url (with trailing slash)
-     * @param url the endpoint 
+     * @param url the endpoint
      * @param data an object of data to send
      * @return a popsicle Promise
      */
     public post(url, data?): Promise<RSIApiResponse> {
-        return popsicle.post(this.pop({ url: this.rsi + url, body: data })).use(popsicle.plugins.parse('json')).then((res: ApiResponse) => {
-            return res.body;
-        });
+        return popsicle
+            .post(this.pop({ url: this.rsi + url, body: data }))
+            .use(popsicle.plugins.parse("json"))
+            .then((res: ApiResponse) => {
+                return res.body;
+            });
     }
 
     /**
      * Sends a GET request to the Service Website.
      * Will append the full Service url (with trailing slash)
-     * @param url the endpoint 
+     * @param url the endpoint
      * @return a popsicle Promise
      */
     public get(url): Promise<RSIApiResponse> {
-        return popsicle.post(this.pop({ url: this.rsi + url })).use(popsicle.plugins.parse('json')).then((res: ApiResponse) => {
-            return res.body;
-        });
+        return popsicle
+            .post(this.pop({ url: this.rsi + url }))
+            .use(popsicle.plugins.parse("json"))
+            .then((res: ApiResponse) => {
+                return res.body;
+            });
     }
 
     /**
@@ -235,7 +265,7 @@ export class Service {
      * @return The RSI-Token
      */
     public getRsiToken(): string {
-        if (this.tokens['Rsi-Token']) return this.tokens['Rsi-Token'];
+        if (this.tokens["Rsi-Token"]) return this.tokens["Rsi-Token"];
         return null;
     }
 
@@ -247,8 +277,8 @@ export class Service {
      */
     public PostAPIAutoComplete(subject: string, community_id?: number): Promise<RSIApiResponse> {
         return this.post("api/spectrum/search/member/autocomplete", {
-            text: subject, community_id: community_id
+            text: subject,
+            community_id: community_id
         });
     }
-
 }

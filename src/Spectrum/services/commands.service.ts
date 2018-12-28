@@ -2,23 +2,24 @@
  * @module Spectrum
  */ /** */
 
-import { aSpectrumCommand } from '../interfaces/api/command.interface';
-import { SpectrumBroadcaster } from './broadcaster.service';
-import { RSI } from './../../';
-import { aBotCommand } from '../components/api/command.component';
-import { SpectrumLobby } from '../components/chat/lobby.component';
-import { receivedTextMessage } from '../interfaces/spectrum/community/chat/receivedTextMessage.interface';
-
-import { TSMap } from "typescript-map"
+import { aSpectrumCommand } from "../interfaces/api/command.interface";
+import { SpectrumBroadcaster } from "./broadcaster.service";
+import { RSI } from "./../../";
+import { aBotCommand } from "../components/api/command.component";
+import { SpectrumLobby } from "../components/chat/lobby.component";
+import { receivedTextMessage } from "../interfaces/spectrum/community/chat/receivedTextMessage.interface";
+import { Service } from "typedi";
+import { TSMap } from "typescript-map";
 
 /** @class SpectrumCommand */
+@Service()
 export class SpectrumCommands {
     /** Our RSI API instance */
     private RSI: RSI = RSI.getInstance();
     /** Our RSI WS API instance  */
     private Broadcaster: SpectrumBroadcaster = SpectrumBroadcaster.getInstance();
     /** The prefix for the commands */
-    protected prefix: string = "\\spbot"
+    protected prefix: string = "\\spbot";
     /** Map of commands */
     protected _commandMap: TSMap<string, aSpectrumCommand> = new TSMap<string, aSpectrumCommand>();
 
@@ -57,14 +58,14 @@ export class SpectrumCommands {
         //  }
 
         this._commandMap.forEach((value: aSpectrumCommand, key: string) => {
-            let re = new RegExp("^" + key, );
+            let re = new RegExp("^" + key);
             let matches = messageAsLower.match(re);
             if (matches) {
                 value.callback(payload.message, lobby, matches);
                 return; // there cant be 2 commands can there?
             }
         });
-    }
+    };
 
     public setPrefix(prefix: string) {
         this.prefix = prefix.toLowerCase();
@@ -82,12 +83,16 @@ export class SpectrumCommands {
      */
     public registerCommand(command: aSpectrumCommand): aSpectrumCommand;
     public registerCommand(name: string, shortCode, callback, manual): aSpectrumCommand;
-    public registerCommand(name: string | aSpectrumCommand, shortCode?, callback?, manual?): aSpectrumCommand {
+    public registerCommand(
+        name: string | aSpectrumCommand,
+        shortCode?,
+        callback?,
+        manual?
+    ): aSpectrumCommand {
         var co = null;
         if (typeof name === typeof "test") {
             co = new aBotCommand(shortCode, callback, name, manual);
-        }
-        else {
+        } else {
             co = name;
         }
 
@@ -104,24 +109,20 @@ export class SpectrumCommands {
         return this.registerCommand(name, shortCode, callback, manual);
     }
 
-    /** 
+    /**
      * Unbinds a command and stop listening to it.
      */
     public unRegisterCommand(command: aBotCommand);
     public unRegisterCommand(commandId: number);
     public unRegisterCommand(co) {
-
         let shortcodeAsLower = co.shortCode.toLowerCase();
 
-        this._commandMap.filter(function (command, key) {
+        this._commandMap.filter(function(command, key) {
             return key === shortcodeAsLower;
         });
-
     }
 
     public getCommandList(): aSpectrumCommand[] {
         return this._commandMap.values();
     }
-
-
 }

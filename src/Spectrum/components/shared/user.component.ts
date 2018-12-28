@@ -4,7 +4,7 @@
  */ /** */
 
 import { ISpectrumUser } from '../../interfaces/spectrum/user.interface';
-import { Service as RSI } from '../../../RSI/services/rsi.service';
+import { RSIService as RSI } from '../../../RSI/services/rsi.service';
 import { SpectrumBroadcaster } from '../../services/broadcaster.service';
 import { SpectrumLobby } from '../chat/lobby.component';
 import { receivedTextMessage } from '../../interfaces/spectrum/community/chat/receivedTextMessage.interface';

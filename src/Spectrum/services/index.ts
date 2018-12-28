@@ -5,7 +5,7 @@
  * @module Spectrum
  */ /** */
 
-export {SpectrumService as Spectrum} from './spectrum.service';
-export * from './state.service';
-export * from './commands.service';
-export * from './broadcaster.service';
+export { SpectrumService as Spectrum } from "./spectrum.service";
+export * from "./state.service";
+export * from "./commands.service";
+export * from "./broadcaster.service";
