@@ -1,22 +1,20 @@
-import { Container } from "typedi"; /** */
 /**
  * @module Spectrum
- */ import { Websocket, WebSocketConnection } from "websocket";
+ */ 
+import { SpectrumCommands } from "./commands.service";
+import { Container } from "typedi"; /** */
+import { WebSocketConnection } from "websocket";
 import { SpectrumLobby } from "../components/chat/lobby.component";
 import { ISpectrumIdentifyPacket } from "../interfaces/spectrum/identify.interface";
 import { RSIService as RSI } from "./../../RSI/services/rsi.service";
 import { SpectrumBroadcaster } from "./broadcaster.service";
 import { ISpectrumCommunity } from "../interfaces/spectrum/community/community.interface";
 import { SpectrumCommunity } from "../components/shared/community.component";
-import { MessageType } from "./../enums/messageType.enum";
 import { receivedTextMessage } from "../interfaces/spectrum/community/chat/receivedTextMessage.interface";
-import { ISpectrumLobby } from "../interfaces/spectrum/community/chat/lobby.interface";
 import { IBroadcasterListenerCallback } from "../interfaces/api/broadcaster-listener-callback.interface";
 import { ISpectrumUser } from "../interfaces/spectrum/user.interface";
 import { ReplaySubject } from "rxjs";
 import { filter, first } from "rxjs/operators";
-import { RSIApiResponse } from "./../../RSI/interfaces/RSIApiResponse.interface";
-import { Service } from "typedi";
 
 /**
  * @class State
@@ -24,6 +22,8 @@ import { Service } from "typedi";
  * watching the websocket to synchronise server-side and client-side information
  */
 export class SpectrumState {
+    /** commands service for this bot */
+    protected _commands: SpectrumCommands;
     /** the currently bookmarked channels */
     protected bookmarks;
     /** the communities we have access to */
@@ -68,6 +68,11 @@ export class SpectrumState {
 
     public getMember(): ISpectrumUser {
         return this.member;
+    }
+
+    /** commands service for this bot */
+    public get commands(): SpectrumCommands {
+        return this._commands;
     }
 
     /**
@@ -128,6 +133,7 @@ export class SpectrumState {
         this.Broadcaster.addListener("broadcaster.ready", () => {
             console.log("[STATE] BROADCASTER IS READY");
             this._broadcasterReadyEvent.next(true);
+            this._commands = Container.get(SpectrumCommands);
             this.restoreWS();
         });
     }

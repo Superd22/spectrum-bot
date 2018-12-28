@@ -253,6 +253,9 @@ export class SpectrumLobby {
         };
     }
 
+    /**
+     * not implemented yet
+     */
     public unSubscribe() {}
 
     /**

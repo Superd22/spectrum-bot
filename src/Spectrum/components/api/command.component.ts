@@ -2,15 +2,14 @@
  * @module Spectrum
  */ /** */
 
-import { ISpectrumCommunity } from "../../interfaces/spectrum/community/community.interface";
-import { ISpectrumLobby } from "../../interfaces/spectrum/community/chat/lobby.interface";
 import { aSpectrumCommand } from "../../interfaces/api/command.interface";
-import { SpectrumLobby } from "../chat/lobby.component";
 
 /**
- * #
  * Helper class for a Bot Command
  *
+ * This class is internal and should not be used anymore to create your own commands.
+ * Please see SpectrumCommand decorator instead
+ * 
  * @class aBotCommand
  */
 export class aBotCommand implements aSpectrumCommand {
