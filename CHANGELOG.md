@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Superd22/spectrum-bot/compare/2.0.0...2.0.1) (2018-12-28)
+
+
+### Bug Fixes
+
+* fix npm stuff ([63fa769](https://github.com/Superd22/spectrum-bot/commit/63fa769))
+
 # [2.0.0](https://github.com/Superd22/spectrum-bot/compare/1.2.0...2.0.0) (2018-12-28)
 
 
