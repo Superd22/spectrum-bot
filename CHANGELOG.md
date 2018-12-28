@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/Superd22/spectrum-bot/compare/2.0.1...2.0.2) (2018-12-28)
+
+
+### Bug Fixes
+
+* deploy lib/ ([b706d18](https://github.com/Superd22/spectrum-bot/commit/b706d18))
+
 ## [2.0.1](https://github.com/Superd22/spectrum-bot/compare/2.0.0...2.0.1) (2018-12-28)
 
 
