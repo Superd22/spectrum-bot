@@ -1,6 +1,6 @@
 {
     "name": "spectrum-bot",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "description": "A crude API for StarCitizen's SPECTRUM@^0.3.5",
     "main": "index.js",
     "scripts": {
@@ -9,7 +9,8 @@
         "coverage:html": "nyc  -r html -e .ts -x \"spec/**.spec.ts\" npm run test",
         "start": "ts-node app/bot.ts",
         "build": "tsc -d -p src/ --outdir lib/",
-        "prepare": "npm run build && mkdir -p cache/ && touch cache/cookie.json"
+        "prepublishOnly": "node bin/prepublish.js",
+        "prepare": "mkdir -p cache/ && touch cache/cookie.json"
     },
     "author": {
         "name": "David FAIN",
@@ -52,10 +53,11 @@
         "nyc": "^13.1.0",
         "semantic-release": "^15.13.2",
         "ts-node": "^7.0.1",
-        "typedoc": "^0.13.0",
-        "typedoc-plugin-external-module-name": "^1.1.3"
+        "typedoc": "^0.13.0"
     },
     "nyc": {
-        "include": ["src/**"]
+        "include": [
+            "src/**"
+        ]
     }
 }
