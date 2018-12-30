@@ -87,6 +87,6 @@ $RECYCLE.BIN/
 
 app/config.ts
 lib/
-cache/*.json
+src/cache/*.json
 coverage
 .nyc_output

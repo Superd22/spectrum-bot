@@ -5,10 +5,12 @@
 import { RSIApiResponse } from "./../interfaces/RSIApiResponse.interface";
 import { ApiResponse } from "./../interfaces/APIResponse.interface";
 import { Container, Service } from "typedi";
+import { CookieJar } from "tough-cookie";
 import * as cookieStore from "tough-cookie-file-store";
 import * as popsicle from "popsicle";
 import * as rl from "readline";
-
+import * as fs from "fs-extra";
+import * as path from "path";
 /**
  * Main API class to handle every call to the RSI-API as well as
  * user-identification.
@@ -25,10 +27,21 @@ export class RSIService {
     /** a collection of tokens */
     private tokens = {};
     /** cookieJar for api calls */
-    private cookieJar = popsicle.jar(new cookieStore(__dirname + "/../../../cache/cookie.json"));
+    private cookieJar: CookieJar;
     private input = rl.createInterface(process.stdin, process.stdout, null);
 
-    constructor() {}
+    constructor() {
+        this.ensureCookieJar();
+    }
+
+    protected async ensureCookieJar() {
+        const path = __dirname + "/../../cache/cookie.json";
+        await fs.ensureFile(path);
+
+        this.cookieJar = popsicle.jar(new cookieStore(path));
+    }
+
+
 
     /**
      * @deprecated use Container.get(RSIService) instead

@@ -1,7 +1,7 @@
 {
     "name": "spectrum-bot",
-    "version": "2.0.0",
-    "description": "A crude API for StarCitizen's SPECTRUM@^0.3.5",
+    "version": "0.0.0",
+    "description": "API for StarCitizen's SPECTRUM & RSI website",
     "main": "index.js",
     "scripts": {
         "test": "jasmine-ts --config=jasmine.json",
@@ -9,8 +9,7 @@
         "coverage:html": "nyc  -r html -e .ts -x \"spec/**.spec.ts\" npm run test",
         "start": "ts-node app/bot.ts",
         "build": "tsc -d -p src/ --outdir lib/",
-        "prepublishOnly": "node bin/prepublish.js",
-        "prepare": "mkdir -p cache/ && touch cache/cookie.json"
+        "prepublishOnly": "node bin/prepublish.js"
     },
     "author": {
         "name": "David FAIN",
@@ -23,6 +22,7 @@
         "@types/node": "^7.0.12",
         "draft-js": "^0.10.0",
         "draft-js-emoji-plugin": "^2.0.0-rc9",
+        "fs-extra": "^7.0.1",
         "popsicle": "^10.0.1",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
@@ -44,6 +44,7 @@
         "@semantic-release/release-notes-generator": "^7.1.4",
         "@types/core-js": "^2.5.0",
         "@types/draft-js": "^0.10.16",
+        "@types/fs-extra": "^5.0.4",
         "@types/jasmine": "^3.3.5",
         "@types/node": "^10.12.18",
         "jasmine": "^3.3.1",

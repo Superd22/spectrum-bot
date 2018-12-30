@@ -33,7 +33,6 @@ build:
   stage: build
   before_script:
     - echo "$BOT_CONFIG" > app/config.ts
-    - touch cache/cookie.json
   script:
     - npm run build
   artifacts:
