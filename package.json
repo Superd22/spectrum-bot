@@ -8,8 +8,7 @@
         "coverage": "nyc  -r text -e .ts -x \"spec/**.spec.ts\" npm run test",
         "coverage:html": "nyc  -r html -e .ts -x \"spec/**.spec.ts\" npm run test",
         "start": "ts-node app/bot.ts",
-        "build": "tsc -d -p src/ --outdir lib/",
-        "prepublishOnly": "node bin/prepublish.js"
+        "build": "tsc -d -p src/ --outdir lib/"
     },
     "author": {
         "name": "David FAIN",

@@ -15,7 +15,6 @@ test:
   stage: test
   before_script:
     - echo "$BOT_CONFIG" > app/config.ts
-    - touch cache/cookie.json
   script:
     - npm i
     - npm run test
@@ -24,7 +23,6 @@ coverage:
   stage: test
   before_script:
     - echo "$BOT_CONFIG" > app/config.ts
-    - touch cache/cookie.json
   script:
     - npm i
     - npm run coverage
