@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/Superd22/spectrum-bot/compare/2.0.3...2.0.4) (2018-12-30)
+
+
+### Bug Fixes
+
+* **cache:** move cache folder and ensure it exists programatically ([6b3399b](https://github.com/Superd22/spectrum-bot/commit/6b3399b))
+
 ## [2.0.3](https://github.com/Superd22/spectrum-bot/compare/2.0.2...2.0.3) (2018-12-28)
 
 
