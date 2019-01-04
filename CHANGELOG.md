@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/Superd22/spectrum-bot/compare/2.0.4...2.0.5) (2019-01-04)
+
+
+### Bug Fixes
+
+* Cannot read property 'getCookiesSync' of undefined ([ff8aa18](https://github.com/Superd22/spectrum-bot/commit/ff8aa18))
+
 ## [2.0.4](https://github.com/Superd22/spectrum-bot/compare/2.0.3...2.0.4) (2018-12-30)
 
 
