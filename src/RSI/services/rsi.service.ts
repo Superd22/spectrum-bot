@@ -34,9 +34,9 @@ export class RSIService {
         this.ensureCookieJar();
     }
 
-    protected async ensureCookieJar() {
+    protected ensureCookieJar() {
         const path = __dirname + "/../../cache/cookie.json";
-        await fs.ensureFile(path);
+        fs.ensureFileSync(path);
 
         this.cookieJar = popsicle.jar(new cookieStore(path));
     }
