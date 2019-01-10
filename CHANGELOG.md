@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/Superd22/spectrum-bot/compare/2.0.5...2.1.0) (2019-01-10)
+
+
+### Features
+
+* add inital support for orgs ([f56fc15](https://github.com/Superd22/spectrum-bot/commit/f56fc15))
+
 ## [2.0.5](https://github.com/Superd22/spectrum-bot/compare/2.0.4...2.0.5) (2019-01-04)
 
 
