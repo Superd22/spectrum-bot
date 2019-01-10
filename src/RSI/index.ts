@@ -7,3 +7,4 @@
  */ /** */
 
 export { RSIService as RSI } from "./services/rsi.service";
+export * from "./orgs";

@@ -28,6 +28,7 @@ export class RSIService {
     private tokens = {};
     /** cookieJar for api calls */
     private cookieJar: CookieJar;
+    /** input interface for MFA inputing */
     private input = rl.createInterface(process.stdin, process.stdout, null);
 
     constructor() {
@@ -40,8 +41,6 @@ export class RSIService {
 
         this.cookieJar = popsicle.jar(new cookieStore(path));
     }
-
-
 
     /**
      * @deprecated use Container.get(RSIService) instead
@@ -249,13 +248,15 @@ export class RSIService {
      * @param data an object of data to send
      * @return a popsicle Promise
      */
-    public post(url, data?): Promise<RSIApiResponse> {
-        return popsicle
+    public async post<T = any>(
+        url: string,
+        data?: { [data: string]: any }
+    ): Promise<RSIApiResponse<T>> {
+        const res = await popsicle
             .post(this.pop({ url: this.rsi + url, body: data }))
-            .use(popsicle.plugins.parse("json"))
-            .then((res: ApiResponse) => {
-                return res.body;
-            });
+            .use(popsicle.plugins.parse("json"));
+
+        return res.body;
     }
 
     /**
@@ -264,13 +265,31 @@ export class RSIService {
      * @param url the endpoint
      * @return a popsicle Promise
      */
-    public get(url): Promise<RSIApiResponse> {
-        return popsicle
-            .post(this.pop({ url: this.rsi + url }))
-            .use(popsicle.plugins.parse("json"))
-            .then((res: ApiResponse) => {
-                return res.body;
-            });
+    public async get<T = any>(url: string): Promise<RSIApiResponse<T>> {
+        const res = await popsicle
+            .get(this.pop({ url: this.rsi + url }))
+            .use(popsicle.plugins.parse("json"));
+
+        return res.body;
+    }
+
+    /**
+     * Navigate via GET to an HTML page of rsi's website
+     * @param url the endpoint to go to
+     */
+    public async navigate(url: string): Promise<string> {
+        const res = await popsicle.get(this.pop({ url: this.rsi + url }));
+        return res.body;
+    }
+
+    /**
+     * Navigate via POST to an HTML page of rsi's website
+     * @param url the endpoint to go to
+     */
+    public async navigatePost(url: string): Promise<string> {
+        const res = await popsicle.post(this.pop({ url: this.rsi + url }));
+
+        return res.body;
     }
 
     /**

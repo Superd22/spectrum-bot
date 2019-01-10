@@ -2,9 +2,9 @@
  * @module RSI
  */ /** */
 
-export interface RSIApiResponse {
-    success:number,
-    data:any,
-    code:string;
-    msg:string;
+export interface RSIApiResponse<T = any> {
+    success: number;
+    data: T;
+    code: string;
+    msg: string;
 }

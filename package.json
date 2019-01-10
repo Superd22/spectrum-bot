@@ -22,6 +22,7 @@
         "draft-js": "^0.10.0",
         "draft-js-emoji-plugin": "^2.0.0-rc9",
         "fs-extra": "^7.0.1",
+        "node-html-parser": "^1.1.11",
         "popsicle": "^10.0.1",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
